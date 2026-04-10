@@ -1,0 +1,100 @@
+# Versioned project defaults.
+# Values here are merged on top of devbox.yml and may be overridden by devbox/local.yml.
+# This file IS tracked by git.
+
+schema_version: "1"
+
+tools:
+  adminer:
+    enabled: false
+  redis_insight:
+    enabled: true
+  mailpit:
+    enabled: true
+
+runtime:
+  use_https: false
+  ports:
+    app: 80
+    adminer: 8080
+    redis_insight: 5540
+    mailpit: 8025
+  hosts:
+    main: app.localhost
+    adminer: adminer.localhost
+    redis_insight: redis.localhost
+    mailpit: mail.localhost
+  spx:
+    path: ""
+
+# Active state name, empty = no state.
+state: ""
+
+# Declarative export spec for generated artifacts.
+# devbox render env  →  reads exports.env and renders .env accordingly.
+#
+# Each rule:
+#   name     — env variable name
+#   from     — dot-path into the effective (merged) config
+#   default  — fallback when the path is absent
+#   required — error if path is absent and default is empty
+#   format   — string (default) | bool | int
+#   when     — dot-path; rule is skipped when the value at this path is falsy
+#   comment  — written as "# comment" above the variable in the generated file
+exports:
+  env:
+    - name: USE_HTTPS
+      from: runtime.use_https
+      format: bool
+
+    - name: APP_PORT
+      from: runtime.ports.app
+      format: int
+
+    - name: APP_HOST
+      from: runtime.hosts.main
+
+    - name: ADMINER_PORT
+      from: runtime.ports.adminer
+      format: int
+      when: tools.adminer.enabled
+
+    - name: ADMINER_HOST
+      from: runtime.hosts.adminer
+      when: tools.adminer.enabled
+
+    - name: REDIS_INSIGHT_PORT
+      from: runtime.ports.redis_insight
+      format: int
+      when: tools.redis_insight.enabled
+
+    - name: REDIS_INSIGHT_HOST
+      from: runtime.hosts.redis_insight
+      when: tools.redis_insight.enabled
+
+    - name: MAILPIT_PORT
+      from: runtime.ports.mailpit
+      format: int
+      when: tools.mailpit.enabled
+
+    - name: MAILPIT_HOST
+      from: runtime.hosts.mailpit
+      when: tools.mailpit.enabled
+
+    - name: TOOL_ADMINER
+      from: tools.adminer.enabled
+      format: bool
+
+    - name: TOOL_REDIS_INSIGHT
+      from: tools.redis_insight.enabled
+      format: bool
+
+    - name: TOOL_MAILPIT
+      from: tools.mailpit.enabled
+      format: bool
+
+    - name: SPX_PATH
+      from: runtime.spx.path
+
+    - name: STATE
+      from: state

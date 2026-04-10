@@ -1,0 +1,20 @@
+# Template for local overrides.
+# Copy this file to local.yml and adjust as needed.
+# local.yml is NOT tracked by git.
+
+# Active state name, empty = no state.
+# state: staging
+
+# Override tool visibility without changing project defaults.
+# tools:
+#   redis_insight:
+#     enabled: false
+#   adminer:
+#     enabled: true
+
+# Override runtime ports if the project defaults conflict with your local setup.
+# runtime:
+#   use_https: true
+#   ports:
+#     app: 8080
+#     mailpit: 8026
