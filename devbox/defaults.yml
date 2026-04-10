@@ -108,3 +108,14 @@ compose:
     redis_insight: compose/tools/redis_insight.yml
     mailpit: compose/tools/mailpit.yml
     debug: compose/services/main/debug.yml
+
+services:
+  main:
+    type: app
+    dir: ./services/main
+    container: app-main
+    dir_internal: /var/www/app
+    configs:
+      - src: configs/app/main/.env
+        dest: .env
+        mode: replace
