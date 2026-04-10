@@ -1,0 +1,78 @@
+# Base compose: mandatory infrastructure (nginx, db, redis, app-main).
+# Always started. Overlays in compose/ add optional services.
+
+volumes:
+  db:
+  composer_cache:
+
+networks:
+  default:
+    name: ${PROJECT_FULL:-devbox-laravel}
+
+services:
+  nginx:
+    image: "${IMAGE_NGINX:-nginx:latest}"
+    container_name: "${PROJECT_FULL:-devbox-laravel}-nginx"
+    restart: unless-stopped
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - "${APP_PORT:-80}:80"
+    volumes:
+      - ./services/main/src:/var/www/main:ro
+    depends_on:
+      - app-main
+
+  db:
+    image: "${IMAGE_DB:-mariadb:lts}"
+    container_name: "${PROJECT_FULL:-devbox-laravel}-db"
+    hostname: db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 3s
+      timeout: 2s
+      retries: 50
+      start_period: 5s
+    ports:
+      - "${DB_PORT:-13306}:3306"
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD:-root}"
+
+  redis:
+    image: "${IMAGE_REDIS:-redis:latest}"
+    container_name: "${PROJECT_FULL:-devbox-laravel}-redis"
+    hostname: redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 2s
+      retries: 50
+      start_period: 5s
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+
+  app-main:
+    image: "${IMAGE_APP_MAIN:-php:8.3-fpm}"
+    container_name: "${PROJECT_FULL:-devbox-laravel}-app-main"
+    hostname: main
+    restart: unless-stopped
+    extra_hosts:
+      - host.docker.internal:host-gateway
+      - "${APP_HOST:-app.localhost}:host-gateway"
+    volumes:
+      - ./services/main/src:/var/www/app
+      - ./services/main/home:/home/www-data
+      - ./services/main/logs:/var/www/app/storage/logs
+      - composer_cache:/home/www-data/.composer/cache
+    env_file:
+      - path: .env
+        required: false
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy

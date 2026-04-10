@@ -1,0 +1,43 @@
+# Overlay: Redis Insight — Redis GUI with auto-connect setup.
+# Enabled when tools.redis_insight.enabled = true in devbox config.
+
+volumes:
+  redisinsight:
+
+services:
+  redis-insight:
+    image: "${IMAGE_REDISINSIGHT:-redis/redisinsight:latest}"
+    container_name: "${PROJECT_FULL:-devbox-laravel}-redis-insight"
+    restart: unless-stopped
+    ports:
+      - "${REDIS_INSIGHT_PORT:-5540}:5540"
+    volumes:
+      - redisinsight:/data
+    depends_on:
+      - redis
+
+  redis-insight-setup:
+    image: curlimages/curl:latest
+    container_name: "${PROJECT_FULL:-devbox-laravel}-redis-insight-setup"
+    entrypoint: /bin/sh -c
+    command:
+      - |
+        set -euo pipefail
+        sleep 10s
+        curl -s -X "PATCH" "http://redis-insight:5540/api/settings" \
+          -H "Content-Type: application/json; charset=utf-8" \
+          -d '{"agreements":{"analytics":false,"notifications":false,"encryption":false,"eula":true}}'
+        if [ $$(curl -s "http://redis-insight:5540/api/databases") = "[]" ]; then
+          echo "No existing database found. Adding Redis database..."
+          curl -s -X "POST" "http://redis-insight:5540/api/databases" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d '{"host":"redis","name":"Main","port":6379,"tls":false}'
+        else
+          echo "Database already exists. Skipping."
+        fi
+    depends_on:
+      redis:
+        condition: service_healthy
+      redis-insight:
+        condition: service_started
+    restart: on-failure

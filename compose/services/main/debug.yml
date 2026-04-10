@@ -1,0 +1,20 @@
+# Overlay: app-main-debug — PHP-FPM container with Xdebug enabled.
+# Enabled when runtime.debug.enabled = true in devbox config.
+# Mounts services/main/runtime for profiler output and Xdebug traces.
+
+services:
+  app-main-debug:
+    extends:
+      file: compose.yaml
+      service: app-main
+    container_name: "${PROJECT_FULL:-devbox-laravel}-app-main-debug"
+    hostname: main-debug
+    volumes:
+      - ./services/main/runtime:/tmp
+    environment:
+      PHP_ENABLE_XDEBUG: "true"
+      DBGP_IDEKEY: "${XDEBUG_IDEKEY:-PHPSTORM}"
+      PHP_IDE_CONFIG: "serverName=${APP_HOST:-app.localhost}"
+    depends_on:
+      app-main:
+        condition: service_started
