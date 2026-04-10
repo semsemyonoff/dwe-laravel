@@ -336,13 +336,13 @@ Deploy pipeline lives in a separate `devbox/deploy.yml` (tracked, not part of th
 
 Output resolved deploy plan. Evaluates `when` conditions. Shows step type (run/make) and the implicit `.env` generation step.
 
-- [ ] add `devbox-cli/internal/command/deploy.go` with `newDeployCmd` and `newDeployPlanCmd`
-- [ ] implement: load config (including deploy.yml), always prepend implicit `.env` generation step, iterate phases/steps, evaluate `when` via `tpl.EvalCondition`, print phase headers + step name/type/description/command
-- [ ] `table` format (default): human-readable, shows phase headers, step type badge `[run]`/`[make]`, description
-- [ ] `shell` format: emit executable commands — `cmd:` steps as-is, `make:` steps as `make <target>`
-- [ ] register `newDeployCmd(flags)` in `root.go`
-- [ ] write tests: truthy `when` included, falsy `when` excluded, no `when` always included, empty phases → empty, implicit .env step always first, both run/make step types rendered correctly in both formats
-- [ ] run tests + lint — must pass before task 8
+- [x] add `devbox-cli/internal/command/deploy.go` with `newDeployCmd` and `newDeployPlanCmd`
+- [x] implement: load config (including deploy.yml), always prepend implicit `.env` generation step, iterate phases/steps, evaluate `when` via `tpl.EvalCondition`, print phase headers + step name/type/description/command
+- [x] `table` format (default): human-readable, shows phase headers, step type badge `[run]`/`[make]`, description
+- [x] `shell` format: emit executable commands — `cmd:` steps as-is, `make:` steps as `make <target>`
+- [x] register `newDeployCmd(flags)` in `root.go`
+- [x] write tests: truthy `when` included, falsy `when` excluded, no `when` always included, empty phases → empty, implicit .env step always first, both run/make step types rendered correctly in both formats
+- [x] run tests + lint — must pass before task 8
 
 ### Task 8: Add `devbox deploy step` command
 
