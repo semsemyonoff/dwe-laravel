@@ -1,0 +1,103 @@
+header:
+  ascii:
+    lines:
+      - "Welcome to"
+      - "Devbox Next"
+    font: doom
+    color: red
+
+sections:
+  - id: devbox_info
+    items:
+      - type: subheader
+        text: Devbox
+      - type: definition
+        name: Project
+        value: "{{ .Project.FullName }}"
+      - type: definition
+        name: State
+        value: "{{ .State }}"
+        when: "{{ .State }}"
+
+  - id: urls
+    title: URLs
+    items:
+      - type: subheader
+        text: Main
+      - type: definition
+        name: URL
+        icon: "🔗"
+        value: "{{ appURL .Runtime.Hosts.Main .Runtime.Ports.App .Runtime.UseHTTPS }}"
+      - type: definition
+        name: SPX profiler
+        value: "{{ appURL .Runtime.Hosts.Main .Runtime.Ports.App .Runtime.UseHTTPS .Runtime.SPX.Path }}"
+        when: "{{ .Runtime.SPX.Path }}"
+      - type: subheader
+        text: Tools
+        when: "{{ .Tools.AnyEnabled }}"
+      - type: definition
+        name: "Adminer"
+        icon: "🛢"
+        value: '{{ appURL .Runtime.Hosts.Adminer .Runtime.Ports.App .Runtime.UseHTTPS }} | {{ appURL "" .Runtime.Ports.Adminer .Runtime.UseHTTPS }}'
+        when: "{{ .Tools.Adminer.Enabled }}"
+      - type: definition
+        name: "Redis Insight"
+        icon: "📕"
+        value: '{{ appURL .Runtime.Hosts.RedisInsight .Runtime.Ports.App .Runtime.UseHTTPS }} | {{ appURL "" .Runtime.Ports.RedisInsight .Runtime.UseHTTPS }}'
+        when: "{{ .Tools.RedisInsight.Enabled }}"
+      - type: definition
+        name: "Mailpit"
+        icon: "📨"
+        value: '{{ appURL .Runtime.Hosts.Mailpit .Runtime.Ports.App .Runtime.UseHTTPS }} | {{ appURL "" .Runtime.Ports.Mailpit .Runtime.UseHTTPS }}'
+        when: "{{ .Tools.Mailpit.Enabled }}"
+
+  - id: hosts
+    title: Hosts
+    items:
+      - type: warning
+        text: "Please, make sure this is added to your /etc/hosts file:"
+      - type: info
+        text: "127.0.0.1\t{{ .Runtime.Hosts.Main }}"
+      - type: info
+        text: "127.0.0.1\t{{ .Runtime.Hosts.Adminer }}"
+        when: "{{ .Tools.Adminer.Enabled }}"
+      - type: info
+        text: "127.0.0.1\t{{ .Runtime.Hosts.RedisInsight }}"
+        when: "{{ .Tools.RedisInsight.Enabled }}"
+      - type: info
+        text: "127.0.0.1\t{{ .Runtime.Hosts.Mailpit }}"
+        when: "{{ .Tools.Mailpit.Enabled }}"
+
+  - id: commands
+    title: General commands
+    items:
+      - type: subheader
+        text: Devbox
+      - type: definition
+        name: deploy
+        value: deploy project
+      - type: definition
+        name: run
+        value: run project
+      - type: definition
+        name: stop
+        value: stop project
+      - type: definition
+        name: restart
+        value: "restart (stop & run) project"
+      - type: subheader
+        text: CLI
+      - type: definition
+        name: cli
+        value: connect to app-main container
+      - type: definition
+        name: cli_root
+        value: connect to app-main container as root
+      - type: definition
+        name: db_cli
+        value: connect to DB console
+      - type: definition
+        name: redis_cli
+        value: connect to Redis console
+
+footer: true
