@@ -214,11 +214,11 @@ Print resolved compose file list (base + enabled overlays), one per line. Make u
 
 Print topology: services table + tools table. Single source of truth.
 
-- [ ] add `devbox-cli/internal/command/services.go` with `newServicesCmd`
-- [ ] implement: services table (name, type, dir, container) + tools table (name, enabled, port, host) using `render.Writer`
-- [ ] register `newServicesCmd(flags)` in `root.go`
-- [ ] write tests for data-building logic covering enabled/disabled tool rows
-- [ ] run tests + lint — must pass before task 4
+- [x] add `devbox-cli/internal/command/services.go` with `newServicesCmd`
+- [x] implement: services table (name, type, dir, container) + tools table (name, enabled, port, host) using `render.Writer`
+- [x] register `newServicesCmd(flags)` in `root.go`
+- [x] write tests for data-building logic covering enabled/disabled tool rows
+- [x] run tests + lint — must pass before task 4
 
 ### Task 4: Create Docker Compose files
 
