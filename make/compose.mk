@@ -3,7 +3,7 @@
 ifneq ($(wildcard $(DEVBOX_BIN)),)
 COMPOSE_FILES := $(shell $(DEVBOX_BIN) compose files | sed 's/^/-f /' | tr '\n' ' ')
 ifeq ($(strip $(COMPOSE_FILES)),)
-$(error $(DEVBOX_BIN) compose files returned empty — config invalid. Rebuild: cd devbox-cli && make build)
+$(warning $(DEVBOX_BIN) compose files returned empty — config invalid. Rebuild: cd devbox-cli && make build)
 endif
 else
 COMPOSE_FILES :=

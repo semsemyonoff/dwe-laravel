@@ -20,7 +20,6 @@ services:
     volumes:
       - ../services/main:/var/www
       - composer_cache:/home/www-data/.composer/cache
-      - ${HOME}/.ssh:/home/www-data/.ssh:ro
     working_dir: /var/www
     env_file:
       - path: ../.env
