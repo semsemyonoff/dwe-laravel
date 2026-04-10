@@ -348,12 +348,12 @@ Output resolved deploy plan. Evaluates `when` conditions. Shows step type (run/m
 
 Run a single named deploy step by `<phase>/<step>` address. Handles both `cmd:` (exec shell command) and `make:` (exec `make <target>`) step types.
 
-- [ ] implement `newDeployStepCmd` in `deploy.go`: find step by `<phase>/<step>`, evaluate `when`, dispatch based on step type:
+- [x] implement `newDeployStepCmd` in `deploy.go`: find step by `<phase>/<step>`, evaluate `when`, dispatch based on step type:
   - `cmd:` → exec via `os/exec`
   - `make:` → exec `make -f Makefile <target>` via `os/exec`
-- [ ] add `--dry-run` flag that prints the resolved command without executing
-- [ ] write tests: step with `cmd:` executed, step with `make:` dispatched correctly, step not found → error, when=false → skip with message, dry-run prints command for both types
-- [ ] run tests + lint — must pass before task 9
+- [x] add `--dry-run` flag that prints the resolved command without executing
+- [x] write tests: step with `cmd:` executed, step with `make:` dispatched correctly, step not found → error, when=false → skip with message, dry-run prints command for both types
+- [x] run tests + lint — must pass before task 9
 
 ### Task 9: Add `devbox deploy config` command
 
