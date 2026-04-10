@@ -1,6 +1,9 @@
 # Compose file list is computed by the CLI based on enabled tools/services.
 # This avoids hardcoding overlay logic in Make.
 COMPOSE_FILES := $(shell $(DEVBOX_BIN) compose files | sed 's/^/-f /' | tr '\n' ' ')
+ifeq ($(strip $(COMPOSE_FILES)),)
+$(error $(DEVBOX_BIN) compose files returned empty — binary missing or config invalid. Build with: cd devbox-cli && make build)
+endif
 
 DOCKER_COMPOSE = docker compose -p $(PROJECT_FULL) $(COMPOSE_FILES)
 
