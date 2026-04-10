@@ -26,6 +26,8 @@ runtime:
     mailpit: mail.localhost
   spx:
     path: ""
+  debug:
+    enabled: false
 
 # Active state name, empty = no state.
 state: ""

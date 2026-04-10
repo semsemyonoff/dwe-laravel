@@ -204,11 +204,11 @@ Add compose overlay declarations to `DevboxConfig` so CLI knows which compose fi
 
 Print resolved compose file list (base + enabled overlays), one per line. Make uses this for `-f` flags.
 
-- [ ] add `devbox-cli/internal/command/compose.go` with `newComposeCmd` and `newComposeFilesCmd`
-- [ ] implement `buildComposeFileList`: always emit base, then check tool/service enabled state for each overlay key (adminer/redis_insight/mailpit map to `cfg.Tools`, debug maps to a new `runtime.debug.enabled` flag or similar)
-- [ ] register `newComposeCmd(flags)` in `root.go`
-- [ ] write tests for `buildComposeFileList`: base only, one tool enabled, multiple tools, disabled excluded, debug on/off
-- [ ] run tests + lint — must pass before task 3
+- [x] add `devbox-cli/internal/command/compose.go` with `newComposeCmd` and `newComposeFilesCmd`
+- [x] implement `buildComposeFileList`: always emit base, then check tool/service enabled state for each overlay key (adminer/redis_insight/mailpit map to `cfg.Tools`, debug maps to a new `runtime.debug.enabled` flag or similar)
+- [x] register `newComposeCmd(flags)` in `root.go`
+- [x] write tests for `buildComposeFileList`: base only, one tool enabled, multiple tools, disabled excluded, debug on/off
+- [x] run tests + lint — must pass before task 3
 
 ### Task 3: Add `devbox services` command
 
