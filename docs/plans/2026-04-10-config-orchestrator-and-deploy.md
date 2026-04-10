@@ -433,8 +433,8 @@ Thin Make layer. Variables come from generated `.env` (loaded via `include .env`
 
 ### Task 14: Update documentation
 
-- [ ] update `devbox/help.yml` to include new commands (`compose files`, `compose wait`, `services`, `deploy plan`, `deploy step`, `deploy config`, `render ide`)
-- [ ] update `CLAUDE.md` / `AGENTS.md` with new directory structure, compose naming, commands, and config schema
+- [x] update `devbox/help.yml` to include new commands (`compose files`, `compose wait`, `services`, `deploy plan`, `deploy step`, `deploy config`, `render ide`)
+- [x] update `CLAUDE.md` / `AGENTS.md` with new directory structure, compose naming, commands, and config schema
 
 ## Technical Details
 
