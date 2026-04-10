@@ -7,12 +7,12 @@ volumes:
 
 networks:
   default:
-    name: ${PROJECT_FULL:-devbox-laravel}
+    name: ${PROJECT_PREFIX:-devbox}-${PROJECT_NAME:-laravel}
 
 services:
   nginx:
     image: "${IMAGE_NGINX:-nginx:latest}"
-    container_name: "${PROJECT_FULL:-devbox-laravel}-nginx"
+    container_name: "${PROJECT_PREFIX:-devbox}-${PROJECT_NAME:-laravel}-nginx"
     restart: unless-stopped
     extra_hosts:
       - host.docker.internal:host-gateway
@@ -25,7 +25,7 @@ services:
 
   db:
     image: "${IMAGE_DB:-mariadb:lts}"
-    container_name: "${PROJECT_FULL:-devbox-laravel}-db"
+    container_name: "${PROJECT_PREFIX:-devbox}-${PROJECT_NAME:-laravel}-db"
     hostname: db
     restart: unless-stopped
     healthcheck:
@@ -43,7 +43,7 @@ services:
 
   redis:
     image: "${IMAGE_REDIS:-redis:latest}"
-    container_name: "${PROJECT_FULL:-devbox-laravel}-redis"
+    container_name: "${PROJECT_PREFIX:-devbox}-${PROJECT_NAME:-laravel}-redis"
     hostname: redis
     restart: unless-stopped
     healthcheck:
@@ -57,7 +57,7 @@ services:
 
   app-main:
     image: "${IMAGE_APP_MAIN:-php:8.3-fpm}"
-    container_name: "${PROJECT_FULL:-devbox-laravel}-app-main"
+    container_name: "${PROJECT_PREFIX:-devbox}-${PROJECT_NAME:-laravel}-app-main"
     hostname: main
     restart: unless-stopped
     extra_hosts:

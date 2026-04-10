@@ -3,11 +3,8 @@
 .PHONY: deploy deploy_reset
 
 deploy:
-	@$(call inf,Generating .env...)
-	@$(DEVBOX_BIN) render env -o .env
-	@$(call ok,.env generated)
 	@$(call inf,Running deploy plan...)
-	@$(DEVBOX_BIN) deploy plan --format=shell | sh
+	@$(DEVBOX_BIN) deploy plan --format=shell > /tmp/.devbox-plan.sh && sh /tmp/.devbox-plan.sh; _code=$$?; rm -f /tmp/.devbox-plan.sh; exit $$_code
 	@$(call ok,Deploy complete)
 
 deploy_reset:
