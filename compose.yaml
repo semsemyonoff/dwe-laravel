@@ -64,6 +64,12 @@ services:
     container_name: "${PROJECT_PREFIX:-devbox}-${PROJECT_NAME:-laravel}-app-main"
     hostname: main
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "php-fpm -t 2>&1 | grep -q 'NOTICE'"]
+      interval: 3s
+      timeout: 2s
+      retries: 20
+      start_period: 5s
     extra_hosts:
       - host.docker.internal:host-gateway
       - "${APP_HOST:-app.localhost}:host-gateway"
