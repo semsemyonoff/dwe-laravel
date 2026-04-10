@@ -1,0 +1,53 @@
+# Deploy pipeline declaration.
+# Steps execute sequentially within each phase.
+# .env generation is always performed first (implicit, not listed).
+#
+# Step types:
+#   cmd:  — shell command (executed directly)
+#   make: — Make target (executed via make -f Makefile <target>)
+#
+# Steps with make: can also be called during regular operation (e.g. make up).
+# Steps with when: are skipped if the config path resolves to falsy.
+
+phases:
+  - name: setup
+    description: Prepare service directories and install application
+    steps:
+      - name: create-dirs
+        cmd: mkdir -p services/main/{src,configs,logs,home,runtime}
+        description: Create service hub directories
+      - name: install
+        cmd: >-
+          docker compose -f compose/installer.yml
+          run --rm -u $(id -u) -w /var/www app-installer
+          laravel new src --force --database=mariadb --phpunit -n
+        description: Install Laravel project via installer container
+      - name: copy-configs
+        cmd: devbox deploy config main
+        description: Copy template configs to service directory
+
+  - name: start
+    description: Start containers and wait for health
+    steps:
+      - name: up
+        make: up
+        description: Start all containers
+      - name: wait-healthy
+        cmd: devbox compose wait
+        description: Wait for all containers to become healthy
+
+  - name: init
+    description: Initialize application (database, dependencies, keys)
+    steps:
+      - name: db-create
+        make: db_create
+        description: Create application database
+      - name: composer-install
+        make: composer_install
+        description: Install PHP dependencies
+      - name: key-generate
+        make: key_generate
+        description: Generate Laravel application key
+      - name: migrate
+        make: migrate
+        description: Run database migrations

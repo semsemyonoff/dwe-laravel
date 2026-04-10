@@ -267,15 +267,15 @@ Deploy pipeline lives in a separate `devbox/deploy.yml` (tracked, not part of th
 
 `.env` generation is always the implicit first step of any deploy — the CLI inserts it automatically before phase 1, because Make and compose both depend on `.env` for variables.
 
-- [ ] add structs in `devbox-cli/internal/config/devbox.go`:
+- [x] add structs in `devbox-cli/internal/config/devbox.go`:
   - `DeployConfig` with `Phases []DeployPhase`
   - `DeployPhase` with `Name string`, `Description string`, `Steps []DeployStep`
   - `DeployStep` with `Name string`, `Cmd string`, `Make string`, `Description string`, `When string`
   - A step must have exactly one of `Cmd` or `Make` set (not both)
-- [ ] add `Deploy DeployConfig` field to `DevboxConfig`
-- [ ] add `LoadDeployConfig(deployPath string)` function that loads `devbox/deploy.yml` separately (not merged with the 3-layer config)
-- [ ] update `LoadConfig` to also load `devbox/deploy.yml` if present and populate `cfg.Deploy`
-- [ ] create `devbox/deploy.yml` — full pipeline matching legacy:
+- [x] add `Deploy DeployConfig` field to `DevboxConfig`
+- [x] add `LoadDeployConfig(deployPath string)` function that loads `devbox/deploy.yml` separately (not merged with the 3-layer config)
+- [x] update `LoadConfig` to also load `devbox/deploy.yml` if present and populate `cfg.Deploy`
+- [x] create `devbox/deploy.yml` — full pipeline matching legacy:
   ```yaml
   # Deploy pipeline declaration.
   # Steps execute sequentially within each phase.
@@ -329,8 +329,8 @@ Deploy pipeline lives in a separate `devbox/deploy.yml` (tracked, not part of th
           make: migrate
           description: Run database migrations
   ```
-- [ ] write tests for loading deploy config: phases present, step with `run`, step with `make`, step with `when`, validation that step has exactly one of run/make
-- [ ] run tests + lint — must pass before task 7
+- [x] write tests for loading deploy config: phases present, step with `run`, step with `make`, step with `when`, validation that step has exactly one of run/make
+- [x] run tests + lint — must pass before task 7
 
 ### Task 7: Add `devbox deploy plan` command
 
