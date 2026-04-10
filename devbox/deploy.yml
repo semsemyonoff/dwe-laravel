@@ -14,14 +14,15 @@ phases:
     description: Prepare service directories and install application
     steps:
       - name: create-dirs
-        cmd: mkdir -p services/main/{src,configs,logs,home,runtime}
+        cmd: mkdir -p services/main/src services/main/configs services/main/logs services/main/home services/main/runtime
         description: Create service hub directories
       - name: install
         cmd: >-
+          test "$(ls -A services/main/src 2>/dev/null)" ||
           docker compose -f compose/installer.yml
           run --rm -u $(id -u) -w /var/www app-installer
-          laravel new src --force --database=mariadb --phpunit -n
-        description: Install Laravel project via installer container
+          composer create-project laravel/laravel src --no-interaction --prefer-dist
+        description: Install Laravel project via installer container (skipped if already installed)
       - name: copy-configs
         cmd: ./bin/devbox deploy config main
         description: Copy template configs to service directory

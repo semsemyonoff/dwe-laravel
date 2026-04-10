@@ -4,7 +4,7 @@
 
 deploy:
 	@$(call inf,Running deploy plan...)
-	@$(DEVBOX_BIN) deploy plan --format=shell > /tmp/.devbox-plan.sh && sh /tmp/.devbox-plan.sh; _code=$$?; rm -f /tmp/.devbox-plan.sh; exit $$_code
+	@_plan=$$(mktemp); $(DEVBOX_BIN) deploy plan --format=shell > $$_plan && sh $$_plan; _code=$$?; rm -f $$_plan; exit $$_code
 	@$(call ok,Deploy complete)
 
 deploy_reset:
