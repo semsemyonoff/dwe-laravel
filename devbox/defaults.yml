@@ -140,7 +140,7 @@ services:
     configs:
       - src: configs/app/main/.env
         dest: .env
-        mode: default
+        mode: replace
 
 ide:
   vscode:
