@@ -18,3 +18,8 @@
 #   ports:
 #     app: 8080
 #     mailpit: 8026
+
+# Enable Xdebug (adds debug compose overlay when running devbox compose files).
+# runtime:
+#   debug:
+#     enabled: true
