@@ -101,6 +101,28 @@ exports:
     - name: STATE
       from: state
 
+    - name: PROJECT_PREFIX
+      from: project.prefix
+
+    - name: PROJECT_NAME
+      from: project.name
+
+    - name: APP_MAIN_CONTAINER
+      from: services.main.container
+
+    - name: APP_MAIN_DIR_INTERNAL
+      from: services.main.dir_internal
+
+    - name: DB_DATABASE
+      from: db.database
+
+    - name: DB_PASSWORD
+      from: db.password
+
+db:
+  database: laravel
+  password: root
+
 compose:
   base: compose.yaml
   overlays:

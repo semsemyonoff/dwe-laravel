@@ -2,7 +2,16 @@ MAKEFLAGS += --no-print-directory
 
 DEVBOX_BIN := ./bin/devbox
 
+-include .env
+
+PROJECT_PREFIX ?= devbox
+PROJECT_NAME   ?= laravel
+PROJECT_FULL    = $(PROJECT_PREFIX)-$(PROJECT_NAME)
+
 include make/macros.mk
+include make/compose.mk
+include make/service.mk
+include make/deploy.mk
 
 .PHONY: all $(MAKECMDGOALS)
 

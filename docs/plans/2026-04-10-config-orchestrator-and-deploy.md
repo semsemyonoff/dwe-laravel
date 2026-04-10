@@ -381,25 +381,25 @@ Health check polling — replaces legacy `wait_all_healthy`. Polls each containe
 
 Thin Make layer. Variables come from generated `.env` (loaded via `include .env`). Atomic targets are reusable — called both during deploy (via `make:` step type) and during regular operation.
 
-- [ ] add `make/compose.mk`:
+- [x] add `make/compose.mk`:
   - `COMPOSE_FILES` variable via `$(shell $(DEVBOX_BIN) compose files | sed 's/^/-f /' | tr '\n' ' ')`
   - `DOCKER_COMPOSE = docker compose -p $(PROJECT_FULL) $(COMPOSE_FILES)` macro
   - targets: `up`, `down`, `stop`, `restart`, `logs`
-- [ ] add `make/service.mk` — atomic service targets (referenced by `deploy.yml` via `make:` steps, also usable standalone):
+- [x] add `make/service.mk` — atomic service targets (referenced by `deploy.yml` via `make:` steps, also usable standalone):
   - `db_create` — `$(DOCKER_COMPOSE) exec db mariadb -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS $(DB_DATABASE) ...'`
   - `composer_install` — `$(DOCKER_COMPOSE) exec -u $$(id -u) -w $(APP_MAIN_DIR_INTERNAL) $(APP_MAIN_CONTAINER) composer install ...`
   - `key_generate` — `$(DOCKER_COMPOSE) exec -u $$(id -u) -w $(APP_MAIN_DIR_INTERNAL) $(APP_MAIN_CONTAINER) php artisan key:generate`
   - `migrate` — `$(DOCKER_COMPOSE) exec -u $$(id -u) -w $(APP_MAIN_DIR_INTERNAL) $(APP_MAIN_CONTAINER) php artisan migrate`
   - Variables (`APP_MAIN_CONTAINER`, `APP_MAIN_DIR_INTERNAL`, `DB_DATABASE` etc.) come from `.env`
-- [ ] add `make/deploy.mk`:
+- [x] add `make/deploy.mk`:
   - `deploy` target: first runs `devbox render env -o .env`, then calls `devbox deploy plan --format=shell | sh` or iterates steps
   - `deploy_reset` target: confirm → stop → remove volumes (filter by project name) → rm -rf services/* → success message
-- [ ] update `Makefile`:
+- [x] update `Makefile`:
   - `-include .env` at the top (load generated variables, `-` to not fail if missing)
   - `include make/compose.mk`, `include make/service.mk`, `include make/deploy.mk`
   - `PROJECT_FULL` derived from `.env` variables or `$(shell $(DEVBOX_BIN) config get project.prefix)-$(shell $(DEVBOX_BIN) config get project.name)`
-- [ ] verify `make help` and `make env` still work
-- [ ] run `cd devbox-cli && make test` — must pass before task 12
+- [x] verify `make help` and `make env` still work
+- [x] run `cd devbox-cli && make test` — must pass before task 12
 
 ### Task 12: Design IDE/devcontainer config generation
 
