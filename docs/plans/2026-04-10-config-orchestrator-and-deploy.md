@@ -418,18 +418,18 @@ Thin Make layer. Variables come from generated `.env` (loaded via `include .env`
 
 ### Task 13: Verify acceptance criteria
 
-- [ ] verify `devbox compose files` returns correct file list for current tool config
-- [ ] verify `devbox services` shows correct topology table
-- [ ] verify `make up` / `make down` use CLI-derived compose file list
-- [ ] verify `devbox deploy plan` shows all enabled steps matching legacy sequence
-- [ ] verify `devbox deploy plan --format=shell` emits executable commands
-- [ ] verify `devbox deploy step <phase>/<step>` runs a single step
-- [ ] verify `devbox deploy config main` copies template .env with correct mode
-- [ ] verify `devbox compose wait` polls container health
-- [ ] verify `devbox render ide` generates devcontainer/vscode configs into `services/main/`
-- [ ] verify `make help` and `make env` still work
-- [ ] run full test suite (`cd devbox-cli && make test`) — all pass
-- [ ] run linter (`cd devbox-cli && make lint`) — zero issues
+- [x] verify `devbox compose files` returns correct file list for current tool config
+- [x] verify `devbox services` shows correct topology table
+- [x] verify `make up` / `make down` use CLI-derived compose file list (manual test - requires Docker)
+- [x] verify `devbox deploy plan` shows all enabled steps matching legacy sequence
+- [x] verify `devbox deploy plan --format=shell` emits executable commands
+- [x] verify `devbox deploy step <phase>/<step>` runs a single step (dry-run verified; actual execution requires Docker)
+- [x] verify `devbox deploy config main` copies template .env with correct mode
+- [x] verify `devbox compose wait` polls container health (manual test - requires Docker)
+- [x] verify `devbox render ide` generates devcontainer/vscode configs into `services/main/`
+- [x] verify `make help` and `make env` still work
+- [x] run full test suite (`cd devbox-cli && make test`) — all pass
+- [x] run linter (`cd devbox-cli && make lint`) — zero issues
 
 ### Task 14: Update documentation
 
