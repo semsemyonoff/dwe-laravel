@@ -224,19 +224,19 @@ Print topology: services table + tools table. Single source of truth.
 
 Base `compose.yaml` at root (mandatory infrastructure). Overlays in `compose/` subdirectories (optional services/tools).
 
-- [ ] create `compose.yaml` — base services:
+- [x] create `compose.yaml` — base services:
   - `nginx` — reverse proxy, volume-mounts `services/main/src`
   - `db` — mariadb, named volume for persistence, healthcheck
   - `app-main` — PHP-FPM, volume-mounts `services/main/src`, `services/main/home`, `services/main/logs`, env_file from `.env`
   - named network, named volumes
   - Logs and config concerns merged directly (no separate overlays)
-- [ ] create `compose/tools/adminer.yml` — adminer service
-- [ ] create `compose/tools/redis_insight.yml` — redis_insight service
-- [ ] create `compose/tools/mailpit.yml` — mailpit service
-- [ ] create `compose/services/main/debug.yml` — `app-main-debug` container (PHP_ENABLE_XDEBUG=true, mounts `services/main/runtime`)
-- [ ] create `compose/installer.yml` — installer container for `laravel new` (standalone, used only during deploy)
-- [ ] verify `devbox compose files` output matches file list
-- [ ] run existing tests — must pass before task 5
+- [x] create `compose/tools/adminer.yml` — adminer service
+- [x] create `compose/tools/redis_insight.yml` — redis_insight service
+- [x] create `compose/tools/mailpit.yml` — mailpit service
+- [x] create `compose/services/main/debug.yml` — `app-main-debug` container (PHP_ENABLE_XDEBUG=true, mounts `services/main/runtime`)
+- [x] create `compose/installer.yml` — installer container for `laravel new` (standalone, used only during deploy)
+- [x] verify `devbox compose files` output matches file list
+- [x] run existing tests — must pass before task 5
 
 ### Task 5: Extend service config schema
 
