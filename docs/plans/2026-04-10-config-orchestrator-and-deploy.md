@@ -371,11 +371,11 @@ Copy/merge template configs to service directories. Replaces legacy `config_copy
 
 Health check polling — replaces legacy `wait_all_healthy`. Polls each container's health status with timeout.
 
-- [ ] add `newComposeWaitCmd` in `compose.go`: get container IDs via `docker compose ps -q`, inspect health status, poll with configurable interval/timeout
-- [ ] implement: for each container — if healthy: ok, if unhealthy: error, if starting: poll (default 30 attempts × 2s = 60s timeout), if no healthcheck: warn and skip
-- [ ] add `--timeout` flag (default 60s) and `--interval` flag (default 2s)
-- [ ] write tests for health-check parsing logic (mock docker output)
-- [ ] run tests + lint — must pass before task 11
+- [x] add `newComposeWaitCmd` in `compose.go`: get container IDs via `docker compose ps -q`, inspect health status, poll with configurable interval/timeout
+- [x] implement: for each container — if healthy: ok, if unhealthy: error, if starting: poll (default 30 attempts × 2s = 60s timeout), if no healthcheck: warn and skip
+- [x] add `--timeout` flag (default 60s) and `--interval` flag (default 2s)
+- [x] write tests for health-check parsing logic (mock docker output)
+- [x] run tests + lint — must pass before task 11
 
 ### Task 11: Update Makefile with compose-aware, deploy, and atomic service targets
 
