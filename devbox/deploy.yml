@@ -7,7 +7,7 @@
 #   make: — Make target (executed via make -f Makefile <target>)
 #
 # Steps with make: can also be called during regular operation (e.g. make up).
-# Steps with when: are skipped if the config path resolves to falsy.
+# Steps with when: are skipped if the Go template expression resolves to falsy ("", "false", "0").
 
 phases:
   - name: setup
