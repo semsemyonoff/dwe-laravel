@@ -242,10 +242,10 @@ Base `compose.yaml` at root (mandatory infrastructure). Overlays in `compose/` s
 
 Template configs in `configs/` (tracked). Service declares its config files and container identity in `devbox/defaults.yml`. CLI uses this during deploy to copy/merge configs.
 
-- [ ] create `configs/app/main/.env` — Laravel .env template (DB_HOST=db, REDIS_HOST=redis, etc. matching compose service names)
-- [ ] extend `ServiceConfig` struct: add `Container string`, `DirInternal string` (workdir inside container, e.g. `/var/www/app`), `Configs []ServiceConfigFile` (with `Src`, `Dest`, `Mode` fields)
-- [ ] add `ServiceConfigFile` struct: `Src string` (template path), `Dest string` (filename in configs/), `Mode string` (default/update/replace)
-- [ ] add service config to `devbox/defaults.yml`:
+- [x] create `configs/app/main/.env` — Laravel .env template (DB_HOST=db, REDIS_HOST=redis, etc. matching compose service names)
+- [x] extend `ServiceConfig` struct: add `Container string`, `DirInternal string` (workdir inside container, e.g. `/var/www/app`), `Configs []ServiceConfigFile` (with `Src`, `Dest`, `Mode` fields)
+- [x] add `ServiceConfigFile` struct: `Src string` (template path), `Dest string` (filename in configs/), `Mode string` (default/update/replace)
+- [x] add service config to `devbox/defaults.yml`:
   ```yaml
   services:
     main:
@@ -258,8 +258,8 @@ Template configs in `configs/` (tracked). Service declares its config files and 
           dest: .env
           mode: replace
   ```
-- [ ] write tests for loading service config with Container, DirInternal, Configs fields
-- [ ] run tests + lint — must pass before task 6
+- [x] write tests for loading service config with Container, DirInternal, Configs fields
+- [x] run tests + lint — must pass before task 6
 
 ### Task 6: Extend config schema for deploy phases
 
