@@ -16,6 +16,8 @@ runtime:
   use_https: false
   ports:
     app: 80
+    db: 13306
+    redis: 6379
     adminer: 8080
     redis_insight: 5540
     mailpit: 8025
@@ -51,6 +53,14 @@ exports:
 
     - name: APP_PORT
       from: runtime.ports.app
+      format: int
+
+    - name: DB_PORT
+      from: runtime.ports.db
+      format: int
+
+    - name: REDIS_PORT
+      from: runtime.ports.redis
       format: int
 
     - name: APP_HOST
@@ -143,7 +153,7 @@ services:
     installer_image: composer:2
     configs:
       - src: configs/app/main/.env
-        dest: .env
+        dest: src/.env
         mode: replace
 
 ide:

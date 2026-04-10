@@ -22,12 +22,12 @@ services:
     entrypoint: /bin/sh -c
     command:
       - |
-        set -euo pipefail
+        set -eu
         sleep 10s
         curl -s -X "PATCH" "http://redis-insight:5540/api/settings" \
           -H "Content-Type: application/json; charset=utf-8" \
           -d '{"agreements":{"analytics":false,"notifications":false,"encryption":false,"eula":true}}'
-        if [ $$(curl -s "http://redis-insight:5540/api/databases") = "[]" ]; then
+        if [ "$$(curl -s 'http://redis-insight:5540/api/databases' | tr -d '[:space:]')" = "[]" ]; then
           echo "No existing database found. Adding Redis database..."
           curl -s -X "POST" "http://redis-insight:5540/api/databases" \
             -H "Content-Type: application/json; charset=utf-8" \
