@@ -185,9 +185,9 @@ make run
 
 Add compose overlay declarations to `DevboxConfig` so CLI knows which compose files to use. New naming: base is `compose.yaml` at root, overlays in `compose/` subdirectories.
 
-- [ ] add `ComposeConfig` struct with `Base string` (single base file) and `Overlays map[string]string` (category/name → file path) in `devbox-cli/internal/config/devbox.go`
-- [ ] add `Compose ComposeConfig` field to `DevboxConfig`
-- [ ] add compose config to `devbox/defaults.yml`:
+- [x] add `ComposeConfig` struct with `Base string` (single base file) and `Overlays map[string]string` (category/name → file path) in `devbox-cli/internal/config/devbox.go`
+- [x] add `Compose ComposeConfig` field to `DevboxConfig`
+- [x] add compose config to `devbox/defaults.yml`:
   ```yaml
   compose:
     base: compose.yaml
@@ -197,8 +197,8 @@ Add compose overlay declarations to `DevboxConfig` so CLI knows which compose fi
       mailpit: compose/tools/mailpit.yml
       debug: compose/services/main/debug.yml
   ```
-- [ ] write tests for loading compose config via `LoadConfig` (base present, overlays loaded correctly)
-- [ ] run tests + lint — must pass before task 2
+- [x] write tests for loading compose config via `LoadConfig` (base present, overlays loaded correctly)
+- [x] run tests + lint — must pass before task 2
 
 ### Task 2: Add `devbox compose files` command
 

@@ -98,3 +98,11 @@ exports:
 
     - name: STATE
       from: state
+
+compose:
+  base: compose.yaml
+  overlays:
+    adminer: compose/tools/adminer.yml
+    redis_insight: compose/tools/redis_insight.yml
+    mailpit: compose/tools/mailpit.yml
+    debug: compose/services/main/debug.yml
