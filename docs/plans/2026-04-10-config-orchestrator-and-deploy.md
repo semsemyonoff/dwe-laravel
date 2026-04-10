@@ -359,13 +359,13 @@ Run a single named deploy step by `<phase>/<step>` address. Handles both `cmd:` 
 
 Copy/merge template configs to service directories. Replaces legacy `config_copy_%` / `apl_cnf` macro.
 
-- [ ] add `newDeployConfigCmd` in `deploy.go`: takes service name arg, reads `ServiceConfig.Configs[]`, for each entry copies `Src` → `services/<name>/configs/<Dest>` using `Mode`
-- [ ] implement copy modes:
+- [x] add `newDeployConfigCmd` in `deploy.go`: takes service name arg, reads `ServiceConfig.Configs[]`, for each entry copies `Src` → `services/<name>/configs/<Dest>` using `Mode`
+- [x] implement copy modes:
   - `default` — skip if destination exists
   - `replace` — overwrite
   - `update` — for `.env` files, merge new keys without overwriting existing (port of legacy AWK logic)
-- [ ] write tests: default mode skips existing, replace overwrites, update merges new keys preserving existing values
-- [ ] run tests + lint — must pass before task 10
+- [x] write tests: default mode skips existing, replace overwrites, update merges new keys preserving existing values
+- [x] run tests + lint — must pass before task 10
 
 ### Task 10: Add `devbox compose wait` command
 
