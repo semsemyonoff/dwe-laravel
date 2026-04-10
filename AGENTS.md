@@ -36,7 +36,7 @@ The project exists to solve the "Make-as-DSL" problem in the legacy devbox, wher
 - All user-visible output goes through CLI macros: `$(call ok,...)`, `$(call err,...)`, `$(call warn,...)`, `$(call inf,...)`. Defined in `make/macros.mk`.
 - Public targets use `snake_case`. Internal targets use `private_*` prefix.
 - Use `@` to suppress command echo in recipes.
-- Makefile includes `make/macros.mk` for output; future phases will add more `.mk` files for atomic commands.
+- Makefile includes `make/macros.mk`, `make/compose.mk`, `make/service.mk`, and `make/deploy.mk`. Each has a single responsibility: output macros, compose file list + DOCKER_COMPOSE macro, atomic service targets, and deploy targets.
 - Cross-platform: must work on macOS and Linux (including WSL). Prefer portable shell constructs.
 
 ### General
@@ -67,7 +67,7 @@ make/macros.mk                      # output macros (ok, err, warn, inf) → dev
 make/compose.mk                     # COMPOSE_FILES, DOCKER_COMPOSE macro, up/down/stop/restart/logs
 make/service.mk                     # atomic service targets: db_create, composer_install, key_generate, migrate
 make/deploy.mk                      # deploy, deploy_reset targets
-compose.yaml                        # base compose: nginx, db, app-main (mandatory infrastructure)
+compose.yaml                        # base compose: nginx, db, redis, app-main (mandatory infrastructure)
 compose/tools/adminer.yml           # Adminer DB tool overlay
 compose/tools/redis_insight.yml     # Redis Insight GUI overlay
 compose/tools/mailpit.yml           # Mailpit email testing overlay
@@ -81,7 +81,7 @@ legacy/                             # old devbox repos (gitignored)
 
 ### Compose naming convention
 
-- `compose.yaml` at root — mandatory infrastructure (nginx, db, app-main), always started
+- `compose.yaml` at root — mandatory infrastructure (nginx, db, redis, app-main), always started
 - `compose/tools/<name>.yml` — optional tool services (adminer, redis_insight, mailpit)
 - `compose/services/<service>/<name>.yml` — optional service variants (debug container)
 - `compose/installer.yml` — standalone installer (deploy only, not in regular compose files list)
