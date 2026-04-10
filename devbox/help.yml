@@ -75,10 +75,16 @@ sections:
         text: Devbox
       - type: definition
         name: deploy
-        value: deploy project
+        value: deploy project (first-time setup)
+      - type: definition
+        name: deploy_reset
+        value: stop containers and remove all service data
       - type: definition
         name: up
         value: start project
+      - type: definition
+        name: down
+        value: stop and remove containers
       - type: definition
         name: stop
         value: stop project

@@ -14,7 +14,7 @@ deploy_reset:
 			$(call err,Aborted); exit 1; \
 		fi
 	@$(MAKE) stop || true
-	@VOLS=$$(docker volume ls -q --filter name=$(PROJECT_FULL)_); \
+	@VOLS=$$(docker volume ls -q | grep "^$(PROJECT_FULL)_"); \
 		[ -z "$$VOLS" ] || docker volume rm $$VOLS
 	@rm -rf services/
 	@$(call ok,Reset complete)
