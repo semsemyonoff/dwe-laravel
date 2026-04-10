@@ -405,16 +405,16 @@ Thin Make layer. Variables come from generated `.env` (loaded via `include .env`
 
 `devbox render ide` generates IDE-specific configs into service directories. Language-agnostic design with PHP/Laravel templates for this pilot.
 
-- [ ] add `IDEConfig` section to `DevboxConfig` with per-editor blocks: `vscode`, `jetbrains`, `devcontainer` — each with `enabled bool`
-- [ ] add `ide:` section to `devbox/defaults.yml` with defaults for Laravel pilot
-- [ ] add `devbox-cli/internal/command/ide.go` with `newRenderIDECmd` under existing `render` parent
-- [ ] implement: for each enabled editor, render Go templates into `services/<name>/.devcontainer/`, `services/<name>/.vscode/`, `services/<name>/.idea/` using `DevboxConfig` data
-- [ ] create initial templates:
+- [x] add `IDEConfig` section to `DevboxConfig` with per-editor blocks: `vscode`, `jetbrains`, `devcontainer` — each with `enabled bool`
+- [x] add `ide:` section to `devbox/defaults.yml` with defaults for Laravel pilot
+- [x] add `devbox-cli/internal/command/ide.go` with `newRenderIDECmd` under existing `render` parent
+- [x] implement: for each enabled editor, render Go templates into `services/<name>/.devcontainer/`, `services/<name>/.vscode/`, `services/<name>/.idea/` using `DevboxConfig` data
+- [x] create initial templates:
   - `devcontainer.json` (language-agnostic base + PHP extensions for this pilot)
   - `.vscode/launch.json` (Xdebug debug config)
   - `.vscode/settings.json` (PHP path, formatter)
-- [ ] write tests for template rendering with different config values
-- [ ] run tests + lint — must pass before task 13
+- [x] write tests for template rendering with different config values
+- [x] run tests + lint — must pass before task 13
 
 ### Task 13: Verify acceptance criteria
 
