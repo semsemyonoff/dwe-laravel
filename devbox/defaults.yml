@@ -119,6 +119,9 @@ exports:
     - name: DB_PASSWORD
       from: db.password
 
+    - name: IMAGE_APP_INSTALLER
+      from: services.main.installer_image
+
 db:
   database: laravel
   password: root
@@ -137,6 +140,7 @@ services:
     dir: ./services/main
     container: app-main
     dir_internal: /var/www/app
+    installer_image: composer:2
     configs:
       - src: configs/app/main/.env
         dest: .env
