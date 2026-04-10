@@ -16,5 +16,5 @@ deploy_reset:
 	@$(MAKE) stop || true
 	@VOLS=$$(docker volume ls -q --filter name=$(PROJECT_FULL)_); \
 		[ -z "$$VOLS" ] || docker volume rm $$VOLS
-	@rm -rf services/*
+	@rm -rf services/
 	@$(call ok,Reset complete)

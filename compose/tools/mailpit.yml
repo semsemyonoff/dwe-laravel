@@ -4,7 +4,7 @@
 services:
   mailpit:
     image: "${IMAGE_MAILPIT:-axllent/mailpit:latest}"
-    container_name: "${PROJECT_FULL:-devbox-laravel}-mailpit"
+    container_name: "${PROJECT_PREFIX:-devbox}-${PROJECT_NAME:-laravel}-mailpit"
     restart: unless-stopped
     ports:
       - "${MAILPIT_PORT:-8025}:8025"
