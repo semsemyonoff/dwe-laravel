@@ -9,9 +9,14 @@ db_create:
 		-e 'CREATE DATABASE IF NOT EXISTS `$(DB_DATABASE)` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'
 	@$(call ok,Database $(DB_DATABASE) created)
 
+# IMAGE_APP_INSTALLER defaults to composer:2 which bundles its own PHP.
+# If your app image uses a non-default PHP version, set IMAGE_APP_INSTALLER
+# in devbox/local.yml to an image matching your PHP version.
 composer_install:
-	@$(DOCKER_COMPOSE) exec -u $$(id -u) -w $(APP_MAIN_DIR_INTERNAL) $(APP_MAIN_CONTAINER) \
-		composer install --prefer-dist --no-interaction --optimize-autoloader
+	@docker run --rm -u $$(id -u) \
+		-v "$$(pwd)/services/main/src:/app" \
+		-w /app \
+		$${IMAGE_APP_INSTALLER:-composer:2} install --prefer-dist --no-interaction --optimize-autoloader
 	@$(call ok,Composer install complete)
 
 key_generate:
