@@ -23,7 +23,7 @@ phases:
           laravel new src --force --database=mariadb --phpunit -n
         description: Install Laravel project via installer container
       - name: copy-configs
-        cmd: devbox deploy config main
+        cmd: ./bin/devbox deploy config main
         description: Copy template configs to service directory
 
   - name: start
@@ -33,7 +33,7 @@ phases:
         make: up
         description: Start all containers
       - name: wait-healthy
-        cmd: devbox compose wait
+        cmd: ./bin/devbox compose wait
         description: Wait for all containers to become healthy
 
   - name: init

@@ -77,8 +77,8 @@ sections:
         name: deploy
         value: deploy project
       - type: definition
-        name: run
-        value: run project
+        name: up
+        value: start project
       - type: definition
         name: stop
         value: stop project
