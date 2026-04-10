@@ -5,9 +5,9 @@
 services:
   app-main-debug:
     extends:
-      file: compose.yaml
+      file: ../../../compose.yaml
       service: app-main
-    container_name: "${PROJECT_FULL:-devbox-laravel}-app-main-debug"
+    container_name: "${PROJECT_PREFIX:-devbox}-${PROJECT_NAME:-laravel}-app-main-debug"
     hostname: main-debug
     volumes:
       - ./services/main/runtime:/tmp
