@@ -1,10 +1,12 @@
 # Deploy targets.
 
-.PHONY: deploy deploy-reset
+.PHONY: deploy deploy-plan deploy-reset
+
+deploy-plan:
+	@$(DEVBOX_BIN) deploy plan
 
 deploy:
-	@$(call inf,Running deploy plan...)
-	@_plan=$$(mktemp) || exit 1; $(DEVBOX_BIN) deploy plan --format=shell > $$_plan && sh $$_plan; _code=$$?; rm -f $$_plan; exit $$_code
+	@$(DEVBOX_BIN) deploy run
 	@$(call ok,Deploy complete)
 
 deploy-reset:

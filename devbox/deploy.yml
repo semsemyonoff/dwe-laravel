@@ -7,7 +7,10 @@
 #   make: — Make target (executed via make -f Makefile <target>)
 #
 # Steps with make: can also be called during regular operation (e.g. make up).
-# Steps with when: are skipped if the Go template expression resolves to falsy ("", "false", "0").
+# Steps with when: support three expression kinds:
+#   - Go template "{{...}}"       — evaluated against config at plan time
+#   - Builtin predicate            — e.g. "dir-empty services/main/src" (runtime)
+#   - Shell command "cmd: <cmd>"  — evaluated at step-execution time (runtime)
 
 phases:
   - name: setup
@@ -17,11 +20,8 @@ phases:
         cmd: mkdir -p services/main/src services/main/configs services/main/logs services/main/home services/main/runtime
         description: Create service hub directories
       - name: install
-        cmd: >-
-          test "$(ls -A services/main/src 2>/dev/null)" ||
-          docker compose -p "${PROJECT_PREFIX}-${PROJECT_NAME}" -f compose/installer.yml
-          run --rm -u $(id -u) -w /var/www app-installer
-          composer create-project laravel/laravel src --no-interaction --prefer-dist
+        cmd: "docker compose --progress tty -p ${PROJECT_PREFIX}-${PROJECT_NAME} -f compose/installer.yml run --rm --quiet-pull -u $(id -u):$(id -g) app-install"
+        when: "dir-empty services/main/src"
         description: Install Laravel project via installer container (skipped if already installed)
       - name: copy-configs
         cmd: ./bin/devbox deploy config main
