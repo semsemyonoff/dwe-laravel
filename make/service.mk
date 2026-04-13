@@ -4,9 +4,9 @@
 
 IMAGE_APP_INSTALLER ?= composer:2
 
-.PHONY: db_create composer_install key_generate migrate
+.PHONY: db-create composer-install key-generate migrate
 
-db_create:
+db-create:
 	@$(DOCKER_COMPOSE) exec db mariadb -uroot -p$(DB_PASSWORD) \
 		-e 'CREATE DATABASE IF NOT EXISTS `$(DB_DATABASE)` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'
 	@$(call ok,Database $(DB_DATABASE) created)
@@ -16,7 +16,7 @@ db_create:
 # The image must provide a `composer` binary in PATH (e.g. composer:2 or a custom PHP image
 # with Composer pre-installed). --entrypoint composer is set explicitly so the target works
 # with any such image, not only images that wrap composer as their default entrypoint.
-composer_install:
+composer-install:
 	@docker run --rm -u $$(id -u) \
 		-v "$$(pwd)/services/main/src:/app" \
 		-w /app \
@@ -24,7 +24,7 @@ composer_install:
 		$(IMAGE_APP_INSTALLER) install --prefer-dist --no-interaction --optimize-autoloader
 	@$(call ok,Composer install complete)
 
-key_generate:
+key-generate:
 	@$(DOCKER_COMPOSE) exec -u $$(id -u) -w $(APP_MAIN_DIR_INTERNAL) $(APP_MAIN_CONTAINER) \
 		php artisan key:generate
 	@$(call ok,Application key generated)

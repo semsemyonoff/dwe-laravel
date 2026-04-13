@@ -1,13 +1,13 @@
 # Deploy targets.
 
-.PHONY: deploy deploy_reset
+.PHONY: deploy deploy-reset
 
 deploy:
 	@$(call inf,Running deploy plan...)
 	@_plan=$$(mktemp) || exit 1; $(DEVBOX_BIN) deploy plan --format=shell > $$_plan && sh $$_plan; _code=$$?; rm -f $$_plan; exit $$_code
 	@$(call ok,Deploy complete)
 
-deploy_reset:
+deploy-reset:
 	@printf "This will stop containers and remove all service data. Continue? [y/N] " && \
 		read -r ans && \
 		if [ "$$ans" != "y" ] && [ "$$ans" != "Y" ]; then \
