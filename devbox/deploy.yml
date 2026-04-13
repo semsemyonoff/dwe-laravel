@@ -41,13 +41,13 @@ phases:
     description: Initialize application (database, dependencies, keys)
     steps:
       - name: db-create
-        make: db_create
+        make: db-create
         description: Create application database
       - name: composer-install
-        make: composer_install
+        make: composer-install
         description: Install PHP dependencies
       - name: key-generate
-        make: key_generate
+        make: key-generate
         description: Generate Laravel application key
       - name: migrate
         make: migrate

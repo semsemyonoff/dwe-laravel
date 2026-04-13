@@ -25,7 +25,7 @@ env:
 	@$(call ok,.env generated)
 
 # Demonstrate all output macros
-print_test:
+print-test:
 	@$(call ok,Everything looks good)
 	@$(call warn,This is a warning message)
 	@$(call inf,Starting some process...)
