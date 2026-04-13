@@ -121,7 +121,7 @@ exports:
       from: services.main.container
 
     - name: APP_MAIN_DIR_INTERNAL
-      from: services.main.dir_internal
+      from: services.main.work_dir_internal
 
     - name: DB_DATABASE
       from: db.database
@@ -149,12 +149,9 @@ services:
     type: app
     dir: ./services/main
     container: app-main
-    dir_internal: /var/www/app
+    dir_internal: /workspace
+    work_dir_internal: /workspace/src
     installer_image: composer:2
-    configs:
-      - src: configs/app/main/.env
-        dest: src/.env
-        mode: replace
 
 ide:
   vscode:

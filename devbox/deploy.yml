@@ -24,8 +24,9 @@ phases:
         when: "dir-empty services/main/src"
         description: Install Laravel project via installer container (skipped if already installed)
       - name: copy-configs
-        cmd: ./bin/devbox deploy config main
-        description: Copy template configs to service directory
+        service_configs_copy: main
+        description: Copy template configs to service directory (files declared in devbox.yml services.main.configs)
+        check: "cmd: ./bin/devbox deploy config-check main"
 
   - name: start
     description: Start containers and wait for health

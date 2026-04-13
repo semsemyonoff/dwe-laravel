@@ -8,3 +8,5 @@ services:
   main:
     type: app
     dir: ./services/main
+    configs:
+      - .env

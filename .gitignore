@@ -5,6 +5,6 @@ bin/
 /services/
 .env
 
-*.log
+logs/*
 
 .ralphex/
