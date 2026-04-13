@@ -19,7 +19,7 @@ services:
     ports:
       - "${APP_PORT:-80}:80"
     volumes:
-      - ./services/main/src:/var/www/app:ro
+      - ./services/main/src:/workspace/src:ro
       - ./configs/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - app-main
@@ -62,17 +62,19 @@ services:
     container_name: "${PROJECT_PREFIX:-devbox}-${PROJECT_NAME:-laravel}-app-main"
     hostname: main
     restart: unless-stopped
+    working_dir: /workspace/src
     extra_hosts:
       - host.docker.internal:host-gateway
       - "${APP_HOST:-app.localhost}:host-gateway"
     volumes:
-      - ./services/main/src:/var/www/app
+      - ./services/main:/workspace
       - ./services/main/home:/home/www-data
-      - ./services/main/logs:/var/www/app/storage/logs
+      - ~/.ssh:/home/www-data/.ssh:ro
+      - ./services/main/logs:/workspace/src/storage/logs
+      - ./services/main/configs/.env:/workspace/src/.env
       - composer_cache:/home/www-data/.composer/cache
     env_file:
-      - path: .env
-        required: false
+      - ./configs/env/default.env
     depends_on:
       db:
         condition: service_healthy
