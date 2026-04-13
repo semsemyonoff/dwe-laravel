@@ -19,7 +19,11 @@
 #     app: 8080
 #     mailpit: 8026
 
-# Enable Xdebug (adds debug compose overlay when running devbox compose files).
-# runtime:
-#   debug:
+# Enable debug service (Xdebug container, adds compose overlay automatically).
+# services:
+#   main-debug:
 #     enabled: true
+
+# Xdebug IDE key for cookie-based debug routing (default: PHPSTORM).
+# debug:
+#   idekey: VSCODE

@@ -1,0 +1,28 @@
+# Application service definitions.
+# Loaded separately (like deploy.yml), not part of the 3-layer config merge.
+#
+# mandatory: true  — service is in the base compose.yaml, cannot be disabled
+# mandatory: false — optional service, toggled via defaults.yml / local.yml
+
+services:
+  main:
+    type: app
+    container: app-main
+    mandatory: true
+    dir: ./services/main
+    dir_internal: /workspace
+    work_dir_internal: /workspace/src
+    configs:
+      - .env
+    cli:
+      shell: bash
+      user: www-data
+      workdir: /workspace/src
+
+  main-debug:
+    type: app
+    container: app-main-debug
+    mandatory: false
+    extends: main
+    compose:
+      - compose/services/main/debug.yml
