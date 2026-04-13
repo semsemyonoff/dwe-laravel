@@ -1,11 +1,16 @@
 # Overlay: app-main-debug — PHP-FPM container with Xdebug enabled.
-# Enabled when runtime.debug.enabled = true in devbox config.
+# Enabled when services.main-debug.enabled = true in devbox config.
 # Mounts services/main/runtime for profiler output and Xdebug traces.
+# Also overrides nginx DEBUG_BACKEND so xdebug-cookie requests route here.
 
 services:
+  nginx:
+    environment:
+      DEBUG_BACKEND: app-main-debug
+
   app-main-debug:
     extends:
-      file: ../../../compose.yaml
+      file: compose.yaml
       service: app-main
     container_name: "${PROJECT_PREFIX:-devbox}-${PROJECT_NAME:-laravel}-app-main-debug"
     hostname: main-debug

@@ -12,6 +12,15 @@ tools:
   mailpit:
     enabled: true
 
+# Optional service toggles. Service definitions live in devbox/services.yml.
+# Mandatory services (e.g. main) cannot be disabled and have no toggle here.
+services:
+  main-debug:
+    enabled: false
+
+debug:
+  idekey: PHPSTORM
+
 runtime:
   use_https: false
   ports:
@@ -28,8 +37,6 @@ runtime:
     mailpit: mail.localhost
   spx:
     path: ""
-  debug:
-    enabled: false
 
 # Active state name, empty = no state.
 state: ""
@@ -108,6 +115,9 @@ exports:
     - name: SPX_PATH
       from: runtime.spx.path
 
+    - name: XDEBUG_IDEKEY
+      from: debug.idekey
+
     - name: STATE
       from: state
 
@@ -129,9 +139,6 @@ exports:
     - name: DB_PASSWORD
       from: db.password
 
-    - name: IMAGE_APP_INSTALLER
-      from: services.main.installer_image
-
 db:
   database: laravel
   password: root
@@ -142,16 +149,6 @@ compose:
     adminer: compose/tools/adminer.yml
     redis_insight: compose/tools/redis_insight.yml
     mailpit: compose/tools/mailpit.yml
-    debug: compose/services/main/debug.yml
-
-services:
-  main:
-    type: app
-    dir: ./services/main
-    container: app-main
-    dir_internal: /workspace
-    work_dir_internal: /workspace/src
-    installer_image: composer:2
 
 ide:
   vscode:
