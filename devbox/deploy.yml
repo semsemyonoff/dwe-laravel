@@ -18,7 +18,7 @@ phases:
     description: Start containers and wait for health
     steps:
       - name: up
-        cmd: make up
+        cmd: docker compose --ansi always --progress tty -p $PROJECT_PREFIX-$PROJECT_NAME $(./bin/devbox compose files | sed 's/^/-f /' | tr '\n' ' ') up -d --remove-orphans
         description: Start all containers
       - name: wait-healthy
         cmd: ./bin/devbox compose wait

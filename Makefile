@@ -50,10 +50,10 @@ logs:
 	@$(DOCKER_COMPOSE) logs -f
 
 cli:
-	@$(DEVBOX_BIN) command run services.main.cli
+	@$(DEVBOX_BIN) services cli main
 
 cli-root:
-	@$(DEVBOX_BIN) command run services.main.cli --set user=root
+	@$(DEVBOX_BIN) services cli main --root
 
 deploy-plan:
 	@$(DEVBOX_BIN) deploy plan

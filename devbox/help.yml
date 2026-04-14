@@ -99,12 +99,6 @@ sections:
       - type: definition
         name: cli_root
         value: connect to app-main container as root
-      - type: definition
-        name: db_cli
-        value: connect to DB console
-      - type: definition
-        name: redis_cli
-        value: connect to Redis console
 
   - id: devbox_commands
     title: Devbox CLI commands

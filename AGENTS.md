@@ -36,7 +36,7 @@ The project exists to solve the "Make-as-DSL" problem in the legacy devbox, wher
 - All user-visible output goes through CLI macros: `$(call ok,...)`, `$(call err,...)`, `$(call warn,...)`, `$(call inf,...)`. Defined in `make/macros.mk`.
 - Public targets use `snake_case`. Internal targets use `private_*` prefix.
 - Use `@` to suppress command echo in recipes.
-- Makefile includes `make/macros.mk`, `make/compose.mk`, `make/service.mk`, and `make/deploy.mk`. Each has a single responsibility: output macros, compose file list + DOCKER_COMPOSE macro, atomic service targets, and deploy targets.
+- Makefile includes only `make/macros.mk`. All lifecycle targets (`up`, `down`, `stop`, `restart`, `logs`, `deploy`, `deploy-reset`) are inlined directly in the Makefile. No orchestration logic remains in Make.
 - Cross-platform: must work on macOS and Linux (including WSL). Prefer portable shell constructs.
 
 ### General
@@ -62,11 +62,16 @@ devbox/deploy.yml                   # deploy pipeline declaration (phases + step
 devbox/local.yml                    # local overrides (gitignored)
 devbox/local.example.yml            # tracked template for local overrides
 devbox/help.yml                     # declarative info/help screen config
-Makefile                            # thin facade — calls ./bin/devbox and make/*.mk
+devbox/commands/                    # declarative command definitions (YAML, grouped by subdirectory)
+devbox/commands/db.yml              # db group: db.up, db.wait, db.start (workflow)
+devbox/commands/app.yml             # app group: app.install (installer container)
+devbox/commands/services/main.yml   # services.main group: composer-install, key-generate, migrate, bootstrap
+devbox/commands/services/main/db.yml       # services.main.db group: db.create (private)
+devbox/commands/services/main/config.yml   # services.main.config group: config-copy (private)
+devbox/commands/services/second.yml        # services.second group: mirror of main service commands
+devbox/commands/services/second/db.yml     # services.second.db group: db.create (private)
+Makefile                            # thin facade — calls ./bin/devbox; lifecycle targets only
 make/macros.mk                      # output macros (ok, err, warn, inf) → devbox print
-make/compose.mk                     # COMPOSE_FILES, DOCKER_COMPOSE macro, up/down/stop/restart/logs
-make/service.mk                     # atomic service targets: db_create, composer_install, key_generate, migrate
-make/deploy.mk                      # deploy, deploy_reset targets
 compose.yaml                        # base compose: nginx, db, redis, app-main (mandatory infrastructure)
 compose/tools/adminer.yml           # Adminer DB tool overlay
 compose/tools/redis_insight.yml     # Redis Insight GUI overlay
@@ -105,7 +110,8 @@ cd devbox-cli && make lint    # golangci-lint
 - `internal/config/` — `DevboxConfig` struct, layered `LoadConfig()`, `LoadDeployConfig()`, `ResolvePath()`, `ExportRule`, `ComposeConfig`, `DeployConfig`, `IDEConfig`
 - `internal/render/` — `Writer` with ANSI output methods (Success, Error, Warning, Info, Definition, TableHeader, ASCII art)
 - `internal/tpl/` — Go template engine with `Render()`, `EvalCondition()`, custom `FuncMap` (`appURL`)
-- `internal/command/` — cobra commands: `info`, `render env`, `render ide`, `print {success,warning,info,error}`, `compose files`, `compose wait`, `services`, `deploy plan`, `deploy step`, `deploy config`
+- `internal/commands/` — declarative command system: `CommandFile`, `Registry`, `HostRunner`, `ServiceExecRunner`, `ServiceRunRunner`, `ScriptRunner`, `WorkflowRunner`, param/context resolution, `${...}` template sugar
+- `internal/command/` — cobra commands: `info`, `render env`, `render ide`, `print {success,warning,info,error}`, `compose files`, `compose wait`, `services`, `deploy plan`, `deploy step`, `deploy config`, `command list`, `command inspect`, `command run`
 
 ### Dependencies
 
@@ -142,7 +148,7 @@ services: { main: { type: app, dir: ./services/main } }
 - `ServiceConfigFile` — `Src`, `Dest`, `Mode` (default/update/replace)
 - `DeployConfig` — `Phases []DeployPhase`
 - `DeployPhase` — `Name`, `Description`, `Steps []DeployStep`
-- `DeployStep` — `Name`, `Cmd`, `Make`, `Description`, `When` (exactly one of Cmd/Make set)
+- `DeployStep` — `Name`, `Cmd`, `Command`, `With`, `Description`, `When` (exactly one of Cmd/Command set; `Make` removed)
 - `IDEConfig` — per-editor blocks: `VSCode`, `JetBrains`, `Devcontainer` (each with `Enabled bool`)
 
 ### Variable flow
@@ -159,9 +165,11 @@ devbox.yml + defaults.yml + local.yml
 
 Steps have two execution modes:
 - `cmd: <command>` — shell command executed directly via `os/exec`
-- `make: <target>` — Make target executed via `make <target>` (atomic targets from `make/service.mk`)
+- `command: <id>` — declarative command ID resolved via the command registry (supports `with:` param overrides)
 
 `.env` generation is always the implicit first step (CLI inserts it before phase 1).
+
+The `make:` step type has been removed. All service-level operations are now expressed as `command:` references pointing to YAML command definitions in `devbox/commands/`.
 
 ## Make macros
 
@@ -174,7 +182,7 @@ This repo is a pilot for migrating from the legacy devbox (Make-as-DSL) to a dec
 1. **Phase 1 — Rendering** (done): Move all output/help/summary from Make macros to CLI. Info display and .env generation work via `devbox info` and `devbox render env`. Make macros delegate to `devbox print`.
 2. **Phase 2 — Config Orchestrator** (done): Merge config layers, compute enabled services/tools, resolve compose overlays, inspect topology — all in CLI. `devbox compose files`, `devbox services`, `devbox render ide`. Make uses `$(shell devbox compose files)` for `-f` flags.
 3. **Phase 3 — Deploy** (done): Declarative deploy phases in `devbox/deploy.yml`. CLI generates deploy plans (`devbox deploy plan`). Make executes steps via `deploy` target. `devbox deploy step`, `devbox deploy config`, `devbox compose wait` all implemented.
-4. **Phase 4 — Make Refactor**: Split large Make recipes into atomic commands. Make becomes a pure execution layer with no orchestration logic.
+4. **Phase 4 — Commands System** (done): Declarative YAML command definitions in `devbox/commands/`. Five command types: `command`, `script`, `service_exec`, `service_run`, `workflow`. Deploy steps reference commands by ID. Make reduced to lifecycle targets only (`up`, `down`, `stop`, `restart`, `logs`, `deploy`, `deploy-reset`). `make/compose.mk`, `make/service.mk`, `make/deploy.mk` removed.
 
 ### Success criteria
 
