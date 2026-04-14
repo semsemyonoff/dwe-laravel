@@ -80,15 +80,15 @@
 - [x] Run tests and lint — must pass before next task
 
 ### Task 4: Template interpolation — `${...}` syntax sugar
-- [ ] Implement `CompileVarSyntax(input string) string` in `internal/tpl/` — convert `${name}` to `{{ index .Raw "name" }}` (or appropriate Go template call)
-- [ ] Handle nested dot-paths: `${project.name}` → resolution against merged config raw map
-- [ ] Handle runtime helpers: `${host.uid}`, `${host.gid}` → injected into template data
-- [ ] Implement `RenderCommand(expr string, data *RenderContext) (string, error)` — compile `${...}`, then evaluate Go template
-- [ ] Define `RenderContext` struct — holds `Raw` config map, `Params` map, `Context` map, runtime helpers
-- [ ] Write tests for `CompileVarSyntax` (simple vars, dot-paths, mixed with Go templates, no-op for plain strings)
-- [ ] Write tests for `RenderCommand` with full context resolution
-- [ ] Write tests for edge cases (escaped `$`, `${` inside Go template blocks, missing values)
-- [ ] Run tests and lint — must pass before next task
+- [x] Implement `CompileVarSyntax(input string) string` in `internal/tpl/` — convert `${name}` to `{{ index .Raw "name" }}` (or appropriate Go template call)
+- [x] Handle nested dot-paths: `${project.name}` → resolution against merged config raw map
+- [x] Handle runtime helpers: `${host.uid}`, `${host.gid}` → injected into template data
+- [x] Implement `RenderCommand(expr string, data *RenderContext) (string, error)` — compile `${...}`, then evaluate Go template
+- [x] Define `RenderContext` struct — holds `Raw` config map, `Params` map, `Context` map, runtime helpers
+- [x] Write tests for `CompileVarSyntax` (simple vars, dot-paths, mixed with Go templates, no-op for plain strings)
+- [x] Write tests for `RenderCommand` with full context resolution
+- [x] Write tests for edge cases (escaped `$`, `${` inside Go template blocks, missing values)
+- [x] Run tests and lint — must pass before next task
 
 ### Task 5: Param and context resolution
 - [ ] Implement `ResolveParams(defs map[string]ParamDef, provided map[string]string, cfg *config.DevboxConfig) (map[string]any, error)` — apply defaults, `default_from` config paths, type coercion, required validation
