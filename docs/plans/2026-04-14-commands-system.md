@@ -91,13 +91,13 @@
 - [x] Run tests and lint — must pass before next task
 
 ### Task 5: Param and context resolution
-- [ ] Implement `ResolveParams(defs map[string]ParamDef, provided map[string]string, cfg *config.DevboxConfig) (map[string]any, error)` — apply defaults, `default_from` config paths, type coercion, required validation
-- [ ] Implement `ResolveContext(defs map[string]ContextDef, cfg *config.DevboxConfig) (map[string]any, error)` — resolve `from` config paths, required validation
-- [ ] Implement `BuildEnv(cmd *CommandDef, params map[string]any, context map[string]any) map[string]string` — build env map from `params.*.env`, `context.*.env`, and command-level `env` field
-- [ ] Write tests for param resolution (defaults, default_from, type coercion, required missing)
-- [ ] Write tests for context resolution (from paths, required missing)
-- [ ] Write tests for env building
-- [ ] Run tests and lint — must pass before next task
+- [x] Implement `ResolveParams(defs map[string]ParamDef, provided map[string]string, cfg *config.DevboxConfig) (map[string]any, error)` — apply defaults, `default_from` config paths, type coercion, required validation
+- [x] Implement `ResolveContext(defs map[string]ContextDef, cfg *config.DevboxConfig) (map[string]any, error)` — resolve `from` config paths, required validation
+- [x] Implement `BuildEnv(cmd *CommandDef, params map[string]any, context map[string]any) map[string]string` — build env map from `params.*.env`, `context.*.env`, and command-level `env` field
+- [x] Write tests for param resolution (defaults, default_from, type coercion, required missing)
+- [x] Write tests for context resolution (from paths, required missing)
+- [x] Write tests for env building
+- [x] Run tests and lint — must pass before next task
 
 ### Task 6: Runners — `command` and `service_exec`/`service_run`
 - [ ] Implement `Runner` interface: `Run(ctx RunContext) error`
