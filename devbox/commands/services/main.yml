@@ -1,0 +1,53 @@
+group:
+  title: Main Service
+  description: Commands for the main Laravel application service
+
+commands:
+  composer-install:
+    type: service_exec
+    description: Install PHP dependencies via Composer
+    service: app-main
+    user: current
+    workdir_from: services.main.work_dir_internal
+    mode: exec-or-run
+    argv:
+      - composer
+      - install
+      - --ansi
+      - --prefer-dist
+      - --no-interaction
+      - --optimize-autoloader
+
+  key-generate:
+    type: service_exec
+    description: Generate the Laravel application key
+    service: app-main
+    user: current
+    workdir_from: services.main.work_dir_internal
+    mode: exec-or-run
+    argv:
+      - php
+      - artisan
+      - "key:generate"
+
+  migrate:
+    type: service_exec
+    description: Run Laravel database migrations
+    service: app-main
+    user: current
+    workdir_from: services.main.work_dir_internal
+    mode: exec-or-run
+    argv:
+      - php
+      - artisan
+      - migrate
+
+  bootstrap:
+    type: workflow
+    description: Full bootstrap — start db, create database, install deps, generate key, run migrations
+    steps:
+      - command: db.start
+      - command: services.main.db.create
+      - command: services.main.composer-install
+      - command: services.main.key-generate
+      - command: services.main.migrate

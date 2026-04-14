@@ -1,0 +1,24 @@
+group:
+  title: Database
+  description: Database container management commands
+
+commands:
+  up:
+    type: command
+    private: true
+    description: Start the database container in the background
+    run: "docker compose -p ${project.prefix}-${project.name} up -d db"
+
+  wait:
+    type: command
+    private: true
+    description: Wait for all containers to become healthy
+    run: "./bin/devbox compose wait"
+
+  start:
+    type: workflow
+    private: true
+    description: Start the database container and wait until healthy
+    steps:
+      - command: db.up
+      - command: db.wait

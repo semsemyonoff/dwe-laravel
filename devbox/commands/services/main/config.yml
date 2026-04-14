@@ -1,0 +1,6 @@
+commands:
+  config-copy:
+    type: command
+    private: true
+    description: Copy template configs to the main service directory
+    run: "./bin/devbox deploy config main"

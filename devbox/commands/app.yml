@@ -1,0 +1,9 @@
+group:
+  title: App
+  description: Application-level commands
+
+commands:
+  install:
+    type: command
+    description: Install the Laravel application via installer container
+    run: "docker compose --progress tty -p ${project.prefix}-${project.name} -f compose/installer.yml run --rm --quiet-pull -u ${host.uid}:${host.gid} app-install"

@@ -151,15 +151,15 @@
 - [x] Run tests and lint — must pass before next task
 
 ### Task 10: Make migration — command YAML files
-- [ ] Create `devbox/commands/db.yml` — `db.up` (private), `db.wait` (private), `db.start` (private workflow)
-- [ ] Create `devbox/commands/services/main.yml` — `composer-install`, `key-generate`, `migrate`, `bootstrap` (workflow)
-- [ ] Create `devbox/commands/services/main/db.yml` — `db.create` (private)
-- [ ] Create `devbox/commands/services/main/config.yml` — `config-copy` (private, replaces config-copy-main)
-- [ ] Create `devbox/commands/services/second.yml` — mirror of main service commands for second
-- [ ] Create `devbox/commands/services/second/db.yml` — db.create for second service
-- [ ] Create `devbox/commands/app.yml` — `app.install` (installer container command)
-- [ ] Verify all commands resolve and validate: `devbox command list`, `devbox command inspect` for each
-- [ ] Run tests — must pass before next task
+- [x] Create `devbox/commands/db.yml` — `db.up` (private), `db.wait` (private), `db.start` (private workflow)
+- [x] Create `devbox/commands/services/main.yml` — `composer-install`, `key-generate`, `migrate`, `bootstrap` (workflow)
+- [x] Create `devbox/commands/services/main/db.yml` — `db.create` (private)
+- [x] Create `devbox/commands/services/main/config.yml` — `config-copy` (private, replaces config-copy-main)
+- [x] Create `devbox/commands/services/second.yml` — mirror of main service commands for second
+- [x] Create `devbox/commands/services/second/db.yml` — db.create for second service
+- [x] Create `devbox/commands/app.yml` — `app.install` (installer container command)
+- [x] Verify all commands resolve and validate: `devbox command list`, `devbox command inspect` for each
+- [x] Run tests — must pass before next task
 
 ### Task 11: Make cleanup — consolidate Makefile
 - [ ] Move `up`, `down`, `stop`, `restart`, `logs` targets from `compose.mk` into `Makefile` (inline, they're simple)

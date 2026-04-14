@@ -1,0 +1,13 @@
+commands:
+  create:
+    type: service_exec
+    private: true
+    description: Create the main service database
+    service: db
+    mode: exec
+    argv:
+      - mariadb
+      - "-uroot"
+      - "-p${db.password}"
+      - "-e"
+      - "CREATE DATABASE IF NOT EXISTS `${db.database}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"

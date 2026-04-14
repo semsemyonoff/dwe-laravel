@@ -1,0 +1,18 @@
+commands:
+  create:
+    type: service_exec
+    private: true
+    description: Create the second service database
+    service: db
+    mode: exec
+    params:
+      database:
+        type: string
+        description: Database name to create
+        default: laravel_second
+    argv:
+      - mariadb
+      - "-uroot"
+      - "-p${db.password}"
+      - "-e"
+      - "CREATE DATABASE IF NOT EXISTS `${param.database}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
