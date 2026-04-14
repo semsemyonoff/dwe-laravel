@@ -2,8 +2,8 @@
 # Steps execute sequentially within each phase.
 #
 # Step types:
-#   cmd:  — shell command (executed directly)
-#   make: — Make target (executed via make -f Makefile <target>)
+#   cmd:     — shell command (executed directly)
+#   command: — devbox command ID dispatched via command runner
 
 phases:
   - name: setup
@@ -26,14 +26,14 @@ phases:
     when: "dir-empty services/main/src/vendor"
     steps:
       - name: db-create
-        make: db-create
+        command: services.main.db.create
         description: Create application database
       - name: composer-install
-        make: composer-install
+        command: services.main.composer-install
         description: Install PHP dependencies
       - name: key-generate
-        make: key-generate
+        command: services.main.key-generate
         description: Generate Laravel application key
       - name: migrate
-        make: migrate
+        command: services.main.migrate
         description: Run database migrations

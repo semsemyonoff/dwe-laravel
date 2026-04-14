@@ -6,8 +6,8 @@
 # in topological dependency order. Only enabled services are included.
 #
 # Step types:
-#   cmd:  — shell command (executed directly)
-#   make: — Make target (executed via make -f Makefile <target>)
+#   cmd:     — shell command (executed directly)
+#   command: — devbox command ID dispatched via command runner
 
 phases:
   - name: services
@@ -18,7 +18,7 @@ phases:
     description: Start containers and wait for health
     steps:
       - name: up
-        make: up
+        cmd: make up
         description: Start all containers
       - name: wait-healthy
         cmd: ./bin/devbox compose wait

@@ -22,14 +22,14 @@ phases:
     description: Initialize application (database, dependencies, keys)
     steps:
       - name: db-create-second
-        make: db-create-second
+        command: services.second.db.create
         description: Create application database for second service
       - name: composer-install-second
-        make: composer-install-second
+        command: services.second.composer-install
         description: Install PHP dependencies
       - name: key-generate-second
-        make: key-generate-second
+        command: services.second.key-generate
         description: Generate Laravel application key
       - name: migrate-second
-        make: migrate-second
+        command: services.second.migrate
         description: Run database migrations

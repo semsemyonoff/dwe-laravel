@@ -138,17 +138,17 @@
 - [x] Run tests and lint — must pass before next task
 
 ### Task 9: Deploy refactoring
-- [ ] Add `Command` field to `DeployStep` struct (command ID reference, mutually exclusive with `Cmd`/`Make`/`ServiceConfigsCopy`)
-- [ ] Add `With` field to `DeployStep` struct (param overrides map for command references)
-- [ ] Remove `Make` field from `DeployStep` struct
-- [ ] Update `LoadDeployConfig` validation: `Command`+`With` is valid, `Make` rejected
-- [ ] Update `resolveDeployPlan` / `resolvePhaseSteps`: resolve command references via registry
-- [ ] Update `newDeployRunCmd` execution: when step has `Command`, delegate to command runner
-- [ ] Update deploy plan display to show command IDs
-- [ ] Migrate existing `devbox/deploy.yml` and `devbox/deploy/*.yml` — replace `make:` steps with `cmd:` or `command:` references
-- [ ] Update existing deploy tests for new step types
-- [ ] Write tests for command-reference step resolution
-- [ ] Run tests and lint — must pass before next task
+- [x] Add `Command` field to `DeployStep` struct (command ID reference, mutually exclusive with `Cmd`/`Make`/`ServiceConfigsCopy`)
+- [x] Add `With` field to `DeployStep` struct (param overrides map for command references)
+- [x] Remove `Make` field from `DeployStep` struct
+- [x] Update `LoadDeployConfig` validation: `Command`+`With` is valid, `Make` rejected
+- [x] Update `resolveDeployPlan` / `resolvePhaseSteps`: resolve command references via registry
+- [x] Update `newDeployRunCmd` execution: when step has `Command`, delegate to command runner
+- [x] Update deploy plan display to show command IDs
+- [x] Migrate existing `devbox/deploy.yml` and `devbox/deploy/*.yml` — replace `make:` steps with `cmd:` or `command:` references
+- [x] Update existing deploy tests for new step types
+- [x] Write tests for command-reference step resolution
+- [x] Run tests and lint — must pass before next task
 
 ### Task 10: Make migration — command YAML files
 - [ ] Create `devbox/commands/db.yml` — `db.up` (private), `db.wait` (private), `db.start` (private workflow)
