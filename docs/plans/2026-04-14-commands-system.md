@@ -113,16 +113,16 @@
 - [x] Run tests and lint — must pass before next task
 
 ### Task 7: Runners — `script` and `workflow`
-- [ ] Implement `ScriptRunner` — execute script file(s) with contract env vars (`DEVBOX_ROOT`, `DEVBOX_COMMAND_ID`, `DEVBOX_TEMP_DIR`, `DEVBOX_NONINTERACTIVE`, `DEVBOX_PARAMS_JSON`, `DEVBOX_CONTEXT_JSON`)
-- [ ] Support simple mode (`script.path`) and phased mode (`script.plan` → `script.run` → `script.cleanup` with guaranteed cleanup)
-- [ ] Support `script.shell` override (default: `sh`)
-- [ ] Implement temp dir creation and cleanup for `DEVBOX_TEMP_DIR`
-- [ ] Implement `WorkflowRunner` — iterate `steps`, resolve command reference, handle `with` param overrides, execute each step sequentially
-- [ ] Implement `confirm` step type in workflow — prompt user with message, abort on decline, skip in non-interactive mode
-- [ ] Validate that private commands can be called from workflow but not directly
-- [ ] Write tests for ScriptRunner (env contract, simple mode, phased mode, cleanup guarantee)
-- [ ] Write tests for WorkflowRunner (step sequencing, param passing via `with`, confirm skipping)
-- [ ] Run tests and lint — must pass before next task
+- [x] Implement `ScriptRunner` — execute script file(s) with contract env vars (`DEVBOX_ROOT`, `DEVBOX_COMMAND_ID`, `DEVBOX_TEMP_DIR`, `DEVBOX_NONINTERACTIVE`, `DEVBOX_PARAMS_JSON`, `DEVBOX_CONTEXT_JSON`)
+- [x] Support simple mode (`script.path`) and phased mode (`script.plan` → `script.run` → `script.cleanup` with guaranteed cleanup)
+- [x] Support `script.shell` override (default: `sh`)
+- [x] Implement temp dir creation and cleanup for `DEVBOX_TEMP_DIR`
+- [x] Implement `WorkflowRunner` — iterate `steps`, resolve command reference, handle `with` param overrides, execute each step sequentially
+- [x] Implement `confirm` step type in workflow — prompt user with message, abort on decline, skip in non-interactive mode
+- [x] Validate that private commands can be called from workflow but not directly
+- [x] Write tests for ScriptRunner (env contract, simple mode, phased mode, cleanup guarantee)
+- [x] Write tests for WorkflowRunner (step sequencing, param passing via `with`, confirm skipping)
+- [x] Run tests and lint — must pass before next task
 
 ### Task 8: CLI commands — `devbox command list/inspect/run`
 - [ ] Add `command` subcommand to root cobra command
