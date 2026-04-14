@@ -162,14 +162,14 @@
 - [x] Run tests — must pass before next task
 
 ### Task 11: Make cleanup — consolidate Makefile
-- [ ] Move `up`, `down`, `stop`, `restart`, `logs` targets from `compose.mk` into `Makefile` (inline, they're simple)
-- [ ] Move `deploy`, `deploy-plan`, `deploy-reset` from `deploy.mk` into `Makefile`
-- [ ] Remove `make/compose.mk`, `make/service.mk`, `make/deploy.mk` includes
-- [ ] Keep `make/macros.mk` (internal output macros)
-- [ ] Update Makefile to keep COMPOSE_FILES and DOCKER_COMPOSE macro (needed by up/down/etc.)
-- [ ] Add `cli` and `cli-root` targets that delegate to `devbox command run` (or keep as simple Make targets)
-- [ ] Verify `make up`, `make down`, `make deploy`, `make cli` all still work
-- [ ] Run tests — must pass before next task
+- [x] Move `up`, `down`, `stop`, `restart`, `logs` targets from `compose.mk` into `Makefile` (inline, they're simple)
+- [x] Move `deploy`, `deploy-plan`, `deploy-reset` from `deploy.mk` into `Makefile`
+- [x] Remove `make/compose.mk`, `make/service.mk`, `make/deploy.mk` includes
+- [x] Keep `make/macros.mk` (internal output macros)
+- [x] Update Makefile to keep COMPOSE_FILES and DOCKER_COMPOSE macro (needed by up/down/etc.)
+- [x] Add `cli` and `cli-root` targets that delegate to `devbox command run` (or keep as simple Make targets)
+- [x] Verify `make up`, `make down`, `make deploy`, `make cli` all still work
+- [x] Run tests — must pass before next task
 
 ### Task 12: Verify acceptance criteria
 - [ ] Verify `devbox command list` shows tree output with all migrated commands
