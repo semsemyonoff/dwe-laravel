@@ -1,0 +1,39 @@
+# Deploy pipeline for service: main
+# Steps execute sequentially within each phase.
+#
+# Step types:
+#   cmd:  — shell command (executed directly)
+#   make: — Make target (executed via make -f Makefile <target>)
+
+phases:
+  - name: setup
+    description: Prepare service directories and install application
+    when: "dir-empty services/main/src"
+    steps:
+      - name: create-dirs
+        cmd: mkdir -p services/main/src services/main/configs services/main/logs services/main/home services/main/runtime
+        description: Create service hub directories
+      - name: install
+        cmd: "docker compose --progress tty -p ${PROJECT_PREFIX}-${PROJECT_NAME} -f compose/installer.yml run --rm --quiet-pull -u $(id -u):$(id -g) app-install"
+        description: Install Laravel project via installer container
+      - name: copy-configs
+        service_configs_copy: main
+        description: Copy template configs to service directory (files declared in devbox.yml services.main.configs)
+        check: "cmd: ./bin/devbox deploy config-check main"
+
+  - name: init
+    description: Initialize application (database, dependencies, keys)
+    when: "dir-empty services/main/src/vendor"
+    steps:
+      - name: db-create
+        make: db-create
+        description: Create application database
+      - name: composer-install
+        make: composer-install
+        description: Install PHP dependencies
+      - name: key-generate
+        make: key-generate
+        description: Generate Laravel application key
+      - name: migrate
+        make: migrate
+        description: Run database migrations

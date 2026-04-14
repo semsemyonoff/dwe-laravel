@@ -24,6 +24,11 @@
 #   main-debug:
 #     enabled: true
 
+# Enable second service (cloned from git, depends on main).
+# services:
+#   second:
+#     enabled: true
+
 # Xdebug IDE key for cookie-based debug routing (default: PHPSTORM).
 # debug:
 #   idekey: VSCODE

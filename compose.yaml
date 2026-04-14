@@ -20,8 +20,11 @@ services:
       - "${APP_PORT:-80}:80"
     volumes:
       - ./services/main/src:/workspace/src:ro
-      - ./configs/nginx/templates/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ./configs/nginx/conf/common/fastcgi.conf:/etc/nginx/conf.d/common/fastcgi.conf:ro
+      - ./configs/nginx/templates/common/backend.conf.template:/etc/nginx/templates/backend.conf.template:ro
+      - ./configs/nginx/templates/services/main.conf.template:/etc/nginx/templates/main.conf.template:ro
     environment:
+      APP_HOST: "${APP_HOST:-app.localhost}"
       XDEBUG_IDEKEY: "${XDEBUG_IDEKEY:-PHPSTORM}"
       DEBUG_BACKEND: "${DEBUG_BACKEND:-app-main}"
     depends_on:
@@ -61,7 +64,7 @@ services:
 
   app-main:
     build:
-      context: images/app/main
+      context: images/services/main
       args:
         APP_UID: "${UID:-1000}"
         APP_GID: "${GID:-1000}"

@@ -26,3 +26,22 @@ services:
     extends: main
     compose:
       - compose/services/main/debug.yml
+
+  second:
+    type: app
+    container: app-second
+    mandatory: false
+    depends_on:
+      - main
+    dir: ./services/second
+    dir_internal: /workspace
+    work_dir_internal: /workspace/src
+    configs:
+      - file: .env
+        mountpoint: src/.env
+    compose:
+      - compose/services/second/app.yml
+    cli:
+      shell: bash
+      user: www-data
+      workdir: /workspace/src

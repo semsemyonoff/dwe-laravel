@@ -15,7 +15,7 @@ services:
     container_name: "${PROJECT_PREFIX:-devbox}-${PROJECT_NAME:-laravel}-app-main-debug"
     hostname: main-debug
     volumes:
-      - ../../../services/main/runtime:/tmp
+      - ./services/main/runtime:/tmp
     environment:
       PHP_ENABLE_XDEBUG: "true"
       DBGP_IDEKEY: "${XDEBUG_IDEKEY:-PHPSTORM}"
