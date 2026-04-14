@@ -188,9 +188,9 @@
 - [x] Run `make down` to stop all containers (manual test - skipped: requires running Docker environment)
 
 ### Task 14: [Final] Update documentation
-- [ ] Update `devbox/help.yml` to reflect new `devbox command` CLI commands
-- [ ] Update `devbox/local.example.yml` if any new overridable config added
-- [ ] Update CLAUDE.md project layout and architecture sections
+- [x] Update `devbox/help.yml` to reflect new `devbox command` CLI commands
+- [x] Update `devbox/local.example.yml` if any new overridable config added (no new overridable config — commands system is self-contained in YAML files)
+- [x] Update CLAUDE.md project layout and architecture sections
 
 ## Technical Details
 

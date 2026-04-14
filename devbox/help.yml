@@ -135,6 +135,23 @@ sections:
         name: "devbox deploy config <service>"
         value: copy template configs to service directory
       - type: subheader
+        text: Commands
+      - type: definition
+        name: "devbox command list"
+        value: show all available commands grouped by category
+      - type: definition
+        name: "devbox command list --all"
+        value: include private commands (marked with indicator)
+      - type: definition
+        name: "devbox command inspect <id>"
+        value: show full command definition (type, params, context, runner)
+      - type: definition
+        name: "devbox command run <id>"
+        value: run a command by its full ID (e.g. services.main.composer-install)
+      - type: definition
+        name: "devbox command run <id> --set key=val"
+        value: run a command with param overrides
+      - type: subheader
         text: Render
       - type: definition
         name: "devbox render env"
