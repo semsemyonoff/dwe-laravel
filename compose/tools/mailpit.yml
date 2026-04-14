@@ -2,6 +2,12 @@
 # Enabled when tools.mailpit.enabled = true in devbox config.
 
 services:
+  nginx:
+    volumes:
+      - ./configs/nginx/templates/tools/mailpit.conf.template:/etc/nginx/templates/mailpit.conf.template:ro
+    environment:
+      MAILPIT_HOST: "${MAILPIT_HOST:-mail.localhost}"
+
   mailpit:
     image: "${IMAGE_MAILPIT:-axllent/mailpit:latest}"
     container_name: "${PROJECT_PREFIX:-devbox}-${PROJECT_NAME:-laravel}-mailpit"

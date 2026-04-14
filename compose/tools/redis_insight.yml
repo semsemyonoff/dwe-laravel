@@ -5,6 +5,12 @@ volumes:
   redisinsight:
 
 services:
+  nginx:
+    volumes:
+      - ./configs/nginx/templates/tools/redis_insight.conf.template:/etc/nginx/templates/redis_insight.conf.template:ro
+    environment:
+      REDIS_INSIGHT_HOST: "${REDIS_INSIGHT_HOST:-redis.localhost}"
+
   redis-insight:
     image: "${IMAGE_REDISINSIGHT:-redis/redisinsight:latest}"
     container_name: "${PROJECT_PREFIX:-devbox}-${PROJECT_NAME:-laravel}-redis-insight"

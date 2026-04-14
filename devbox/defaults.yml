@@ -31,7 +31,7 @@ runtime:
     redis_insight: 5540
     mailpit: 8025
   hosts:
-    main: app.localhost
+    main: laravel.localhost
     adminer: adminer.localhost
     redis_insight: redis.localhost
     mailpit: mail.localhost
