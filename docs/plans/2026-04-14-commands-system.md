@@ -68,16 +68,16 @@
 - [x] Run tests and lint — must pass before next task
 
 ### Task 3: Command registry
-- [ ] Implement `Registry` struct — holds all commands indexed by full ID, groups as tree
-- [ ] Implement `LoadRegistry(baseDir string) (*Registry, error)` — discover files, load all, build registry with duplicate ID detection
-- [ ] Implement `Registry.Get(id string) (*CommandDef, error)` — lookup by full ID
-- [ ] Implement `Registry.List(groupPrefix string) []*CommandDef` — list commands under a group prefix (excluding private)
-- [ ] Implement `Registry.ListAll(groupPrefix string) []*CommandDef` — list all commands including private
-- [ ] Implement `Registry.Groups() *GroupTree` — tree structure for display
-- [ ] Implement `Registry.Validate() error` — cross-registry validation (workflow steps reference existing commands, service references valid services)
-- [ ] Write tests for registry building, lookup, listing, tree
-- [ ] Write tests for validation (missing workflow step references, duplicate IDs)
-- [ ] Run tests and lint — must pass before next task
+- [x] Implement `Registry` struct — holds all commands indexed by full ID, groups as tree
+- [x] Implement `LoadRegistry(baseDir string) (*Registry, error)` — discover files, load all, build registry with duplicate ID detection
+- [x] Implement `Registry.Get(id string) (*CommandDef, error)` — lookup by full ID
+- [x] Implement `Registry.List(groupPrefix string) []*CommandDef` — list commands under a group prefix (excluding private)
+- [x] Implement `Registry.ListAll(groupPrefix string) []*CommandDef` — list all commands including private
+- [x] Implement `Registry.Groups() *GroupTree` — tree structure for display
+- [x] Implement `Registry.Validate() error` — cross-registry validation (workflow steps reference existing commands, service references valid services)
+- [x] Write tests for registry building, lookup, listing, tree
+- [x] Write tests for validation (missing workflow step references, duplicate IDs)
+- [x] Run tests and lint — must pass before next task
 
 ### Task 4: Template interpolation — `${...}` syntax sugar
 - [ ] Implement `CompileVarSyntax(input string) string` in `internal/tpl/` — convert `${name}` to `{{ index .Raw "name" }}` (or appropriate Go template call)
