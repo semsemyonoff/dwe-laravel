@@ -10,4 +10,6 @@ commands:
         type: string
         description: Database name to create
         default_from: db.second_database
-    run: "MYSQL_PWD='${db.password}' mariadb -uroot -e 'CREATE DATABASE IF NOT EXISTS `${param.database}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'"
+    env:
+      MYSQL_PWD: "${db.password}"
+    run: "mariadb -uroot -e 'CREATE DATABASE IF NOT EXISTS `${param.database}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'"

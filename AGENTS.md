@@ -67,7 +67,6 @@ devbox/commands/db.yml              # db group: db.up, db.wait, db.start (workfl
 devbox/commands/app.yml             # app group: app.install (installer container)
 devbox/commands/services/main.yml   # services.main group: composer-install, key-generate, migrate, bootstrap
 devbox/commands/services/main/db.yml       # services.main.db group: db.create (private)
-devbox/commands/services/main/config.yml   # services.main.config group: config-copy (private)
 devbox/commands/services/second.yml        # services.second group: mirror of main service commands
 devbox/commands/services/second/db.yml     # services.second.db group: db.create (private)
 Makefile                            # thin facade — calls ./bin/devbox; lifecycle targets only

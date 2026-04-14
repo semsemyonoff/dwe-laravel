@@ -5,4 +5,6 @@ commands:
     description: Create the main service database
     service: db
     mode: exec
-    run: "MYSQL_PWD='${db.password}' mariadb -uroot -e 'CREATE DATABASE IF NOT EXISTS `${db.database}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'"
+    env:
+      MYSQL_PWD: "${db.password}"
+    run: "mariadb -uroot -e 'CREATE DATABASE IF NOT EXISTS `${db.database}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'"
