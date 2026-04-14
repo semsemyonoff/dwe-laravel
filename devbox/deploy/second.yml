@@ -20,6 +20,7 @@ phases:
 
   - name: init
     description: Initialize application (database, dependencies, keys)
+    when: "dir-empty services/second/src/vendor"
     steps:
       - name: db-create-second
         command: services.second.db.create
