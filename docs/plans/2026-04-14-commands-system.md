@@ -58,14 +58,14 @@
 - [x] Run tests and lint — must pass before next task
 
 ### Task 2: Command loader — file discovery and ID computation
-- [ ] Implement `DiscoverCommandFiles(baseDir string) ([]string, error)` — walk `devbox/commands/` recursively, collect `*.yml`
-- [ ] Implement `ComputeGroup(relPath string) string` — derive group segments from path (`index.yml` handling, directory segments)
-- [ ] Implement `ComputeCommandID(group string, localName string) string` — build full `<group>.<local_name>` ID
-- [ ] Implement `LoadCommandFile(path string) (*CommandFile, error)` — parse single YAML file, validate, set computed group
-- [ ] Write tests for file discovery with temp directory fixtures
-- [ ] Write tests for group computation (all path patterns from spec: `db.yml`, `services/main.yml`, `services/main/db.yml`, `services/main/index.yml`)
-- [ ] Write tests for ID computation
-- [ ] Run tests and lint — must pass before next task
+- [x] Implement `DiscoverCommandFiles(baseDir string) ([]string, error)` — walk `devbox/commands/` recursively, collect `*.yml`
+- [x] Implement `ComputeGroup(relPath string) string` — derive group segments from path (`index.yml` handling, directory segments)
+- [x] Implement `ComputeCommandID(group string, localName string) string` — build full `<group>.<local_name>` ID
+- [x] Implement `LoadCommandFile(path string) (*CommandFile, error)` — parse single YAML file, validate, set computed group
+- [x] Write tests for file discovery with temp directory fixtures
+- [x] Write tests for group computation (all path patterns from spec: `db.yml`, `services/main.yml`, `services/main/db.yml`, `services/main/index.yml`)
+- [x] Write tests for ID computation
+- [x] Run tests and lint — must pass before next task
 
 ### Task 3: Command registry
 - [ ] Implement `Registry` struct — holds all commands indexed by full ID, groups as tree
