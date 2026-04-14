@@ -125,17 +125,17 @@
 - [x] Run tests and lint — must pass before next task
 
 ### Task 8: CLI commands — `devbox command list/inspect/run`
-- [ ] Add `command` subcommand to root cobra command
-- [ ] Implement `devbox command list [group]` — tree-formatted output, hide private commands, show descriptions
-- [ ] Implement `devbox command list --all [group]` — include private commands (marked with indicator)
-- [ ] Implement `devbox command inspect <id>` — show full command definition: type, description, params, context, runner details
-- [ ] Implement `devbox command run <id> [--set key=value...]` — resolve params from `--set` flags, resolve context from config, pick runner, execute
-- [ ] Implement tree rendering in `internal/render/` — `WriteTree(tree GroupTree)` with proper indentation
-- [ ] Integrate registry loading into config loading flow (load commands after config merge)
-- [ ] Write tests for tree rendering output
-- [ ] Write tests for `--set` flag parsing and param forwarding
-- [ ] Write tests for command resolution and runner dispatch
-- [ ] Run tests and lint — must pass before next task
+- [x] Add `command` subcommand to root cobra command
+- [x] Implement `devbox command list [group]` — tree-formatted output, hide private commands, show descriptions
+- [x] Implement `devbox command list --all [group]` — include private commands (marked with indicator)
+- [x] Implement `devbox command inspect <id>` — show full command definition: type, description, params, context, runner details
+- [x] Implement `devbox command run <id> [--set key=value...]` — resolve params from `--set` flags, resolve context from config, pick runner, execute
+- [x] Implement tree rendering in `internal/render/` — `WriteTree(tree GroupTree)` with proper indentation
+- [x] Integrate registry loading into config loading flow (load commands after config merge)
+- [x] Write tests for tree rendering output
+- [x] Write tests for `--set` flag parsing and param forwarding
+- [x] Write tests for command resolution and runner dispatch
+- [x] Run tests and lint — must pass before next task
 
 ### Task 9: Deploy refactoring
 - [ ] Add `Command` field to `DeployStep` struct (command ID reference, mutually exclusive with `Cmd`/`Make`/`ServiceConfigsCopy`)
