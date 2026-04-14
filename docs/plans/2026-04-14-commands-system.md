@@ -100,17 +100,17 @@
 - [x] Run tests and lint — must pass before next task
 
 ### Task 6: Runners — `command` and `service_exec`/`service_run`
-- [ ] Implement `Runner` interface: `Run(ctx RunContext) error`
-- [ ] Define `RunContext` — command def, resolved params, resolved context, render context, config, project root, stdout/stderr
-- [ ] Implement `HostRunner` — executes `run` (via `sh -c`) or `argv` (via `exec`) on host, with `cwd` and `env` templating
-- [ ] Implement `ServiceExecRunner` — builds `docker compose exec` command with service, user, workdir resolution (`workdir_from` config path), mode (`exec`/`run`/`exec-or-run` with container-running check)
-- [ ] Implement `ServiceRunRunner` — builds `docker compose run --rm` command with same resolution
-- [ ] Implement exec-or-run mode: check if container is running, pick exec or run accordingly
-- [ ] Implement `runner` field support: when `runner` is set, use its fields instead of top-level `service`/`user`/`workdir`/etc.
-- [ ] Write tests for HostRunner command building (run vs argv, cwd, env)
-- [ ] Write tests for ServiceExecRunner command building (service, user, workdir, workdir_from)
-- [ ] Write tests for exec-or-run mode logic
-- [ ] Run tests and lint — must pass before next task
+- [x] Implement `Runner` interface: `Run(ctx RunContext) error`
+- [x] Define `RunContext` — command def, resolved params, resolved context, render context, config, project root, stdout/stderr
+- [x] Implement `HostRunner` — executes `run` (via `sh -c`) or `argv` (via `exec`) on host, with `cwd` and `env` templating
+- [x] Implement `ServiceExecRunner` — builds `docker compose exec` command with service, user, workdir resolution (`workdir_from` config path), mode (`exec`/`run`/`exec-or-run` with container-running check)
+- [x] Implement `ServiceRunRunner` — builds `docker compose run --rm` command with same resolution
+- [x] Implement exec-or-run mode: check if container is running, pick exec or run accordingly
+- [x] Implement `runner` field support: when `runner` is set, use its fields instead of top-level `service`/`user`/`workdir`/etc.
+- [x] Write tests for HostRunner command building (run vs argv, cwd, env)
+- [x] Write tests for ServiceExecRunner command building (service, user, workdir, workdir_from)
+- [x] Write tests for exec-or-run mode logic
+- [x] Run tests and lint — must pass before next task
 
 ### Task 7: Runners — `script` and `workflow`
 - [ ] Implement `ScriptRunner` — execute script file(s) with contract env vars (`DEVBOX_ROOT`, `DEVBOX_COMMAND_ID`, `DEVBOX_TEMP_DIR`, `DEVBOX_NONINTERACTIVE`, `DEVBOX_PARAMS_JSON`, `DEVBOX_CONTEXT_JSON`)
