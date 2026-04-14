@@ -1,0 +1,35 @@
+# Deploy pipeline for service: second
+# Source is cloned from git instead of installed via installer.
+# Depends on main (declared in services.yml — deploy order is enforced by orchestrator).
+
+phases:
+  - name: setup
+    description: Prepare service directories and clone repository
+    steps:
+      - name: create-dirs
+        cmd: mkdir -p services/second/src services/second/configs services/second/logs services/second/home services/second/runtime
+        description: Create service hub directories
+      - name: git-clone
+        cmd: git clone ssh://git@git.horn:2222/semsemyonoff/laravel-test-service.git services/second/src
+        when: "dir-empty services/second/src"
+        description: Clone repository (skipped if already cloned)
+      - name: copy-configs
+        service_configs_copy: second
+        description: Copy template configs to service directory (files declared in services.second.configs)
+        check: "cmd: ./bin/devbox deploy config-check second"
+
+  - name: init
+    description: Initialize application (database, dependencies, keys)
+    steps:
+      - name: db-create-second
+        make: db-create-second
+        description: Create application database for second service
+      - name: composer-install-second
+        make: composer-install-second
+        description: Install PHP dependencies
+      - name: key-generate-second
+        make: key-generate-second
+        description: Generate Laravel application key
+      - name: migrate-second
+        make: migrate-second
+        description: Run database migrations
