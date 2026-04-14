@@ -1,0 +1,25 @@
+server {
+    listen 80;
+    server_name ${APP_HOST};
+    root /workspace/src/public;
+    index index.php;
+
+    # PHP-FPM document root (same as nginx root for main service).
+    set $php_root /workspace/src/public;
+
+    # Docker internal DNS — required for variable-based fastcgi_pass resolution.
+    resolver 127.0.0.11 valid=10s;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass $backend;
+        include /etc/nginx/conf.d/common/fastcgi.conf;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}

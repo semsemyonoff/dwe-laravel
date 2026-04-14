@@ -36,7 +36,7 @@ The project exists to solve the "Make-as-DSL" problem in the legacy devbox, wher
 - All user-visible output goes through CLI macros: `$(call ok,...)`, `$(call err,...)`, `$(call warn,...)`, `$(call inf,...)`. Defined in `make/macros.mk`.
 - Public targets use `snake_case`. Internal targets use `private_*` prefix.
 - Use `@` to suppress command echo in recipes.
-- Makefile includes `make/macros.mk` for output; future phases will add more `.mk` files for atomic commands.
+- Makefile includes `make/macros.mk`, `make/compose.mk`, `make/service.mk`, and `make/deploy.mk`. Each has a single responsibility: output macros, compose file list + DOCKER_COMPOSE macro, atomic service targets, and deploy targets.
 - Cross-platform: must work on macOS and Linux (including WSL). Prefer portable shell constructs.
 
 ### General
@@ -47,23 +47,45 @@ The project exists to solve the "Make-as-DSL" problem in the legacy devbox, wher
 
 ## Architecture
 
-- **devbox-cli** (`devbox-cli/`) — Go binary, the shared core: config loading, rendering, env generation, info display
+- **devbox-cli** (`devbox-cli/`) — Go binary, the shared core: config loading, rendering, env generation, info display, topology, deploy planning
 - **Make** (`Makefile` + `make/`) — thin execution layer, delegates all output to CLI via `make/macros.mk`
 - **Config** — 3-layer YAML merge: `devbox.yml` → `devbox/defaults.yml` → `devbox/local.yml` (gitignored)
+- **Deploy** — `devbox/deploy.yml` loaded separately (not merged); declares phases and steps
 - `.env` is a **generated artifact** (`devbox render env -o .env`), never a source of truth
 
 ## Project layout
 
 ```
-devbox.yml              # structural spec: project + services
-devbox/defaults.yml     # versioned defaults: tools, runtime, ports, hosts, exports
-devbox/local.yml        # local overrides (gitignored)
-devbox/help.yml         # declarative info/help screen config
-Makefile                # thin facade — calls ./bin/devbox
-make/macros.mk          # output macros (ok, err, warn, inf) → devbox print
-devbox-cli/             # Go module (gitignored, built separately into bin/)
-legacy/                 # old devbox repos (gitignored)
+devbox.yml                          # structural spec: project + services
+devbox/defaults.yml                 # versioned defaults: tools, runtime, ports, hosts, exports, compose, ide
+devbox/deploy.yml                   # deploy pipeline declaration (phases + steps, loaded separately)
+devbox/local.yml                    # local overrides (gitignored)
+devbox/local.example.yml            # tracked template for local overrides
+devbox/help.yml                     # declarative info/help screen config
+Makefile                            # thin facade — calls ./bin/devbox and make/*.mk
+make/macros.mk                      # output macros (ok, err, warn, inf) → devbox print
+make/compose.mk                     # COMPOSE_FILES, DOCKER_COMPOSE macro, up/down/stop/restart/logs
+make/service.mk                     # atomic service targets: db_create, composer_install, key_generate, migrate
+make/deploy.mk                      # deploy, deploy_reset targets
+compose.yaml                        # base compose: nginx, db, redis, app-main (mandatory infrastructure)
+compose/tools/adminer.yml           # Adminer DB tool overlay
+compose/tools/redis_insight.yml     # Redis Insight GUI overlay
+compose/tools/mailpit.yml           # Mailpit email testing overlay
+compose/services/main/debug.yml     # app-main-debug container (Xdebug enabled)
+compose/installer.yml               # installer container (deploy only)
+configs/app/main/.env               # Laravel .env template (copied to services/main/configs/ on deploy)
+services/                           # service hubs (gitignored, created by deploy)
+devbox-cli/                         # Go module (gitignored, built separately into bin/)
+legacy/                             # old devbox repos (gitignored)
 ```
+
+### Compose naming convention
+
+- `compose.yaml` at root — mandatory infrastructure (nginx, db, redis, app-main), always started
+- `compose/tools/<name>.yml` — optional tool services (adminer, redis_insight, mailpit)
+- `compose/services/<service>/<name>.yml` — optional service variants (debug container)
+- `compose/installer.yml` — standalone installer (deploy only, not in regular compose files list)
+- No `docker-compose.` prefix in overlay filenames
 
 ## devbox-cli
 
@@ -80,10 +102,10 @@ cd devbox-cli && make lint    # golangci-lint
 ### Package structure
 
 - `cmd/devbox/main.go` — entry point
-- `internal/config/` — `DevboxConfig` struct, layered `LoadConfig()`, `ResolvePath()` for dot-paths, `ExportRule`
+- `internal/config/` — `DevboxConfig` struct, layered `LoadConfig()`, `LoadDeployConfig()`, `ResolvePath()`, `ExportRule`, `ComposeConfig`, `DeployConfig`, `IDEConfig`
 - `internal/render/` — `Writer` with ANSI output methods (Success, Error, Warning, Info, Definition, TableHeader, ASCII art)
 - `internal/tpl/` — Go template engine with `Render()`, `EvalCondition()`, custom `FuncMap` (`appURL`)
-- `internal/command/` — cobra commands: `info`, `render env`, `print {success,warning,info,error}`
+- `internal/command/` — cobra commands: `info`, `render env`, `render ide`, `print {success,warning,info,error}`, `compose files`, `compose wait`, `services`, `deploy plan`, `deploy step`, `deploy config`
 
 ### Dependencies
 
@@ -107,9 +129,39 @@ project: { name: laravel, prefix: devbox }
 services: { main: { type: app, dir: ./services/main } }
 ```
 
-`devbox/defaults.yml` — tools, runtime, ports, hosts, export rules (tracked).
+`devbox/defaults.yml` — tools, runtime, ports, hosts, export rules, compose overlays, ide config (tracked).
+
+`devbox/deploy.yml` — deploy pipeline declaration: phases and steps (tracked, loaded separately by `LoadDeployConfig()`). Not merged with the 3-layer config.
 
 `devbox/local.yml` — per-user overrides for state, tools, ports (gitignored). See `devbox/local.example.yml` for options.
+
+### Config structs (key additions in Phases 2+)
+
+- `ComposeConfig` — `Base string` + `Overlays map[string]string` (key → file path)
+- `ServiceConfig` — adds `Container string`, `DirInternal string`, `Configs []ServiceConfigFile`
+- `ServiceConfigFile` — `Src`, `Dest`, `Mode` (default/update/replace)
+- `DeployConfig` — `Phases []DeployPhase`
+- `DeployPhase` — `Name`, `Description`, `Steps []DeployStep`
+- `DeployStep` — `Name`, `Cmd`, `Make`, `Description`, `When` (exactly one of Cmd/Make set)
+- `IDEConfig` — per-editor blocks: `VSCode`, `JetBrains`, `Devcontainer` (each with `Enabled bool`)
+
+### Variable flow
+
+```
+devbox.yml + defaults.yml + local.yml
+  → devbox render env -o .env    (CLI generates)
+  → .env loaded by Make (-include .env)
+  → .env loaded by Docker Compose (env_file)
+  → Make targets use variables from .env (APP_MAIN_CONTAINER, DB_DATABASE, etc.)
+```
+
+### Deploy pipeline
+
+Steps have two execution modes:
+- `cmd: <command>` — shell command executed directly via `os/exec`
+- `make: <target>` — Make target executed via `make <target>` (atomic targets from `make/service.mk`)
+
+`.env` generation is always the implicit first step (CLI inserts it before phase 1).
 
 ## Make macros
 
@@ -119,9 +171,9 @@ All Make output goes through CLI: `$(call ok,msg)`, `$(call err,msg[,exit_code])
 
 This repo is a pilot for migrating from the legacy devbox (Make-as-DSL) to a declarative architecture. Each phase delivers standalone value.
 
-1. **Phase 1 — Rendering** (current): Move all output/help/summary from Make macros to CLI. Info display and .env generation work via `devbox info` and `devbox render env`. Make macros delegate to `devbox print`.
-2. **Phase 2 — Config Orchestrator**: Merge config layers, compute enabled services/tools, resolve compose overlays, inspect topology — all in CLI. Make calls CLI to get computed values.
-3. **Phase 3 — Deploy**: Declarative deploy phases in config. CLI generates deploy plans. Make executes atomic steps from the generated plan.
+1. **Phase 1 — Rendering** (done): Move all output/help/summary from Make macros to CLI. Info display and .env generation work via `devbox info` and `devbox render env`. Make macros delegate to `devbox print`.
+2. **Phase 2 — Config Orchestrator** (done): Merge config layers, compute enabled services/tools, resolve compose overlays, inspect topology — all in CLI. `devbox compose files`, `devbox services`, `devbox render ide`. Make uses `$(shell devbox compose files)` for `-f` flags.
+3. **Phase 3 — Deploy** (done): Declarative deploy phases in `devbox/deploy.yml`. CLI generates deploy plans (`devbox deploy plan`). Make executes steps via `deploy` target. `devbox deploy step`, `devbox deploy config`, `devbox compose wait` all implemented.
 4. **Phase 4 — Make Refactor**: Split large Make recipes into atomic commands. Make becomes a pure execution layer with no orchestration logic.
 
 ### Success criteria

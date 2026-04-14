@@ -3,8 +3,3 @@ schema_version: "1"
 project:
   name: laravel
   prefix: devbox
-
-services:
-  main:
-    type: app
-    dir: ./services/main

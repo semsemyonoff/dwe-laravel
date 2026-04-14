@@ -2,11 +2,20 @@ MAKEFLAGS += --no-print-directory
 
 DEVBOX_BIN := ./bin/devbox
 
-include make/macros.mk
+-include .env
 
-.PHONY: all $(MAKECMDGOALS)
+PROJECT_PREFIX ?= devbox
+PROJECT_NAME   ?= laravel
+PROJECT_FULL    = $(PROJECT_PREFIX)-$(PROJECT_NAME)
 
 all: help
+
+include make/macros.mk
+include make/compose.mk
+include make/service.mk
+include make/deploy.mk
+
+.PHONY: all $(MAKECMDGOALS)
 
 help:
 	@$(DEVBOX_BIN) info
@@ -16,7 +25,7 @@ env:
 	@$(call ok,.env generated)
 
 # Demonstrate all output macros
-print_test:
+print-test:
 	@$(call ok,Everything looks good)
 	@$(call warn,This is a warning message)
 	@$(call inf,Starting some process...)

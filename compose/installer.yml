@@ -1,0 +1,25 @@
+# Disposable installer containers for deploy and standalone use.
+# Not part of the regular compose file list (not an overlay).
+#
+# Usage:
+#   docker compose -p <project> -f compose/installer.yml run --rm -u $(id -u):$(id -g) <service>
+#
+# NOTE: Paths are relative to this file's directory (compose/).
+# Image is hardcoded here (project-specific, not configurable via devbox config).
+
+volumes:
+  composer_cache:
+
+services:
+  app-install:
+    image: composer:2
+    init: true
+    volumes:
+      - ../services/main:/var/www
+      - composer_cache:/tmp/composer-cache
+    working_dir: /var/www
+    environment:
+      COMPOSER_CACHE_DIR: /tmp/composer-cache
+    entrypoint: composer
+    command: ["create-project", "laravel/laravel", "src", "--ansi", "--no-interaction", "--prefer-dist"]
+

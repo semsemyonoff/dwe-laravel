@@ -1,0 +1,25 @@
+# Deploy pipeline orchestrator.
+# .env generation is always performed first (implicit, not listed).
+#
+# Phases with deploy_services: true are markers — CLI resolves them by
+# inlining per-service deploy pipelines (from devbox/deploy/<service>.yml)
+# in topological dependency order. Only enabled services are included.
+#
+# Step types:
+#   cmd:  — shell command (executed directly)
+#   make: — Make target (executed via make -f Makefile <target>)
+
+phases:
+  - name: services
+    deploy_services: true
+    description: Deploy all enabled services (resolved by dependency order)
+
+  - name: start
+    description: Start containers and wait for health
+    steps:
+      - name: up
+        make: up
+        description: Start all containers
+      - name: wait-healthy
+        cmd: ./bin/devbox compose wait
+        description: Wait for all containers to become healthy

@@ -1,0 +1,21 @@
+# Overlay: Adminer — lightweight DB management UI.
+# Enabled when tools.adminer.enabled = true in devbox config.
+
+services:
+  nginx:
+    volumes:
+      - ./configs/nginx/templates/tools/adminer.conf.template:/etc/nginx/templates/adminer.conf.template:ro
+    environment:
+      ADMINER_HOST: "${ADMINER_HOST:-adminer.localhost}"
+
+  adminer:
+    image: "${IMAGE_ADMINER:-adminer:latest}"
+    container_name: "${PROJECT_PREFIX:-devbox}-${PROJECT_NAME:-laravel}-adminer"
+    hostname: adminer
+    restart: unless-stopped
+    ports:
+      - "${ADMINER_PORT:-8080}:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+    depends_on:
+      - db

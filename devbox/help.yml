@@ -75,10 +75,16 @@ sections:
         text: Devbox
       - type: definition
         name: deploy
-        value: deploy project
+        value: deploy project (first-time setup)
       - type: definition
-        name: run
-        value: run project
+        name: deploy_reset
+        value: stop containers and remove all service data
+      - type: definition
+        name: up
+        value: start project
+      - type: definition
+        name: down
+        value: stop and remove containers
       - type: definition
         name: stop
         value: stop project
@@ -99,5 +105,42 @@ sections:
       - type: definition
         name: redis_cli
         value: connect to Redis console
+
+  - id: devbox_commands
+    title: Devbox CLI commands
+    items:
+      - type: subheader
+        text: Topology
+      - type: definition
+        name: "devbox services"
+        value: show services and tools topology table
+      - type: definition
+        name: "devbox compose files"
+        value: print resolved compose file list (base + enabled overlays)
+      - type: definition
+        name: "devbox compose wait"
+        value: poll container health until all healthy or timeout
+      - type: subheader
+        text: Deploy
+      - type: definition
+        name: "devbox deploy plan"
+        value: show resolved deploy plan with all enabled steps
+      - type: definition
+        name: "devbox deploy plan --format=shell"
+        value: emit deploy plan as executable shell commands
+      - type: definition
+        name: "devbox deploy step <phase>/<step>"
+        value: run a single named deploy step
+      - type: definition
+        name: "devbox deploy config <service>"
+        value: copy template configs to service directory
+      - type: subheader
+        text: Render
+      - type: definition
+        name: "devbox render env"
+        value: generate .env from config export rules
+      - type: definition
+        name: "devbox render ide"
+        value: generate IDE configs (devcontainer, VS Code) into service dirs
 
 footer: true
