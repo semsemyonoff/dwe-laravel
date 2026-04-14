@@ -7,7 +7,10 @@ commands:
     type: command
     private: true
     description: Start the database container in the background
-    run: "docker compose -p ${project.prefix}-${project.name} up -d db"
+    run: |
+      COMPOSE_FILES=$(./bin/devbox compose files) || exit 1
+      if [ -z "$COMPOSE_FILES" ]; then echo "error: compose files list is empty — config invalid" >&2; exit 1; fi
+      docker compose -p ${project.prefix}-${project.name} $(echo "$COMPOSE_FILES" | sed 's/^/-f /' | tr '\n' ' ') up -d db
 
   wait:
     type: command
