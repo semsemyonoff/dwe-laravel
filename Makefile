@@ -70,7 +70,7 @@ deploy-reset:
 		fi
 	@$(MAKE) down || true
 	@[ -n "$(PROJECT_FULL)" ] || { $(call err,PROJECT_FULL is empty — cannot remove volumes safely,1); }
-	@VOLS=$$(docker volume ls -q | grep "^$(PROJECT_FULL)_"); \
+	@VOLS=$$(docker volume ls -q | awk -v p="$(PROJECT_FULL)_" 'substr($$0,1,length(p))==p'); \
 		[ -z "$$VOLS" ] || docker volume rm $$VOLS
 	@rm -rf services/
 	@$(call ok,Reset complete)

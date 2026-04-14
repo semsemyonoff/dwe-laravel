@@ -22,6 +22,9 @@ phases:
     description: Initialize application (database, dependencies, keys)
     when: "dir-empty services/second/src/vendor"
     steps:
+      - name: db-start
+        command: db.start
+        description: Start database container and wait until healthy
       - name: db-create-second
         command: services.second.db.create
         description: Create application database for second service

@@ -9,7 +9,7 @@ commands:
       database:
         type: string
         description: Database name to create
-        default: laravel_second
+        default_from: db.second_database
     argv:
       - mariadb
       - "-uroot"

@@ -156,6 +156,7 @@ exports:
 
 db:
   database: laravel
+  second_database: laravel_second
   password: root
 
 compose:
