@@ -45,17 +45,17 @@
 ## Implementation Steps
 
 ### Task 1: Branch setup and command schema types
-- [ ] Create `commands-system` branch in both repos (root next-laravel and devbox-cli)
-- [ ] Create `internal/commands/` package in devbox-cli
-- [ ] Define core types: `CommandFile`, `GroupMeta`, `CommandDef`, `ParamDef`, `ContextDef`, `ScriptDef`, `WorkflowStep`, `RunnerDef`
-- [ ] Define `CommandType` enum: `command`, `script`, `service_exec`, `service_run`, `workflow`
-- [ ] Define `ParamType` enum: `string`, `bool`, `int`, `path`
-- [ ] Define `UserMode` type: `current`, `root`, literal string
-- [ ] Define `ExecMode` type: `exec`, `run`, `exec-or-run`
-- [ ] Implement YAML unmarshalling with validation (mutually exclusive fields: `run`/`argv`, `script.path`/`script.plan+run+cleanup`, workflow uses `steps` not `run`)
-- [ ] Write tests for type definitions and YAML unmarshalling (valid cases)
-- [ ] Write tests for validation (invalid/conflicting field combinations)
-- [ ] Run tests and lint — must pass before next task
+- [x] Create `commands-system` branch in both repos (root next-laravel and devbox-cli)
+- [x] Create `internal/commands/` package in devbox-cli
+- [x] Define core types: `CommandFile`, `GroupMeta`, `CommandDef`, `ParamDef`, `ContextDef`, `ScriptDef`, `WorkflowStep`, `RunnerDef`
+- [x] Define `CommandType` enum: `command`, `script`, `service_exec`, `service_run`, `workflow`
+- [x] Define `ParamType` enum: `string`, `bool`, `int`, `path`
+- [x] Define `UserMode` type: `current`, `root`, literal string
+- [x] Define `ExecMode` type: `exec`, `run`, `exec-or-run`
+- [x] Implement YAML unmarshalling with validation (mutually exclusive fields: `run`/`argv`, `script.path`/`script.plan+run+cleanup`, workflow uses `steps` not `run`)
+- [x] Write tests for type definitions and YAML unmarshalling (valid cases)
+- [x] Write tests for validation (invalid/conflicting field combinations)
+- [x] Run tests and lint — must pass before next task
 
 ### Task 2: Command loader — file discovery and ID computation
 - [ ] Implement `DiscoverCommandFiles(baseDir string) ([]string, error)` — walk `devbox/commands/` recursively, collect `*.yml`
