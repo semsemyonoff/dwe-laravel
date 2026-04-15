@@ -118,7 +118,7 @@ This means compose flags, project naming, and file resolution logic is duplicate
 - [x] Commit in devbox-cli repo
 
 ### Task 3: Create internal docker package for compose execution
-- [ ] Create `devbox-cli/internal/docker/compose.go` with `Compose` struct:
+- [x] Create `devbox-cli/internal/docker/compose.go` with `Compose` struct:
   ```go
   type Compose struct {
       ProjectName string
@@ -127,14 +127,14 @@ This means compose flags, project naming, and file resolution logic is duplicate
       CommandArgs map[string][]string  // per-command default args
   }
   ```
-- [ ] Add `NewCompose(cfg *config.DevboxConfig, dockerCfg *config.DockerConfig) *Compose`
-- [ ] Add method `Exec(command string, extraArgs ...string) error` — runs `docker compose` with project name, files, global args, command default args, and extra args; connects stdin/stdout/stderr
-- [ ] Add method `BuildArgs(command string, extraArgs ...string) []string` — returns the full arg list without executing (for diagnostics / `compose argv`)
-- [ ] Add method `ContainerIDs() ([]string, error)` — replaces `dockerComposeContainerIDs` from compose.go
-- [ ] Write tests for BuildArgs (verify correct arg ordering, merging)
-- [ ] Write tests for NewCompose (correct initialization from config)
-- [ ] Run tests and linter — must pass before next task
-- [ ] Commit in devbox-cli repo
+- [x] Add `NewCompose(cfg *config.DevboxConfig, dockerCfg *config.DockerConfig) *Compose`
+- [x] Add method `Exec(command string, extraArgs ...string) error` — runs `docker compose` with project name, files, global args, command default args, and extra args; connects stdin/stdout/stderr
+- [x] Add method `BuildArgs(command string, extraArgs ...string) []string` — returns the full arg list without executing (for diagnostics / `compose argv`)
+- [x] Add method `ContainerIDs() ([]string, error)` — replaces `dockerComposeContainerIDs` from compose.go
+- [x] Write tests for BuildArgs (verify correct arg ordering, merging)
+- [x] Write tests for NewCompose (correct initialization from config)
+- [x] Run tests and linter — must pass before next task
+- [x] Commit in devbox-cli repo
 
 ### Task 4: Create `devbox docker` command group
 - [ ] Create `devbox-cli/internal/command/docker.go` with `newDockerCmd(flags)`:
