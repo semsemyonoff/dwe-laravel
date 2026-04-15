@@ -13,3 +13,10 @@ args:
 env:
   auto_generate: true
   commands: [up, run, exec, restart]
+
+resources:
+  volumes:
+    composer_cache:
+      name: devbox_composer_cache
+      shared: true
+      ensure_before: [up, deploy]

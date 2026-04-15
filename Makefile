@@ -8,7 +8,7 @@ all: help
 
 include make/macros.mk
 
-.PHONY: all help env up down stop restart logs cli cli-root deploy deploy-plan deploy-reset print-test private_ensure_composer_cache
+.PHONY: all help env up down stop restart logs cli cli-root deploy deploy-plan deploy-reset print-test
 
 help:
 	@$(DEVBOX_BIN) info
@@ -17,7 +17,7 @@ env:
 	@$(DEVBOX_BIN) render env -o .env
 	@$(call ok,.env generated)
 
-up: private_ensure_composer_cache
+up:
 	@$(DEVBOX_BIN) docker up
 
 down:
@@ -41,7 +41,7 @@ cli-root:
 deploy-plan:
 	@$(DEVBOX_BIN) deploy plan
 
-deploy: private_ensure_composer_cache
+deploy:
 	@$(DEVBOX_BIN) deploy run
 	@$(call ok,Deploy complete)
 
@@ -54,15 +54,6 @@ deploy-reset:
 		[ -z "$$VOLS" ] || docker volume rm $$VOLS
 	@rm -rf services/
 	@$(call ok,Reset complete)
-
-private_ensure_composer_cache:
-	@if docker volume inspect devbox_composer_cache >/dev/null 2>&1; then \
-		$(call ok,Shared composer cache volume exists); \
-	else \
-		$(call inf,Creating shared composer cache volume...); \
-		docker volume create devbox_composer_cache >/dev/null; \
-		$(call ok,Shared composer cache volume created); \
-	fi
 
 # Demonstrate all output macros
 print-test:
