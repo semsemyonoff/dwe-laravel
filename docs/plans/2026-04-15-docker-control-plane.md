@@ -208,14 +208,14 @@ This means compose flags, project naming, and file resolution logic is duplicate
 - [x] Keep `deploy`, `deploy-plan`, `deploy-reset`, `cli`, `cli-root`, `help`, `env` — they already delegate to devbox CLI
 - [x] Update `deploy-reset` to use `devbox docker down` and resolve project name via CLI (e.g. `$(shell $(DEVBOX_BIN) compose project-name)` or inline)
 - [x] Update `private_ensure_composer_cache` — keep as is (it's a Docker volume check, not compose)
-- [ ] Commit in next-laravel repo
+- [x] Commit in next-laravel repo
 
 ### Task 10: Update CLAUDE.md and project documentation
-- [ ] Update CLAUDE.md: document `devbox docker` as the primary runtime API
-- [ ] Update CLAUDE.md: document `devbox compose` as low-level/diagnostic
-- [ ] Update CLAUDE.md: document `devbox/docker.yml` + `devbox/docker.local.yml`
-- [ ] Update project layout section in CLAUDE.md
-- [ ] Update Makefile section in CLAUDE.md (no more compose flag assembly)
+- [x] Update CLAUDE.md: document `devbox docker` as the primary runtime API
+- [x] Update CLAUDE.md: document `devbox compose` as low-level/diagnostic
+- [x] Update CLAUDE.md: document `devbox/docker.yml` + `devbox/docker.local.yml`
+- [x] Update project layout section in CLAUDE.md
+- [x] Update Makefile section in CLAUDE.md (no more compose flag assembly)
 
 ### Task 11: Verify acceptance criteria
 - [ ] Verify all requirements from Overview are implemented
