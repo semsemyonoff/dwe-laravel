@@ -175,9 +175,9 @@ This means compose flags, project naming, and file resolution logic is duplicate
 - [x] Commit in devbox-cli repo
 
 ### Task 7: Remove direct `docker compose` from YAML commands
-- [ ] Update `devbox/commands/app.yml`: change `app.install` from `type: command` with direct `docker compose` to use `devbox docker run` or a new appropriate mechanism (e.g. `type: devbox` with `run: "docker run ..."` or add installer support to docker commands)
-- [ ] Verify all files in `devbox/commands/` have no direct `docker compose` references
-- [ ] Commit in next-laravel repo
+- [x] Update `devbox/commands/app.yml`: change `app.install` from `type: command` with direct `docker compose` to use `devbox docker run` or a new appropriate mechanism (e.g. `type: devbox` with `run: "docker run ..."` or add installer support to docker commands)
+- [x] Verify all files in `devbox/commands/` have no direct `docker compose` references
+- [x] Commit in next-laravel repo
 
 ### Task 8: Update deploy steps to use `devbox docker`
 - [ ] Update `devbox/deploy.yml`:
