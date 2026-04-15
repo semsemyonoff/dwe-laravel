@@ -23,7 +23,6 @@ phases:
 
   - name: init
     description: Initialize application (database, dependencies, keys)
-    when: "dir-empty services/main/src/vendor"
     steps:
       - name: db-start
         command: db.start
