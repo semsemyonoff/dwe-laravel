@@ -1,15 +1,9 @@
 commands:
   create:
-    type: service_exec
+    type: workflow
     private: true
     description: Create the second service database
-    service: db
-    mode: exec
-    params:
-      database:
-        type: string
-        description: Database name to create
-        default_from: db.second_database
-    env:
-      MYSQL_PWD: "${db.password}"
-    run: "mariadb -uroot -e 'CREATE DATABASE IF NOT EXISTS `${param.database}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'"
+    steps:
+      - command: db.create
+        with:
+          database: "${db.second_database}"

@@ -7,10 +7,10 @@ phases:
     description: Prepare service directories and clone repository
     steps:
       - name: create-dirs
-        cmd: mkdir -p services/second/src services/second/configs services/second/logs services/second/home services/second/runtime
+        run: mkdir -p services/second/src services/second/configs services/second/logs services/second/home services/second/runtime
         description: Create service hub directories
       - name: git-clone
-        cmd: git clone ssh://git@git.horn:2222/semsemyonoff/laravel-test-service.git services/second/src
+        run: git clone ssh://git@git.horn:2222/semsemyonoff/laravel-test-service.git services/second/src
         when: "dir-empty services/second/src"
         description: Clone repository (skipped if already cloned)
       - name: copy-configs

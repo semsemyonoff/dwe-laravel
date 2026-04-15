@@ -29,6 +29,11 @@
 #   second:
 #     enabled: true
 
+# Override database credentials if needed (default: root / root).
+# db:
+#   user: myuser
+#   password: mypassword
+
 # Xdebug IDE key for cookie-based debug routing (default: PHPSTORM).
 # debug:
 #   idekey: VSCODE

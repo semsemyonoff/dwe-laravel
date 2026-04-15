@@ -6,7 +6,8 @@
 # in topological dependency order. Only enabled services are included.
 #
 # Step types:
-#   cmd:     — shell command (executed directly)
+#   run:     — shell command (executed directly)
+#   devbox:  — devbox subcommand (binary path resolved automatically)
 #   command: — devbox command ID dispatched via command runner
 
 phases:
@@ -18,10 +19,8 @@ phases:
     description: Start containers and wait for health
     steps:
       - name: up
-        cmd: |
-          COMPOSE_FILES=$(./bin/devbox compose files) || exit 1
-          docker compose --ansi always --progress tty -p "$PROJECT_PREFIX-$PROJECT_NAME" $(echo "$COMPOSE_FILES" | sed 's/^/-f /' | tr '\n' ' ') up -d --remove-orphans
+        devbox: "compose run -- --ansi always --progress tty up -d --remove-orphans"
         description: Start all containers
       - name: wait-healthy
-        cmd: ./bin/devbox compose wait
+        devbox: "compose wait"
         description: Wait for all containers to become healthy

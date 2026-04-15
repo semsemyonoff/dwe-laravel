@@ -154,10 +154,14 @@ exports:
     - name: DB_PASSWORD
       from: db.password
 
+    - name: DB_USER
+      from: db.user
+
 db:
   database: laravel
   second_database: laravel_second
   password: root
+  user: root
 
 compose:
   base: compose.yaml

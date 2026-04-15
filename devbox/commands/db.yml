@@ -4,19 +4,31 @@ group:
 
 commands:
   up:
-    type: command
+    type: devbox
     private: true
     description: Start the database container in the background
-    run: |
-      COMPOSE_FILES=$(./bin/devbox compose files) || exit 1
-      if [ -z "$COMPOSE_FILES" ]; then echo "error: compose files list is empty — config invalid" >&2; exit 1; fi
-      docker compose -p ${project.prefix}-${project.name} $(echo "$COMPOSE_FILES" | sed 's/^/-f /' | tr '\n' ' ') up -d db
+    run: "compose run -- up -d db"
 
   wait:
-    type: command
+    type: devbox
     private: true
     description: Wait for all containers to become healthy
-    run: "./bin/devbox compose wait"
+    run: "compose wait"
+
+  create:
+    type: service_exec
+    private: true
+    description: Create a database in the db container
+    service: db
+    mode: exec
+    params:
+      database:
+        type: string
+        description: Database name to create
+        required: true
+    env:
+      MYSQL_PWD: "${db.password}"
+    run: "mariadb -u${db.user} -e 'CREATE DATABASE IF NOT EXISTS `${param.database}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'"
 
   start:
     type: workflow

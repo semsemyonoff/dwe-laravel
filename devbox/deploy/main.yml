@@ -2,7 +2,7 @@
 # Steps execute sequentially within each phase.
 #
 # Step types:
-#   cmd:     — shell command (executed directly)
+#   run:     — shell command (executed directly)
 #   command: — devbox command ID dispatched via command runner
 
 phases:
@@ -11,7 +11,7 @@ phases:
     when: "dir-empty services/main/src"
     steps:
       - name: create-dirs
-        cmd: mkdir -p services/main/src services/main/configs services/main/logs services/main/home services/main/runtime
+        run: mkdir -p services/main/src services/main/configs services/main/logs services/main/home services/main/runtime
         description: Create service hub directories
       - name: install
         command: app.install
