@@ -230,8 +230,8 @@ This means compose flags, project naming, and file resolution logic is duplicate
 - [x] Run linter: `cd devbox-cli && make lint`
 
 ### Task 12: [Final] Update documentation
-- [ ] Update README.md if needed
-- [ ] Update project knowledge docs if new patterns discovered
+- [x] Update README.md if needed (no project-root README exists; CLAUDE.md already comprehensive)
+- [x] Update project knowledge docs if new patterns discovered (updated memory docs to reflect Phase 5 completion)
 
 ## Technical Details
 
