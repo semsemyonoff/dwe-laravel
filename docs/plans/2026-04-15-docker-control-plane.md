@@ -137,7 +137,7 @@ This means compose flags, project naming, and file resolution logic is duplicate
 - [x] Commit in devbox-cli repo
 
 ### Task 4: Create `devbox docker` command group
-- [ ] Create `devbox-cli/internal/command/docker.go` with `newDockerCmd(flags)`:
+- [x] Create `devbox-cli/internal/command/docker.go` with `newDockerCmd(flags)`:
   - `devbox docker up [services...]` — runs compose up with policy args
   - `devbox docker down` — runs compose down with policy args
   - `devbox docker stop [services...]` — runs compose stop
@@ -147,12 +147,12 @@ This means compose flags, project naming, and file resolution logic is duplicate
   - `devbox docker exec <service> [-- cmd...]` — runs compose exec
   - `devbox docker run <service> [-- cmd...]` — runs compose run
   - `devbox docker wait` — migrated from compose wait (polls health)
-- [ ] Each command follows the pipeline: load config → load docker policy → build Compose → optionally generate .env → execute
-- [ ] `.env` auto-generation: if `dockerCfg.Env.AutoGenerate` and command is in `Env.Commands`, call `devbox render env -o .env` before executing
-- [ ] Register `newDockerCmd(flags)` in `root.go`
-- [ ] Write tests for docker command argument assembly
-- [ ] Run tests and linter — must pass before next task
-- [ ] Commit in devbox-cli repo
+- [x] Each command follows the pipeline: load config → load docker policy → build Compose → optionally generate .env → execute
+- [x] `.env` auto-generation: if `dockerCfg.Env.AutoGenerate` and command is in `Env.Commands`, call `devbox render env -o .env` before executing
+- [x] Register `newDockerCmd(flags)` in `root.go`
+- [x] Write tests for docker command argument assembly
+- [x] Run tests and linter — must pass before next task
+- [x] Commit in devbox-cli repo
 
 ### Task 5: Refactor `devbox compose` to low-level diagnostic layer
 - [ ] Keep `devbox compose files` — unchanged
