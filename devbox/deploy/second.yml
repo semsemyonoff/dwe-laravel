@@ -14,7 +14,10 @@ phases:
         when: "dir-empty services/second/src"
         description: Clone repository (skipped if already cloned)
       - name: copy-configs
-        service_configs_copy: second
+        builtin: service_configs_copy
+        with:
+          service: second
+          mode: replace
         description: Copy template configs to service directory (files declared in services.second.configs)
         check: "cmd: ./bin/devbox deploy config-check second"
 

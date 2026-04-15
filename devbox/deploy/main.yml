@@ -3,7 +3,9 @@
 #
 # Step types:
 #   run:     — shell command (executed directly)
+#   devbox:  — public devbox CLI command
 #   command: — devbox command ID dispatched via command runner
+#   builtin: — engine-internal action
 
 phases:
   - name: setup
@@ -17,7 +19,10 @@ phases:
         command: app.install
         description: Install Laravel project via installer container
       - name: copy-configs
-        service_configs_copy: main
+        builtin: service_configs_copy
+        with:
+          service: main
+          mode: replace
         description: Copy template configs to service directory (files declared in devbox.yml services.main.configs)
         check: "cmd: ./bin/devbox deploy config-check main"
 

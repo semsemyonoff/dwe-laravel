@@ -1,0 +1,38 @@
+# Reset pipeline for the devbox project.
+# Executed via: devbox reset run [--yes]
+#
+# Step types:
+#   builtin: — engine-internal action (confirm, docker_remove_project_volumes, remove_paths)
+#   devbox:  — public devbox CLI command (docker down, etc.)
+#   run:     — shell command
+#   command: — devbox command registry entry
+
+phases:
+  - name: pre
+    description: Confirm destructive reset
+    steps:
+      - name: confirm
+        builtin: confirm
+        with:
+          message: "This will stop containers, remove project volumes, and delete generated data."
+        description: Confirm before proceeding with destructive operations
+
+  - name: stop
+    description: Stop all containers
+    steps:
+      - name: down
+        devbox: "docker down"
+        description: Stop and remove all project containers
+
+  - name: cleanup
+    description: Remove volumes and generated service data
+    steps:
+      - name: remove-volumes
+        builtin: docker_remove_project_volumes
+        description: Remove all Docker volumes belonging to this project
+      - name: remove-services
+        builtin: remove_paths
+        with:
+          paths:
+            - services/
+        description: Remove generated service hub directories
