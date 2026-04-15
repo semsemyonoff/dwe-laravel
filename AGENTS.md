@@ -12,7 +12,7 @@ The project exists to solve the "Make-as-DSL" problem in the legacy devbox, wher
 4. **Generated .env as transport only** — `.env` is never edited manually, never a source of truth. It is rendered from the export spec by `devbox render env`.
 5. **Explicit over magic** — No magic env variable name mapping. All exports are declared explicitly in `exports.env` rules with `name`, `from` (dot-path), `format`, `when`.
 6. **Service as hub** — Each application service directory follows the hub model: `src/`, `configs/`, `logs/`, `home/`, `runtime/`, `.devcontainer/`.
-7. **Incremental migration** — No big bang rewrite. Four phases, each delivering standalone value while preserving backward compatibility.
+7. **Incremental migration** — No big bang rewrite. Five phases, each delivering standalone value while preserving backward compatibility.
 8. **Editor-agnostic** — Must support JetBrains, VS Code, and Zed equally via generated configurations.
 9. **AI-friendly structure** — Predictable directory layout, declarative entities, safe extensibility. An agent or human should be able to understand the project state by reading config files without tracing Make logic.
 
@@ -116,8 +116,8 @@ cd devbox-cli && make lint    # golangci-lint
 - `internal/docker/` — `Compose` struct for building and executing `docker compose` commands with policy args
 - `internal/render/` — `Writer` with ANSI output methods (Success, Error, Warning, Info, Definition, TableHeader, ASCII art)
 - `internal/tpl/` — Go template engine with `Render()`, `EvalCondition()`, custom `FuncMap` (`appURL`)
-- `internal/commands/` — declarative command system: `CommandFile`, `Registry`, `HostRunner`, `ServiceExecRunner`, `ServiceRunRunner`, `ScriptRunner`, `WorkflowRunner`, param/context resolution, `${...}` template sugar
-- `internal/command/` — cobra commands: `info`, `render env`, `render ide`, `print {success,warning,info,error}`, `docker {up,down,stop,restart,logs,ps,exec,run,wait,project-name}`, `compose {files,argv,raw}`, `services`, `deploy plan`, `deploy step`, `deploy config`, `command list`, `command inspect`, `command run`
+- `internal/commands/` — declarative command system: `CommandFile`, `Registry`, `HostRunner`, `DevboxRunner`, `ServiceExecRunner`, `ServiceRunRunner`, `ScriptRunner`, `WorkflowRunner`, param/context resolution, `${...}` template sugar
+- `internal/command/` — cobra commands: `info`, `render env`, `render ide`, `print {success,warning,info,error}`, `docker {up,down,stop,restart,logs,ps,exec,run,wait,project-name}`, `compose {files,argv,raw}`, `services`, `deploy {plan,run,step,config}`, `command list`, `command inspect`, `command run`
 
 ### Dependencies
 
@@ -189,8 +189,8 @@ This repo is a pilot for migrating from the legacy devbox (Make-as-DSL) to a dec
 
 1. **Phase 1 — Rendering** (done): Move all output/help/summary from Make macros to CLI. Info display and .env generation work via `devbox info` and `devbox render env`. Make macros delegate to `devbox print`.
 2. **Phase 2 — Config Orchestrator** (done): Merge config layers, compute enabled services/tools, resolve compose overlays, inspect topology — all in CLI. `devbox compose files`, `devbox services`, `devbox render ide`.
-3. **Phase 3 — Deploy** (done): Declarative deploy phases in `devbox/deploy.yml`. CLI generates deploy plans (`devbox deploy plan`). Make executes steps via `deploy` target. `devbox deploy step`, `devbox deploy config`, `devbox compose wait` all implemented.
-4. **Phase 4 — Commands System** (done): Declarative YAML command definitions in `devbox/commands/`. Five command types: `command`, `script`, `service_exec`, `service_run`, `workflow`. Deploy steps reference commands by ID. Make reduced to lifecycle targets only (`up`, `down`, `stop`, `restart`, `logs`, `deploy`, `deploy-reset`). `make/compose.mk`, `make/service.mk`, `make/deploy.mk` removed.
+3. **Phase 3 — Deploy** (done): Declarative deploy phases in `devbox/deploy.yml`. CLI generates deploy plans (`devbox deploy plan`). Make executes steps via `deploy` target. `devbox deploy step`, `devbox deploy config` all implemented. Health polling (originally `devbox compose wait`) moved to `devbox docker wait` in Phase 5.
+4. **Phase 4 — Commands System** (done): Declarative YAML command definitions in `devbox/commands/`. Six command types: `command`, `devbox`, `script`, `service_exec`, `service_run`, `workflow`. Deploy steps reference commands by ID. Make reduced to lifecycle targets only (`up`, `down`, `stop`, `restart`, `logs`, `deploy`, `deploy-reset`). `make/compose.mk`, `make/service.mk`, `make/deploy.mk` removed.
 5. **Phase 5 — Docker Control Plane** (done): `devbox docker` is the single compose execution layer. Docker policy in `devbox/docker.yml`. Make lifecycle targets delegate to `devbox docker`. No direct `docker compose` calls in YAML commands or deploy steps. `devbox compose` retained as diagnostic layer (files/argv/raw).
 
 ### Success criteria

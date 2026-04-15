@@ -7,12 +7,7 @@ project_name: "${project.prefix}-${project.name}"
 args:
   global: ["--ansi", "always", "--progress", "tty"]
   up: ["-d", "--remove-orphans"]
-  down: []
-  stop: []
-  restart: []
   logs: ["-f"]
-  ps: []
-  exec: []
   run: ["--rm"]
 
 env:

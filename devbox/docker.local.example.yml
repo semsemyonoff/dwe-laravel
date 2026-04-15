@@ -1,6 +1,9 @@
 # Local overrides for Docker/Compose execution policy.
 # Copy to docker.local.yml and adjust as needed (gitignored).
 
+# Override the project name (used as docker compose -p value):
+# project_name: "my-custom-project"
+
 # Override default args for specific commands:
 # args:
 #   global: ["--ansi", "always"]    # remove --progress tty
