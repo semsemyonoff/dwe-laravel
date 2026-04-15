@@ -165,14 +165,14 @@ This means compose flags, project naming, and file resolution logic is duplicate
 - [x] Commit in devbox-cli repo
 
 ### Task 6: Refactor service runners to use docker package
-- [ ] Update `buildDockerComposeCmd()` in `runner_service.go` to accept a `*docker.Compose` (or build one from config) instead of assembling compose args manually
-- [ ] Update `isContainerRunning()` to use the docker package
-- [ ] Update `ServiceExecRunner.BuildCommand()` and `ServiceRunRunner.BuildCommand()` to use the shared Compose struct for project name and file list
-- [ ] Ensure compose global args from docker policy are applied to service commands
-- [ ] Update existing tests for service runners
-- [ ] Write tests for the refactored command building
-- [ ] Run tests and linter — must pass before next task
-- [ ] Commit in devbox-cli repo
+- [x] Update `buildDockerComposeCmd()` in `runner_service.go` to accept a `*docker.Compose` (or build one from config) instead of assembling compose args manually
+- [x] Update `isContainerRunning()` to use the docker package
+- [x] Update `ServiceExecRunner.BuildCommand()` and `ServiceRunRunner.BuildCommand()` to use the shared Compose struct for project name and file list
+- [x] Ensure compose global args from docker policy are applied to service commands
+- [x] Update existing tests for service runners
+- [x] Write tests for the refactored command building
+- [x] Run tests and linter — must pass before next task
+- [x] Commit in devbox-cli repo
 
 ### Task 7: Remove direct `docker compose` from YAML commands
 - [ ] Update `devbox/commands/app.yml`: change `app.install` from `type: command` with direct `docker compose` to use `devbox docker run` or a new appropriate mechanism (e.g. `type: devbox` with `run: "docker run ..."` or add installer support to docker commands)
