@@ -4,6 +4,8 @@
 volumes:
   db:
   composer_cache:
+    external: true
+    name: devbox_composer_cache
 
 networks:
   default:
@@ -82,6 +84,8 @@ services:
       - ./services/main/logs:/workspace/src/storage/logs
       - ./services/main/configs/.env:/workspace/src/.env
       - composer_cache:/home/www-data/.composer/cache
+    environment:
+      COMPOSER_CACHE_DIR: /home/www-data/.composer/cache
     env_file:
       - ./configs/env/default.env
     depends_on:
