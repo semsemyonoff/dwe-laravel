@@ -218,16 +218,16 @@ This means compose flags, project naming, and file resolution logic is duplicate
 - [x] Update Makefile section in CLAUDE.md (no more compose flag assembly)
 
 ### Task 11: Verify acceptance criteria
-- [ ] Verify all requirements from Overview are implemented
-- [ ] Verify `devbox docker up/down/stop/restart/logs/ps/exec/run/wait` all work
-- [ ] Verify `devbox compose files` still works
-- [ ] Verify `devbox compose argv up` shows correct command
-- [ ] Verify `devbox compose raw -- ps` works as escape hatch
-- [ ] Verify `make up/down/stop/restart/logs` delegate to `devbox docker`
-- [ ] Verify no direct `docker compose` in `devbox/commands/*.yml`
-- [ ] Verify no direct `docker compose` in `devbox/deploy*.yml`
-- [ ] Run full test suite: `cd devbox-cli && make test`
-- [ ] Run linter: `cd devbox-cli && make lint`
+- [x] Verify all requirements from Overview are implemented
+- [x] Verify `devbox docker up/down/stop/restart/logs/ps/exec/run/wait` all work
+- [x] Verify `devbox compose files` still works
+- [x] Verify `devbox compose argv up` shows correct command
+- [x] Verify `devbox compose raw -- ps` works as escape hatch
+- [x] Verify `make up/down/stop/restart/logs` delegate to `devbox docker`
+- [x] Verify no direct `docker compose` in `devbox/commands/*.yml`
+- [x] Verify no direct `docker compose` in `devbox/deploy*.yml`
+- [x] Run full test suite: `cd devbox-cli && make test`
+- [x] Run linter: `cd devbox-cli && make lint`
 
 ### Task 12: [Final] Update documentation
 - [ ] Update README.md if needed
