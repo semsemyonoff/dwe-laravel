@@ -76,12 +76,12 @@ This means compose flags, project naming, and file resolution logic is duplicate
 ## Implementation Steps
 
 ### Task 1: Update Go dependencies
-- [ ] Update `devbox-cli/go.mod`: cobra → 1.10.2, pflag → 1.0.10
-- [ ] Run `cd devbox-cli && go mod tidy`
-- [ ] Run `cd devbox-cli && make build` to verify compilation
-- [ ] Run tests — must pass before next task
-- [ ] Run linter — must pass before next task
-- [ ] Commit in devbox-cli repo
+- [x] Update `devbox-cli/go.mod`: cobra → 1.10.2, pflag → 1.0.10
+- [x] Run `cd devbox-cli && go mod tidy`
+- [x] Run `cd devbox-cli && make build` to verify compilation
+- [x] Run tests — must pass before next task
+- [x] Run linter — must pass before next task
+- [x] Commit in devbox-cli repo
 
 ### Task 2: Add docker policy config layer
 - [ ] Create `devbox/docker.yml` with default compose execution policy:
