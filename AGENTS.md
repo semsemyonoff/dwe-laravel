@@ -171,7 +171,7 @@ devbox.yml + defaults.yml + local.yml
 ### Deploy pipeline
 
 Steps have three execution modes:
-- `cmd: <command>` — shell command executed directly via `os/exec`
+- `run: <command>` — shell command executed directly via `os/exec`
 - `command: <id>` — declarative command ID resolved via the command registry (supports `with:` param overrides)
 - `devbox: "<subcommand>"` — invokes a devbox CLI subcommand (e.g. `devbox: "docker up"`, `devbox: "docker wait"`)
 

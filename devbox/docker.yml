@@ -12,4 +12,4 @@ args:
 
 env:
   auto_generate: true
-  commands: [up, run, exec]
+  commands: [up, run, exec, restart]
