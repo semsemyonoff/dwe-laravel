@@ -1,6 +1,7 @@
 legacy/
 devbox-cli/
 devbox/local.yml
+devbox/docker.local.yml
 bin/
 /services/
 .env

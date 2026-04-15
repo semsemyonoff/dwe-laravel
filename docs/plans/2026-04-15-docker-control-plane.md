@@ -84,7 +84,7 @@ This means compose flags, project naming, and file resolution logic is duplicate
 - [x] Commit in devbox-cli repo
 
 ### Task 2: Add docker policy config layer
-- [ ] Create `devbox/docker.yml` with default compose execution policy:
+- [x] Create `devbox/docker.yml` with default compose execution policy:
   ```yaml
   # Docker/Compose execution policy.
   # Loaded separately — not merged with the 3-layer devbox config.
@@ -106,16 +106,16 @@ This means compose flags, project naming, and file resolution logic is duplicate
     auto_generate: true           # regenerate .env before lifecycle commands
     commands: [up, run, exec]     # which commands trigger .env generation
   ```
-- [ ] Create `devbox/docker.local.example.yml` showing override options
-- [ ] Add `devbox/docker.local.yml` to `.gitignore`
-- [ ] Add `DockerConfig` struct in `devbox-cli/internal/config/docker.go`:
+- [x] Create `devbox/docker.local.example.yml` showing override options
+- [x] Add `devbox/docker.local.yml` to `.gitignore`
+- [x] Add `DockerConfig` struct in `devbox-cli/internal/config/docker.go`:
   - `ProjectName string` (template string, resolved against config)
   - `Args` map with `Global []string` and per-command `[]string`
   - `Env` struct with `AutoGenerate bool`, `Commands []string`
-- [ ] Add `LoadDockerConfig(baseDir string, cfg *DevboxConfig) (*DockerConfig, error)` — loads `docker.yml`, merges `docker.local.yml`, resolves project name template
-- [ ] Write tests for DockerConfig loading, merging, and project name resolution
-- [ ] Run tests and linter — must pass before next task
-- [ ] Commit in devbox-cli repo
+- [x] Add `LoadDockerConfig(baseDir string, cfg *DevboxConfig) (*DockerConfig, error)` — loads `docker.yml`, merges `docker.local.yml`, resolves project name template
+- [x] Write tests for DockerConfig loading, merging, and project name resolution
+- [x] Run tests and linter — must pass before next task
+- [x] Commit in devbox-cli repo
 
 ### Task 3: Create internal docker package for compose execution
 - [ ] Create `devbox-cli/internal/docker/compose.go` with `Compose` struct:

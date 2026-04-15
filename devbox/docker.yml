@@ -1,0 +1,20 @@
+# Docker/Compose execution policy.
+# Loaded separately — not merged with the 3-layer devbox config.
+# Override locally via devbox/docker.local.yml (gitignored).
+
+project_name: "${project.prefix}-${project.name}"
+
+args:
+  global: ["--ansi", "always", "--progress", "tty"]
+  up: ["-d", "--remove-orphans"]
+  down: []
+  stop: []
+  restart: []
+  logs: ["-f"]
+  ps: []
+  exec: []
+  run: ["--rm"]
+
+env:
+  auto_generate: true
+  commands: [up, run, exec]
