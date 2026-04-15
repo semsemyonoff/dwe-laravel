@@ -155,14 +155,14 @@ This means compose flags, project naming, and file resolution logic is duplicate
 - [x] Commit in devbox-cli repo
 
 ### Task 5: Refactor `devbox compose` to low-level diagnostic layer
-- [ ] Keep `devbox compose files` — unchanged
-- [ ] Rename `devbox compose run` → `devbox compose raw` (escape hatch for direct passthrough)
-- [ ] Add `devbox compose argv <command> [args...]` — shows the full `docker compose` command that `devbox docker <command>` would execute, without running it
-- [ ] Remove `devbox compose wait` (moved to `devbox docker wait`)
-- [ ] Update `compose.go` to use the `docker` package for arg building
-- [ ] Write tests for compose argv output
-- [ ] Run tests and linter — must pass before next task
-- [ ] Commit in devbox-cli repo
+- [x] Keep `devbox compose files` — unchanged
+- [x] Rename `devbox compose run` → `devbox compose raw` (escape hatch for direct passthrough)
+- [x] Add `devbox compose argv <command> [args...]` — shows the full `docker compose` command that `devbox docker <command>` would execute, without running it
+- [x] Remove `devbox compose wait` (moved to `devbox docker wait`)
+- [x] Update `compose.go` to use the `docker` package for arg building
+- [x] Write tests for compose argv output
+- [x] Run tests and linter — must pass before next task
+- [x] Commit in devbox-cli repo
 
 ### Task 6: Refactor service runners to use docker package
 - [ ] Update `buildDockerComposeCmd()` in `runner_service.go` to accept a `*docker.Compose` (or build one from config) instead of assembling compose args manually
