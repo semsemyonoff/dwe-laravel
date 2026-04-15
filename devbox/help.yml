@@ -77,7 +77,7 @@ sections:
         name: deploy
         value: deploy project (first-time setup)
       - type: definition
-        name: deploy_reset
+        name: deploy-reset
         value: stop containers and remove all service data
       - type: definition
         name: up
@@ -97,7 +97,7 @@ sections:
         name: cli
         value: connect to app-main container
       - type: definition
-        name: cli_root
+        name: cli-root
         value: connect to app-main container as root
 
   - id: devbox_commands
