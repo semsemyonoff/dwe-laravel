@@ -49,7 +49,7 @@ deploy-reset:
 	@$(call cnf,This will stop containers and remove all service data. Continue?,,,Aborted)
 	@$(DEVBOX_BIN) docker down || true
 	@PROJECT=$$($(DEVBOX_BIN) docker project-name); \
-		[ -n "$$PROJECT" ] || { $(call err,Could not resolve project name — cannot remove volumes safely,1); }; \
+		[ -n "$$PROJECT" ] || { $(call err,Could not resolve project name — cannot remove volumes safely); exit 1; }; \
 		VOLS=$$(docker volume ls -q | awk -v p="$${PROJECT}_" 'substr($$0,1,length(p))==p'); \
 		[ -z "$$VOLS" ] || docker volume rm $$VOLS
 	@rm -rf services/

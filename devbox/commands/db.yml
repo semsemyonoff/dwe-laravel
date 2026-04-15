@@ -7,13 +7,13 @@ commands:
     type: devbox
     private: true
     description: Start the database container in the background
-    run: "compose run -- up -d db"
+    run: "docker up db"
 
   wait:
     type: devbox
     private: true
     description: Wait for all containers to become healthy
-    run: "compose wait"
+    run: "docker wait"
 
   create:
     type: service_exec

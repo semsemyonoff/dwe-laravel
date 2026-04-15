@@ -112,7 +112,7 @@ sections:
         name: "devbox compose files"
         value: print resolved compose file list (base + enabled overlays)
       - type: definition
-        name: "devbox compose wait"
+        name: "devbox docker wait"
         value: poll container health until all healthy or timeout
       - type: subheader
         text: Deploy

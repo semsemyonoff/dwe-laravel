@@ -50,5 +50,5 @@ endef
 # Check if a container is running. Exits 0 if running, 1 if not.
 #   <1> — container name (without project prefix, e.g. app-main)
 define container-running
-docker ps -q --filter "name=^$(PROJECT_FULL)-$(1)$$" --filter "status=running" | grep -q .
+docker ps -q --filter "name=^$$($(DEVBOX_BIN) docker project-name)-$(1)$$" --filter "status=running" | grep -q .
 endef
