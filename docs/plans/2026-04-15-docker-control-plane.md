@@ -180,11 +180,11 @@ This means compose flags, project naming, and file resolution logic is duplicate
 - [x] Commit in next-laravel repo
 
 ### Task 8: Update deploy steps to use `devbox docker`
-- [ ] Update `devbox/deploy.yml`:
+- [x] Update `devbox/deploy.yml`:
   - `devbox: "compose run -- --ansi always --progress tty up -d --remove-orphans"` → `devbox: "docker up"`
   - `devbox: "compose wait"` → `devbox: "docker wait"`
-- [ ] Verify `devbox/deploy/main.yml` and `devbox/deploy/second.yml` have no direct compose calls (they use `command:` references — should be fine)
-- [ ] Commit in next-laravel repo
+- [x] Verify `devbox/deploy/main.yml` and `devbox/deploy/second.yml` have no direct compose calls (they use `command:` references — should be fine)
+- [x] Commit in next-laravel repo
 
 ### Task 9: Simplify Makefile to pure delegation
 - [ ] Remove `COMPOSE_FILES`, `DOCKER_COMPOSE_FLAGS`, `DOCKER_COMPOSE`, `PROJECT_PREFIX`, `PROJECT_NAME`, `PROJECT_FULL` variables

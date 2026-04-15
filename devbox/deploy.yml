@@ -19,8 +19,8 @@ phases:
     description: Start containers and wait for health
     steps:
       - name: up
-        devbox: "compose run -- --ansi always --progress tty up -d --remove-orphans"
+        devbox: "docker up"
         description: Start all containers
       - name: wait-healthy
-        devbox: "compose wait"
+        devbox: "docker wait"
         description: Wait for all containers to become healthy
