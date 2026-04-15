@@ -63,11 +63,7 @@ deploy: private_ensure_composer_cache
 	@$(call ok,Deploy complete)
 
 deploy-reset:
-	@printf "This will stop containers and remove all service data. Continue? [y/N] " && \
-		read -r ans && \
-		if [ "$$ans" != "y" ] && [ "$$ans" != "Y" ]; then \
-			$(call err,Aborted); exit 1; \
-		fi
+	@$(call cnf,This will stop containers and remove all service data. Continue?,,,Aborted)
 	@$(MAKE) down || true
 	@[ -n "$(PROJECT_FULL)" ] || { $(call err,PROJECT_FULL is empty — cannot remove volumes safely,1); }
 	@VOLS=$$(docker volume ls -q | awk -v p="$(PROJECT_FULL)_" 'substr($$0,1,length(p))==p'); \

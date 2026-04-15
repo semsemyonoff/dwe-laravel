@@ -37,6 +37,16 @@ define inf
 $(DEVBOX_BIN) print info "$(1)"
 endef
 
+# Interactive yes/no confirmation prompt.
+# Exits 1 on refusal unless --continue is passed. Skips prompt in CI.
+#   <1> — question message
+#   [2] (false) — if "true", continue execution on refusal (exit 0)
+#   [3] (Continuing) — message on agreement
+#   [4] (Stopping) — message on refusal
+define cnf
+$(DEVBOX_BIN) print confirm "$(1)"$(if $(filter true,$(2)), --continue,)$(if $(strip $(3)), --ok-msg "$(3)",)$(if $(strip $(4)), --stop-msg "$(4)",)
+endef
+
 # Check if a container is running. Exits 0 if running, 1 if not.
 #   <1> — container name (without project prefix, e.g. app-main)
 define container-running
