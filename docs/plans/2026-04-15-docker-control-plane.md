@@ -104,7 +104,7 @@ This means compose flags, project naming, and file resolution logic is duplicate
   
   env:
     auto_generate: true           # regenerate .env before lifecycle commands
-    commands: [up, run, exec]     # which commands trigger .env generation
+    commands: [up, run, exec, restart]  # which commands trigger .env generation
   ```
 - [x] Create `devbox/docker.local.example.yml` showing override options
 - [x] Add `devbox/docker.local.yml` to `.gitignore`
@@ -253,7 +253,7 @@ args:
 
 env:
   auto_generate: true
-  commands: [up, run, exec]
+  commands: [up, run, exec, restart]
 ```
 
 ### Compose command construction pipeline
