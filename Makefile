@@ -4,26 +4,9 @@ DEVBOX_BIN := ./bin/devbox
 
 -include .env
 
-PROJECT_PREFIX ?= devbox
-PROJECT_NAME   ?= laravel
-PROJECT_FULL    = $(PROJECT_PREFIX)-$(PROJECT_NAME)
-
 all: help
 
 include make/macros.mk
-
-# Compose file list is computed by the CLI based on enabled tools/services.
-ifneq ($(wildcard $(DEVBOX_BIN)),)
-COMPOSE_FILES := $(shell $(DEVBOX_BIN) compose files | sed 's/^/-f /' | tr '\n' ' ')
-ifeq ($(strip $(COMPOSE_FILES)),)
-$(warning $(DEVBOX_BIN) compose files returned empty — config invalid.)
-endif
-else
-COMPOSE_FILES :=
-endif
-
-DOCKER_COMPOSE_FLAGS ?= --ansi always --progress tty
-DOCKER_COMPOSE = docker compose $(DOCKER_COMPOSE_FLAGS) -p $(PROJECT_FULL) $(COMPOSE_FILES)
 
 .PHONY: all help env up down stop restart logs cli cli-root deploy deploy-plan deploy-reset print-test private_ensure_composer_cache
 
@@ -35,19 +18,19 @@ env:
 	@$(call ok,.env generated)
 
 up: private_ensure_composer_cache
-	@$(DOCKER_COMPOSE) up -d --remove-orphans
+	@$(DEVBOX_BIN) docker up
 
 down:
-	@$(DOCKER_COMPOSE) down
+	@$(DEVBOX_BIN) docker down
 
 stop:
-	@$(DOCKER_COMPOSE) stop
+	@$(DEVBOX_BIN) docker stop
 
 restart:
-	@$(DOCKER_COMPOSE) restart
+	@$(DEVBOX_BIN) docker restart
 
 logs:
-	@$(DOCKER_COMPOSE) logs -f
+	@$(DEVBOX_BIN) docker logs
 
 cli:
 	@$(DEVBOX_BIN) services cli main
@@ -64,9 +47,10 @@ deploy: private_ensure_composer_cache
 
 deploy-reset:
 	@$(call cnf,This will stop containers and remove all service data. Continue?,,,Aborted)
-	@$(MAKE) down || true
-	@[ -n "$(PROJECT_FULL)" ] || { $(call err,PROJECT_FULL is empty — cannot remove volumes safely,1); }
-	@VOLS=$$(docker volume ls -q | awk -v p="$(PROJECT_FULL)_" 'substr($$0,1,length(p))==p'); \
+	@$(DEVBOX_BIN) docker down || true
+	@PROJECT=$$($(DEVBOX_BIN) docker project-name); \
+		[ -n "$$PROJECT" ] || { $(call err,Could not resolve project name — cannot remove volumes safely,1); }; \
+		VOLS=$$(docker volume ls -q | awk -v p="$${PROJECT}_" 'substr($$0,1,length(p))==p'); \
 		[ -z "$$VOLS" ] || docker volume rm $$VOLS
 	@rm -rf services/
 	@$(call ok,Reset complete)

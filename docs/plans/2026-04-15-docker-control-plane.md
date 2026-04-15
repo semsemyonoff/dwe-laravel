@@ -187,8 +187,8 @@ This means compose flags, project naming, and file resolution logic is duplicate
 - [x] Commit in next-laravel repo
 
 ### Task 9: Simplify Makefile to pure delegation
-- [ ] Remove `COMPOSE_FILES`, `DOCKER_COMPOSE_FLAGS`, `DOCKER_COMPOSE`, `PROJECT_PREFIX`, `PROJECT_NAME`, `PROJECT_FULL` variables
-- [ ] Rewrite lifecycle targets as pure delegation:
+- [x] Remove `COMPOSE_FILES`, `DOCKER_COMPOSE_FLAGS`, `DOCKER_COMPOSE`, `PROJECT_PREFIX`, `PROJECT_NAME`, `PROJECT_FULL` variables
+- [x] Rewrite lifecycle targets as pure delegation:
   ```makefile
   up: private_ensure_composer_cache
   	@$(DEVBOX_BIN) docker up
@@ -205,9 +205,9 @@ This means compose flags, project naming, and file resolution logic is duplicate
   logs:
   	@$(DEVBOX_BIN) docker logs
   ```
-- [ ] Keep `deploy`, `deploy-plan`, `deploy-reset`, `cli`, `cli-root`, `help`, `env` — they already delegate to devbox CLI
-- [ ] Update `deploy-reset` to use `devbox docker down` and resolve project name via CLI (e.g. `$(shell $(DEVBOX_BIN) compose project-name)` or inline)
-- [ ] Update `private_ensure_composer_cache` — keep as is (it's a Docker volume check, not compose)
+- [x] Keep `deploy`, `deploy-plan`, `deploy-reset`, `cli`, `cli-root`, `help`, `env` — they already delegate to devbox CLI
+- [x] Update `deploy-reset` to use `devbox docker down` and resolve project name via CLI (e.g. `$(shell $(DEVBOX_BIN) compose project-name)` or inline)
+- [x] Update `private_ensure_composer_cache` — keep as is (it's a Docker volume check, not compose)
 - [ ] Commit in next-laravel repo
 
 ### Task 10: Update CLAUDE.md and project documentation
