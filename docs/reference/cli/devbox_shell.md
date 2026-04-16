@@ -12,7 +12,7 @@ Mode controls how the shell is opened (--mode auto|exec|run):
   run   — always start a new container via 'docker compose run --rm'
 
 Shell, user, working directory, and env defaults are read from the service
-cli config block in devbox/defaults.yml and can be overridden with flags.
+cli config block in devbox/services.yml and can be overridden with flags.
 
 When no service argument is given, the command auto-selects if only one enabled
 service exists, or shows an interactive selector when multiple services are enabled.
@@ -34,12 +34,13 @@ devbox shell [service] [flags]
 ### Options
 
 ```
-  -h, --help             help for shell
-      --mode string      shell mode: auto, exec, or run
-      --root             run as root user
-      --shell string     shell binary to use (e.g. bash, sh, zsh)
-      --user string      user to run as inside the container
-      --workdir string   working directory inside the container
+      --env stringArray   set an environment variable (KEY=VALUE); overrides service cli.env config
+  -h, --help              help for shell
+      --mode string       shell mode: auto, exec, or run
+      --root              run as root user
+      --shell string      shell binary to use (e.g. bash, sh, zsh)
+      --user string       user to run as inside the container
+      --workdir string    working directory inside the container
 ```
 
 ### Options inherited from parent commands
