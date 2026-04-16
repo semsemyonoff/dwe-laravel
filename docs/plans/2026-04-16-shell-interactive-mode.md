@@ -83,14 +83,14 @@
 - [x] Run tests — must pass before next task
 
 ### Task 3: Implement 3-tier value resolution (flags -> config -> defaults)
-- [ ] Create `shellOptions` struct to hold resolved values: `Mode`, `Shell`, `User`, `WorkDir`, `Env`
-- [ ] Create `resolveShellOptions(flags, svcCLI ServiceCLIConfig, svc ServiceConfig) shellOptions` function
-- [ ] Resolution priority: CLI flag (if non-empty) -> config value -> built-in default
-- [ ] Built-in defaults: mode=`auto`, shell=`bash`, user=current UID, workdir=`work_dir_internal` -> `dir_internal`
-- [ ] `--root` sets user to `root` (highest priority, already handled but integrate into new flow)
-- [ ] Update `runServicesCLI` to use `resolveShellOptions` instead of inline resolution
-- [ ] Write tests for resolution priority (flag overrides config, config overrides default)
-- [ ] Run tests — must pass before next task
+- [x] Create `shellOptions` struct to hold resolved values: `Mode`, `Shell`, `User`, `WorkDir`, `Env`
+- [x] Create `resolveShellOptions(flags, svcCLI ServiceCLIConfig, svc ServiceConfig) shellOptions` function
+- [x] Resolution priority: CLI flag (if non-empty) -> config value -> built-in default
+- [x] Built-in defaults: mode=`auto`, shell=`bash`, user=current UID, workdir=`work_dir_internal` -> `dir_internal`
+- [x] `--root` sets user to `root` (highest priority, already handled but integrate into new flow)
+- [x] Update `runServicesCLI` to use `resolveShellOptions` instead of inline resolution
+- [x] Write tests for resolution priority (flag overrides config, config overrides default)
+- [x] Run tests — must pass before next task
 
 ### Task 4: Implement explicit mode logic
 - [ ] Refactor `runServicesCLI` to use resolved `Mode` value from `shellOptions`
