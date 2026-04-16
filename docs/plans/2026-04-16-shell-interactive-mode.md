@@ -137,15 +137,15 @@
 - [x] Run tests — must pass before next task
 
 ### Task 8: Interactive selector in `tools enable/disable`
-- [ ] Change `tools enable` args from `ExactArgs(1)` to `MaximumNArgs(1)` in `tools.go`
-- [ ] When no arg: show selector with all tools from `knownTools`, each showing enabled/disabled state
+- [x] Change `tools enable` args from `ExactArgs(1)` to `MaximumNArgs(1)` in `tools.go`
+- [x] When no arg: show selector with all tools from `knownTools`, each showing enabled/disabled state
   - Same visual treatment as services: checkmark + color for enabled, dimmed for disabled
   - For `enable`: show only disabled tools (or all with state)
   - For `disable`: show only enabled tools
-- [ ] Change `tools disable` args similarly
-- [ ] Keep direct arg path working unchanged
-- [ ] Write tests for arg-optional behavior
-- [ ] Run tests — must pass before next task
+- [x] Change `tools disable` args similarly
+- [x] Keep direct arg path working unchanged
+- [x] Write tests for arg-optional behavior
+- [x] Run tests — must pass before next task
 
 ### Task 9: Interactive selector in `commands run` and `commands inspect`
 - [ ] Change `commands run` args from `ExactArgs(1)` to `MaximumNArgs(1)` in `command_cmd.go`
