@@ -116,13 +116,13 @@
 - [x] Run tests — must pass before next task
 
 ### Task 6: Interactive selector in `devbox shell`
-- [ ] Change `shell.go` args from `cobra.MaximumNArgs(1)` (already) — keep current behavior
-- [ ] When no service arg AND multiple enabled services: build `SelectorItem` list from enabled services (label=name, description=container)
-- [ ] Call `RunSelector` and use selected service name
-- [ ] When only one enabled service: auto-select (no selector, current behavior)
-- [ ] When no enabled services: error
-- [ ] Write tests for selection logic (single auto-select, no services error, multi triggers selector)
-- [ ] Run tests — must pass before next task
+- [x] Change `shell.go` args from `cobra.MaximumNArgs(1)` (already) — keep current behavior
+- [x] When no service arg AND multiple enabled services: build `SelectorItem` list from enabled services (label=name, description=container)
+- [x] Call `RunSelector` and use selected service name
+- [x] When only one enabled service: auto-select (no selector, current behavior)
+- [x] When no enabled services: error
+- [x] Write tests for selection logic (single auto-select, no services error, multi triggers selector)
+- [x] Run tests — must pass before next task
 
 ### Task 7: Interactive selector in `services enable/disable`
 - [ ] Change `services enable` args from `ExactArgs(1)` to `MaximumNArgs(1)` in `service.go`
