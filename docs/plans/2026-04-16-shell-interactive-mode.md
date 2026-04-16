@@ -103,17 +103,17 @@
 - [x] Run tests — must pass before next task
 
 ### Task 5: Add bubbletea dependency and shared selector component
-- [ ] Add `github.com/charmbracelet/bubbletea/v2` v2.0.5 and `github.com/charmbracelet/bubbles/v2` v2.1.0
-- [ ] Create `devbox-cli/internal/ui/selector.go` — reusable interactive list selector model
-- [ ] Selector model features:
+- [x] Add `github.com/charmbracelet/bubbletea/v2` v2.0.5 and `github.com/charmbracelet/bubbles/v2` v2.1.0
+- [x] Create `devbox-cli/internal/ui/selector.go` — reusable interactive list selector model
+- [x] Selector model features:
   - Items are `[]SelectorItem` with `Label`, `Description`, `Status` (e.g. "enabled"/"disabled"), `Disabled` (non-selectable)
   - Arrow keys (up/down) to navigate, Enter to select, Esc/q to cancel
   - Current item highlighted with accent color (from styles palette)
   - Status shown inline: checkmark + green for enabled, dimmed for disabled
   - Returns selected item index or cancellation error
-- [ ] Create `RunSelector(title string, items []SelectorItem) (int, error)` public entry point
-- [ ] Write unit tests for selector model (Init, Update with key msgs, View output, cancel behavior)
-- [ ] Run tests — must pass before next task
+- [x] Create `RunSelector(title string, items []SelectorItem) (int, error)` public entry point
+- [x] Write unit tests for selector model (Init, Update with key msgs, View output, cancel behavior)
+- [x] Run tests — must pass before next task
 
 ### Task 6: Interactive selector in `devbox shell`
 - [ ] Change `shell.go` args from `cobra.MaximumNArgs(1)` (already) — keep current behavior
