@@ -241,14 +241,14 @@ Stack: running ●
 - [x] Run tests — must pass before next task
 
 ### Task 10: Add topology visualization to `status`
-- [ ] Add `internal/ui/topology.go` — parse compose topology from `docker compose config` output (YAML/JSON)
-- [ ] Build dependency DAG: map each service to its `depends_on` list
-- [ ] Render as styled tree using lipgloss (indented tree with box-drawing chars or lipgloss/list)
-- [ ] Color nodes by status: running (green), stopped (yellow), disabled (gray)
-- [ ] Integrate into `status` command output (after tables)
-- [ ] Fallback: if docker not available, show topology from config only (no running status)
-- [ ] Write tests for DAG building and tree rendering
-- [ ] Run tests — must pass before next task
+- [x] Add `internal/ui/topology.go` — parse compose topology from `docker compose config` output (YAML/JSON)
+- [x] Build dependency DAG: map each service to its `depends_on` list
+- [x] Render as styled tree using lipgloss (indented tree with box-drawing chars or lipgloss/list)
+- [x] Color nodes by status: running (green), stopped (yellow), disabled (gray)
+- [x] Integrate into `status` command output (after tables)
+- [x] Fallback: if docker not available, show topology from config only (no running status)
+- [x] Write tests for DAG building and tree rendering
+- [x] Run tests — must pass before next task
 
 ### Task 11: Verify acceptance criteria
 - [ ] Verify: `devbox` (no args) — no URL in summary, newline after ASCII header
