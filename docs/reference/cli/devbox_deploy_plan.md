@@ -7,7 +7,7 @@ Show resolved deploy plan
 Print all phases and steps from devbox/deploy.yml as they would be executed.
 
 The implicit .env generation step is always shown first. Use --service to filter
-the plan to steps relevant to a specific service. Use --format yaml for machine-readable output.
+the plan to steps relevant to a specific service. Use --format shell for script-friendly output.
 
 ```
 devbox deploy plan [flags]
@@ -18,7 +18,7 @@ devbox deploy plan [flags]
 ```
   devbox deploy plan
   devbox deploy plan --service main
-  devbox deploy plan --format yaml
+  devbox deploy plan --format shell
 ```
 
 ### Options

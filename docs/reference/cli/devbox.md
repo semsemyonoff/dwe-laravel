@@ -7,7 +7,8 @@ devbox-cli — local development environment toolkit
 devbox-cli is the core engine for the devbox local development environment.
 
 It provides config validation, rendering, topology inspection, and project info display.
-Run 'devbox info' to display the current project status.
+Run 'devbox' with no arguments to display a compact project summary and available commands.
+Run 'devbox info' for the full info dashboard.
 
 ```
 devbox [flags]

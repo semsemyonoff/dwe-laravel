@@ -47,6 +47,7 @@ deploy:
 
 reset:
 	@$(DEVBOX_BIN) reset run
+	@$(call ok,Reset complete)
 
 # Demonstrate all output macros
 print-test:

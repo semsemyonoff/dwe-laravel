@@ -37,7 +37,7 @@ The project exists to solve the "Make-as-DSL" problem in the legacy devbox, wher
 - All user-visible output goes through CLI macros: `$(call ok,...)`, `$(call err,...)`, `$(call warn,...)`, `$(call inf,...)`. Defined in `make/macros.mk`.
 - Public targets use `snake_case`. Internal targets use `private_*` prefix.
 - Use `@` to suppress command echo in recipes.
-- Makefile includes only `make/macros.mk`. Lifecycle targets (`up`, `down`, `stop`, `restart`, `logs`) delegate to `devbox docker`. No compose flag assembly, no `docker compose` calls in Make.
+- Makefile includes only `make/macros.mk`. Lifecycle targets (`up`, `down`, `stop`, `restart`, `logs`) delegate to root-level `devbox` lifecycle commands (`devbox up`, `devbox down`, etc.), which in turn delegate to `devbox docker` internally. No compose flag assembly, no `docker compose` calls in Make.
 - Cross-platform: must work on macOS and Linux (including WSL). Prefer portable shell constructs.
 
 ### General
@@ -84,6 +84,10 @@ compose/tools/mailpit.yml           # Mailpit email testing overlay
 compose/services/main/debug.yml     # app-main-debug container (Xdebug enabled)
 compose/installer.yml               # installer container (deploy only)
 configs/app/main/.env               # Laravel .env template (copied to services/main/configs/ on deploy)
+docs/plans/                         # implementation plans (markdown)
+docs/reference/                     # generated reference documentation (devbox docs generate)
+docs/reference/cli/                 # cobra command reference (one file per command)
+docs/reference/commands/            # declarative command registry reference (one file per command)
 services/                           # service hubs (gitignored, created by deploy)
 devbox-cli/                         # Go module (gitignored, built separately into bin/)
 legacy/                             # old devbox repos (gitignored)
@@ -107,6 +111,7 @@ Go module at `devbox-cli/`, built to `bin/devbox`.
 cd devbox-cli && make build   # → ../bin/devbox
 cd devbox-cli && make test    # go test ./...
 cd devbox-cli && make lint    # golangci-lint
+./bin/devbox docs generate    # → docs/reference/ (CLI + command reference, --include-private for all)
 ```
 
 ### Package structure
@@ -203,6 +208,7 @@ This repo is a pilot for migrating from the legacy devbox (Make-as-DSL) to a dec
 3. **Phase 3 — Deploy** (done): Declarative deploy phases in `devbox/deploy.yml`. CLI generates deploy plans (`devbox deploy plan`). Make executes steps via `deploy` target. `devbox deploy step`, `devbox deploy config` all implemented. Health polling (originally `devbox compose wait`) moved to `devbox docker wait` in Phase 5.
 4. **Phase 4 — Commands System** (done): Declarative YAML command definitions in `devbox/commands/`. Six command types: `command`, `devbox`, `script`, `service_exec`, `service_run`, `workflow`. Deploy steps reference commands by ID. Make reduced to lifecycle targets only (`up`, `down`, `stop`, `restart`, `logs`, `deploy`, `deploy-reset`). `make/compose.mk`, `make/service.mk`, `make/deploy.mk` removed.
 5. **Phase 5 — Docker Control Plane** (done): `devbox docker` is the single compose execution layer. Docker policy in `devbox/docker.yml`. Make lifecycle targets delegate to `devbox docker`. No direct `docker compose` calls in YAML commands or deploy steps. `devbox compose` retained as diagnostic layer (files/argv/raw).
+6. **Phase 6 — CLI UX Refactor** (done): Restructured devbox-cli into the primary user interface. Added `internal/ui` (Lipgloss) for styled output and `internal/version` for version injection. Fang integration for styled help/errors. `devbox` (no args) shows ASCII header + compact summary + help; `devbox info` is the full styled dashboard from `devbox/info.yml` (renamed from `help.yml`). Lifecycle commands promoted to root level (`devbox up`, `devbox down`, etc.). Added `devbox shell`, `devbox status`, `devbox version`, `devbox completion`, `devbox docs generate`. Command group renamed `command` → `commands`.
 
 ### Success criteria
 
