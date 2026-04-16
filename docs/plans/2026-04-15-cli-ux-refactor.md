@@ -149,13 +149,13 @@ Restructure `devbox-cli` from a "core for Make" into the primary user interface 
 
 ### Task 10: Implement styled `devbox info` with Lipgloss
 
-- [ ] update `internal/command/info.go` to use `ui.RenderInfo()` instead of legacy `renderInfo()` with `TableHeader`/`Definition`
-- [ ] remove legacy table-based rendering functions from `info.go` (`renderInfo`, `renderItem`, etc.)
-- [ ] verify `devbox info` renders all sections from `info.yml` with new styled output
-- [ ] verify conditional items (`when`) still work with template evaluation
-- [ ] clean up `devbox/info.yml` content: remove command cheat-sheet sections that duplicate `help`, keep project summary, URLs, hosts, services, tools, runtime details
-- [ ] write tests for info command with new renderer
-- [ ] run tests - must pass before next task
+- [x] update `internal/command/info.go` to use `ui.RenderInfo()` instead of legacy `renderInfo()` with `TableHeader`/`Definition`
+- [x] remove legacy table-based rendering functions from `info.go` (`renderInfo`, `renderItem`, etc.)
+- [x] verify `devbox info` renders all sections from `info.yml` with new styled output
+- [x] verify conditional items (`when`) still work with template evaluation
+- [x] clean up `devbox/info.yml` content: remove command cheat-sheet sections that duplicate `help`, keep project summary, URLs, hosts, services, tools, runtime details
+- [x] write tests for info command with new renderer
+- [x] run tests - must pass before next task
 
 ### Task 11: Add shell completion
 
