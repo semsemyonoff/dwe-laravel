@@ -169,13 +169,13 @@ Restructure `devbox-cli` from a "core for Make" into the primary user interface 
 
 ### Task 12: Add `devbox docs generate` command
 
-- [ ] create `internal/command/docs.go` with `devbox docs generate` command
-- [ ] implement Cobra docgen for static command tree (`doc.GenMarkdownTree`)
-- [ ] implement custom generator for registry commands (ID, description, type, params, context, env, examples)
-- [ ] support flags: `--output <dir>` (default `docs/reference`), `--format markdown|yaml|man|all`, `--scope all|cli|commands`, `--include-hidden`, `--include-private`
-- [ ] generate index files (`docs/reference/index.md`, `docs/reference/commands/index.md`)
-- [ ] write tests for doc generation (CLI tree output, registry command output)
-- [ ] run tests - must pass before next task
+- [x] create `internal/command/docs.go` with `devbox docs generate` command
+- [x] implement Cobra docgen for static command tree (`doc.GenMarkdownTree`)
+- [x] implement custom generator for registry commands (ID, description, type, params, context, env, examples)
+- [x] support flags: `--output <dir>` (default `docs/reference`), `--format markdown|yaml|man|all`, `--scope all|cli|commands`, `--include-hidden`, `--include-private`
+- [x] generate index files (`docs/reference/index.md`, `docs/reference/commands/index.md`)
+- [x] write tests for doc generation (CLI tree output, registry command output)
+- [x] run tests - must pass before next task
 
 ### Task 13: Clean up messages and descriptions
 
