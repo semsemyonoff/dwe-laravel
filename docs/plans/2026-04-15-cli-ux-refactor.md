@@ -84,13 +84,13 @@ Restructure `devbox-cli` from a "core for Make" into the primary user interface 
 
 ### Task 4: Add `internal/ui` package for styled rendering
 
-- [ ] create `internal/ui/styles.go` with Lipgloss style definitions (colors, borders, spacing) consistent with Fang aesthetic
-- [ ] create `internal/ui/summary.go` with `RenderSummary(cfg *config.DevboxConfig) string` — compact project summary (name, state, URL, services/tools counts)
-- [ ] create `internal/ui/info.go` with `RenderInfo(cfg *config.DevboxConfig, infoCfg *config.InfoConfig) string` — full styled info dashboard replacing legacy table rendering
-- [ ] ensure terminal width detection for adaptive layout
-- [ ] write tests for summary rendering (content correctness)
-- [ ] write tests for info rendering (sections, conditional items, template evaluation)
-- [ ] run tests - must pass before next task
+- [x] create `internal/ui/styles.go` with Lipgloss style definitions (colors, borders, spacing) consistent with Fang aesthetic
+- [x] create `internal/ui/summary.go` with `RenderSummary(cfg *config.DevboxConfig) string` — compact project summary (name, state, URL, services/tools counts)
+- [x] create `internal/ui/info.go` with `RenderInfo(cfg *config.DevboxConfig, infoCfg *config.InfoConfig) (string, error)` — full styled info dashboard replacing legacy table rendering
+- [x] ensure terminal width detection for adaptive layout
+- [x] write tests for summary rendering (content correctness)
+- [x] write tests for info rendering (sections, conditional items, template evaluation)
+- [x] run tests - must pass before next task
 
 ### Task 5: Restructure command tree — promote lifecycle commands to root
 
