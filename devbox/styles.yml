@@ -3,7 +3,7 @@
 header:
   lines:
     - "Welcome to"
-    - "Devbox Next"
+    - "Devbox Laravel"
   font: doom
   color: red
 
@@ -32,6 +32,15 @@ colors:
   # Table colors (shared across all Lipgloss tables) — Laravel red accents
   table_border: "167" # darker coral — table border lines
   table_header: "203" # Laravel red — table header text
+
+  # Help/CLI output colors (Fang color scheme)
+  help:
+    title: "203"       # section headers (USAGE, COMMANDS, etc.) — Laravel coral
+    command: "167"     # command names — darker coral
+    flag: "2"          # flag names — green
+    program: "209"     # program name in usage line — warm salmon
+    description: "250" # command/flag descriptions — light gray
+    argument: "245"    # arguments like [command] — muted gray
 
 # Separator character between label and value in definitions
 separator: "—"

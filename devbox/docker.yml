@@ -14,6 +14,11 @@ env:
   auto_generate: true
   commands: [up, run, exec, restart]
 
+topology:
+  # Compose services to hide from the topology tree and health calculation.
+  # Useful for init containers that run once and exit (e.g. redis-insight-setup).
+  hidden: [redis-insight-setup]
+
 resources:
   volumes:
     composer_cache:
