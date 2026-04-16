@@ -230,15 +230,15 @@ Stack: running ●
 - [x] Run tests — must pass before next task
 
 ### Task 9: Rewrite `status` command — stack health + tables
-- [ ] Rewrite `internal/command/status.go` to show stack running status:
+- [x] Rewrite `internal/command/status.go` to show stack running status:
   - All enabled running → green "● running"
   - Some running → yellow "◐ partial"
   - None running → red "○ stopped"
-- [ ] Show service summary table (reuse `ui.RenderServiceTable` from task 7)
-- [ ] Show tool summary table (reuse `ui.RenderToolTable` from task 8)
-- [ ] Load styles config and apply before rendering
-- [ ] Write tests for status aggregation logic (all/partial/none running)
-- [ ] Run tests — must pass before next task
+- [x] Show service summary table (reuse `ui.RenderServiceTable` from task 7)
+- [x] Show tool summary table (reuse `ui.RenderToolTable` from task 8)
+- [x] Load styles config and apply before rendering
+- [x] Write tests for status aggregation logic (all/partial/none running)
+- [x] Run tests — must pass before next task
 
 ### Task 10: Add topology visualization to `status`
 - [ ] Add `internal/ui/topology.go` — parse compose topology from `docker compose config` output (YAML/JSON)
