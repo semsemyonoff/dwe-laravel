@@ -93,14 +93,14 @@
 - [x] Run tests — must pass before next task
 
 ### Task 4: Implement explicit mode logic
-- [ ] Refactor `runServicesCLI` to use resolved `Mode` value from `shellOptions`
-- [ ] `auto` mode (current behavior): running->exec, not exists->run, stopped/paused/dead->error with hint
-- [ ] `exec` mode: always exec, error if container not running (`container %q is not running — start it with 'devbox up'`)
-- [ ] `run` mode: always `docker compose run --rm`, regardless of container state
-- [ ] Pass `Env` from `shellOptions` as `-e KEY=VALUE` args to both exec and run
-- [ ] Write tests for mode logic (auto/exec/run behavior with different container states)
-- [ ] Write tests for env passthrough
-- [ ] Run tests — must pass before next task
+- [x] Refactor `runServicesCLI` to use resolved `Mode` value from `shellOptions`
+- [x] `auto` mode (current behavior): running->exec, not exists->run, stopped/paused/dead->error with hint
+- [x] `exec` mode: always exec, error if container not running (`container %q is not running — start it with 'devbox up'`)
+- [x] `run` mode: always `docker compose run --rm`, regardless of container state
+- [x] Pass `Env` from `shellOptions` as `-e KEY=VALUE` args to both exec and run
+- [x] Write tests for mode logic (auto/exec/run behavior with different container states)
+- [x] Write tests for env passthrough
+- [x] Run tests — must pass before next task
 
 ### Task 5: Add bubbletea dependency and shared selector component
 - [ ] Add `github.com/charmbracelet/bubbletea/v2` v2.0.5 and `github.com/charmbracelet/bubbles/v2` v2.1.0
