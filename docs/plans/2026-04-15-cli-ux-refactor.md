@@ -24,7 +24,7 @@ Restructure `devbox-cli` from a "core for Make" into the primary user interface 
 
 - **Repo:** `devbox-cli/` is a separate git repository; needs its own branch and commits
 - **Current deps:** cobra v1.10.2, yaml.v3, go-figure (3 direct deps)
-- **New deps:** fang v2.0.1, lipgloss v1.1.0
+- **New deps:** fang v1.0.0 (v2.0.1 does not exist), lipgloss v1.1.0
 - **Files affected:** ~46 source files, 24 test files across 8 packages
 - **Current root behavior:** `devbox` (no args) runs `runInfo()` directly
 - **Config:** `devbox/help.yml` drives info screen with Go templates
@@ -57,12 +57,12 @@ Restructure `devbox-cli` from a "core for Make" into the primary user interface 
 
 ### Task 1: Repository setup and dependencies
 
-- [ ] create feature branch in `devbox-cli/` repo (e.g. `feat/cli-ux-refactor`)
-- [ ] add `github.com/charmbracelet/fang v2.0.1` dependency
-- [ ] add `github.com/charmbracelet/lipgloss v1.1.0` dependency
-- [ ] run `go mod tidy` to resolve transitive deps
-- [ ] verify `go build ./...` succeeds
-- [ ] run tests - must pass before next task
+- [x] create feature branch in `devbox-cli/` repo (e.g. `feat/cli-ux-refactor`)
+- [x] add `github.com/charmbracelet/fang v1.0.0` dependency (v2.0.1 does not exist; latest is v1.0.0)
+- [x] add `github.com/charmbracelet/lipgloss v1.1.0` dependency
+- [x] run `go mod tidy` to resolve transitive deps (skipped until imports added — tidy removes unused deps)
+- [x] verify `go build ./...` succeeds
+- [x] run tests - must pass before next task
 
 ### Task 2: Add `internal/version` package
 
@@ -279,7 +279,7 @@ func main() {
 }
 ```
 
-Note: exact Fang API to be verified against v2.0.1 docs during implementation.
+Note: exact Fang API to be verified against v1.0.0 docs during implementation.
 
 ## Post-Completion
 
