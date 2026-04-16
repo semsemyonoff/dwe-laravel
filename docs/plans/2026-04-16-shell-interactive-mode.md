@@ -125,16 +125,16 @@
 - [x] Run tests — must pass before next task
 
 ### Task 7: Interactive selector in `services enable/disable`
-- [ ] Change `services enable` args from `ExactArgs(1)` to `MaximumNArgs(1)` in `service.go`
-- [ ] When no arg: show selector with all non-mandatory services, each showing enabled/disabled state
+- [x] Change `services enable` args from `ExactArgs(1)` to `MaximumNArgs(1)` in `service.go`
+- [x] When no arg: show selector with all non-mandatory services, each showing enabled/disabled state
   - Enabled services: checkmark prefix, green/enabled color
   - Disabled services: no prefix, dimmed/disabled color
   - For `enable`: filter to show only currently disabled services (or show all with state, skip if already enabled)
   - For `disable`: filter to show only currently enabled non-mandatory services
-- [ ] Change `services disable` args from `ExactArgs(1)` to `MaximumNArgs(1)` similarly
-- [ ] Keep direct arg path working unchanged (backward compatible)
-- [ ] Write tests for arg-optional behavior (0 args triggers selector, 1 arg works as before)
-- [ ] Run tests — must pass before next task
+- [x] Change `services disable` args from `ExactArgs(1)` to `MaximumNArgs(1)` similarly
+- [x] Keep direct arg path working unchanged (backward compatible)
+- [x] Write tests for arg-optional behavior (0 args triggers selector, 1 arg works as before)
+- [x] Run tests — must pass before next task
 
 ### Task 8: Interactive selector in `tools enable/disable`
 - [ ] Change `tools enable` args from `ExactArgs(1)` to `MaximumNArgs(1)` in `tools.go`
