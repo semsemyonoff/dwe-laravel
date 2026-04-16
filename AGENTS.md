@@ -68,6 +68,7 @@ devbox/docker.local.example.yml     # tracked template for docker policy overrid
 devbox/local.yml                    # local overrides (gitignored)
 devbox/local.example.yml            # tracked template for local overrides
 devbox/info.yml                     # declarative info dashboard config (renamed from help.yml)
+devbox/styles.yml                   # UI styles config: ASCII header, color palette, separator (loaded separately)
 devbox/commands/                    # declarative command definitions (YAML, grouped by subdirectory)
 devbox/commands/db.yml              # db group: db.up, db.wait, db.start (workflow)
 devbox/commands/app.yml             # app group: app.install (installer container)
@@ -118,10 +119,10 @@ cd devbox-cli && make lint    # golangci-lint
 
 - `cmd/devbox/main.go` — entry point (uses `fang.Execute` for styled help/errors)
 - `internal/version/` — `Version`, `Commit`, `Date`, `BuiltBy` vars; `Info()` formatter; injected via `-ldflags -X` at build time
-- `internal/config/` — `DevboxConfig` struct, layered `LoadConfig()`, `LoadDeployConfig()`, `LoadDockerConfig()`, `ResolvePath()`, `ExportRule`, `ComposeConfig`, `DockerConfig`, `DeployConfig`, `IDEConfig`, `InfoConfig` (renamed from `HelpConfig`), `LoadInfoConfig()`
+- `internal/config/` — `DevboxConfig` struct, layered `LoadConfig()`, `LoadDeployConfig()`, `LoadDockerConfig()`, `ResolvePath()`, `ExportRule`, `ComposeConfig`, `DockerConfig`, `DeployConfig`, `IDEConfig`, `InfoConfig` (renamed from `HelpConfig`), `LoadInfoConfig()`, `StylesConfig`, `LoadStylesConfig()`
 - `internal/docker/` — `Compose` struct for building and executing `docker compose` commands with policy args
 - `internal/render/` — `Writer` with ANSI output methods (Success, Error, Warning, Info, Definition, TableHeader, ASCII art); plain passthrough for logs/deploy output
-- `internal/ui/` — Lipgloss styled output: `RenderSummary(cfg)` for compact root summary, `RenderInfo(cfg, infoCfg)` for full info dashboard; terminal width detection
+- `internal/ui/` — Lipgloss styled output: `RenderSummary(cfg)` for compact root summary, `RenderInfo(cfg, infoCfg)` for full info dashboard, `RenderServiceTable()` and `RenderToolTable()` for Lipgloss tables, `RenderTopology()` for dependency tree; `ApplyStyles(stylesCfg)` to hot-apply palette from `styles.yml`; terminal width detection
 - `internal/tpl/` — Go template engine with `Render()`, `EvalCondition()`, custom `FuncMap` (`appURL`)
 - `internal/commands/` — declarative command system: `CommandFile`, `Registry`, `HostRunner`, `DevboxRunner`, `ServiceExecRunner`, `ServiceRunRunner`, `ScriptRunner`, `WorkflowRunner`, param/context resolution, `${...}` template sugar
 - `internal/command/` — cobra commands with Fang integration and command groups:
@@ -163,6 +164,8 @@ services: { main: { type: app, dir: ./services/main } }
 
 `devbox/local.yml` — per-user overrides for state, tools, ports (gitignored). See `devbox/local.example.yml` for options.
 
+`devbox/styles.yml` — UI styles: ASCII header config (moved from `info.yml`), ANSI 256 color palette, separator character. Loaded separately by `LoadStylesConfig()`. Omitting the file produces identical defaults. Colors are applied at startup via `ui.ApplyStyles()`.
+
 ### Config structs (key additions in Phases 2+)
 
 - `ComposeConfig` — `Base string` + `Overlays map[string]string` (key → file path)
@@ -173,6 +176,7 @@ services: { main: { type: app, dir: ./services/main } }
 - `DeployStep` — `Name`, `Cmd`, `Command`, `With`, `Description`, `When` (exactly one of Cmd/Command set; `Make` removed)
 - `DockerConfig` — `ProjectName string`, `Args` (Global + per-command `[]string`), `Env` (AutoGenerate, Commands)
 - `IDEConfig` — per-editor blocks: `VSCode`, `JetBrains`, `Devcontainer` (each with `Enabled bool`)
+- `StylesConfig` — `Header StylesHeader` (lines, font, color) + `Colors StylesColors` (label, section_title, subheader, muted, warning, info, enabled, disabled, mandatory, partial, table_border, table_header) + `Separator string`
 
 ### Variable flow
 
