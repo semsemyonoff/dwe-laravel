@@ -107,15 +107,15 @@ Restructure `devbox-cli` from a "core for Make" into the primary user interface 
 
 ### Task 6: Restructure command tree — rename and reorganize
 
-- [ ] create `internal/command/shell.go` — `devbox shell [service]` replacing `services cli` (reuse `runServicesCLI` logic)
-- [ ] create `internal/command/status.go` — `devbox status` replacing topology `services` output (reuse `runServices` logic with tree/table)
-- [ ] rename `command` group to `commands` (`internal/command/command_cmd.go` — update `Use: "commands"`)
-- [ ] update `newServiceCmd` to use `Use: "services"` consistently (list/enable/disable only, no `cli` subcommand)
-- [ ] remove `service_cli.go` subcommand registration from `services` (moved to root `shell`)
-- [ ] remove old `services` topology-display RunE (moved to `status`)
-- [ ] add `devbox version` command using `internal/version`
-- [ ] write tests for `shell`, `status`, `version` commands
-- [ ] run tests - must pass before next task
+- [x] create `internal/command/shell.go` — `devbox shell [service]` replacing `services cli` (reuse `runServicesCLI` logic)
+- [x] create `internal/command/status.go` — `devbox status` replacing topology `services` output (reuse `runServices` logic with tree/table)
+- [x] rename `command` group to `commands` (`internal/command/command_cmd.go` — update `Use: "commands"`)
+- [x] update `newServiceCmd` to use `Use: "services"` consistently (list/enable/disable only, no `cli` subcommand)
+- [x] remove `service_cli.go` subcommand registration from `services` (moved to root `shell`)
+- [x] remove old `services` topology-display RunE (moved to `status`)
+- [x] add `devbox version` command using `internal/version`
+- [x] write tests for `shell`, `status`, `version` commands
+- [x] run tests - must pass before next task
 
 ### Task 7: Add command groups to help output
 
