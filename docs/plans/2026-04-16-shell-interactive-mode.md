@@ -148,16 +148,16 @@
 - [x] Run tests — must pass before next task
 
 ### Task 9: Interactive selector in `commands run` and `commands inspect`
-- [ ] Change `commands run` args from `ExactArgs(1)` to `MaximumNArgs(1)` in `command_cmd.go`
-- [ ] When no arg: show selector with all public commands from `registry.List("")`
+- [x] Change `commands run` args from `ExactArgs(1)` to `MaximumNArgs(1)` in `command_cmd.go`
+- [x] When no arg: show selector with all public commands from `registry.List("")`
   - Items: label=command ID, description=command description
-- [ ] When arg is a group prefix (e.g. `services.main`): use `registry.List(groupPrefix)` to get commands in that group, show selector among them
+- [x] When arg is a group prefix (e.g. `services.main`): use `registry.List(groupPrefix)` to get commands in that group, show selector among them
   - Detect group vs command: try `registry.Get(arg)` first; if not found, try `registry.List(arg)` — if non-empty, it's a group
-- [ ] When arg is a full command ID: run directly (current behavior, no selector)
-- [ ] Change `commands inspect` args from `ExactArgs(1)` to `MaximumNArgs(1)` similarly
-- [ ] Same group-prefix logic for inspect
-- [ ] Write tests for: no arg -> full list, group prefix -> filtered list, exact ID -> direct run
-- [ ] Run tests — must pass before next task
+- [x] When arg is a full command ID: run directly (current behavior, no selector)
+- [x] Change `commands inspect` args from `ExactArgs(1)` to `MaximumNArgs(1)` similarly
+- [x] Same group-prefix logic for inspect
+- [x] Write tests for: no arg -> full list, group prefix -> filtered list, exact ID -> direct run
+- [x] Run tests — must pass before next task
 
 ### Task 10: Verify acceptance criteria
 - [ ] Verify `devbox shell main` works with all flags (`--mode`, `--shell`, `--user`, `--workdir`, `--root`)
