@@ -201,11 +201,11 @@ Stack: running ●
 - [x] Run tests — must pass before next task
 
 ### Task 5: Wire styles loading into commands
-- [ ] Update `internal/command/root.go` — load `StylesConfig`, call `ApplyStyles`, use `StylesConfig.Header` for ASCII
-- [ ] Update `internal/command/info.go` — load `StylesConfig`, call `ApplyStyles`, use header from styles
-- [ ] Graceful handling when `styles.yml` is missing (use defaults, no error)
-- [ ] Update command tests
-- [ ] Run tests — must pass before next task
+- [x] Update `internal/command/root.go` — load `StylesConfig`, call `ApplyStyles`, use `StylesConfig.Header` for ASCII
+- [x] Update `internal/command/info.go` — load `StylesConfig`, call `ApplyStyles`, use header from styles
+- [x] Graceful handling when `styles.yml` is missing (use defaults, no error)
+- [x] Update command tests
+- [x] Run tests — must pass before next task
 
 ### Task 6: Add Lipgloss table renderer to ui package
 - [ ] Add `internal/ui/table.go` with helper functions to build Lipgloss tables using shared table styles
