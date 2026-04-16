@@ -1,0 +1,78 @@
+# CLI Reference
+
+Generated reference for the `devbox` command tree.
+
+## Commands
+
+- [devbox commands](devbox_commands.md) — List, inspect, and run devbox commands
+  - [devbox commands help](devbox_commands_help.md) — Help about any command
+  - [devbox commands inspect](devbox_commands_inspect.md) — Show full command definition
+  - [devbox commands list](devbox_commands_list.md) — List available commands
+  - [devbox commands run](devbox_commands_run.md) — Run a devbox command
+- [devbox completion](devbox_completion.md) — Generate the autocompletion script for the specified shell
+  - [devbox completion bash](devbox_completion_bash.md) — Generate the autocompletion script for bash
+  - [devbox completion fish](devbox_completion_fish.md) — Generate the autocompletion script for fish
+  - [devbox completion help](devbox_completion_help.md) — Help about any command
+  - [devbox completion powershell](devbox_completion_powershell.md) — Generate the autocompletion script for powershell
+  - [devbox completion zsh](devbox_completion_zsh.md) — Generate the autocompletion script for zsh
+- [devbox compose](devbox_compose.md) — Low-level Docker Compose diagnostics
+  - [devbox compose argv](devbox_compose_argv.md) — Show the full docker compose command that would be executed
+  - [devbox compose files](devbox_compose_files.md) — Print resolved compose file list (base + enabled overlays), one per line
+  - [devbox compose help](devbox_compose_help.md) — Help about any command
+  - [devbox compose raw](devbox_compose_raw.md) — Run docker compose directly with resolved file list and project name (escape hatch)
+- [devbox deploy](devbox_deploy.md) — Deploy pipeline commands
+  - [devbox deploy config](devbox_deploy_config.md) — Copy template configs to service directory
+  - [devbox deploy config-check](devbox_deploy_config-check.md) — Verify that all declared service configs exist in the service directory
+  - [devbox deploy help](devbox_deploy_help.md) — Help about any command
+  - [devbox deploy plan](devbox_deploy_plan.md) — Show resolved deploy plan
+  - [devbox deploy run](devbox_deploy_run.md) — Execute the deploy plan
+  - [devbox deploy step](devbox_deploy_step.md) — Run a single deploy step by <phase>/<step> address
+- [devbox docker](devbox_docker.md) — Docker Compose lifecycle commands
+  - [devbox docker down](devbox_docker_down.md) — Stop and remove compose services
+  - [devbox docker exec](devbox_docker_exec.md) — Execute a command in a running compose service
+  - [devbox docker help](devbox_docker_help.md) — Help about any command
+  - [devbox docker logs](devbox_docker_logs.md) — View compose service logs
+  - [devbox docker project-name](devbox_docker_project-name.md) — Print the resolved compose project name
+  - [devbox docker ps](devbox_docker_ps.md) — List compose containers
+  - [devbox docker restart](devbox_docker_restart.md) — Restart compose services
+  - [devbox docker run](devbox_docker_run.md) — Run a one-off command in a compose service
+  - [devbox docker stop](devbox_docker_stop.md) — Stop compose services
+  - [devbox docker up](devbox_docker_up.md) — Start compose services
+  - [devbox docker wait](devbox_docker_wait.md) — Wait for all compose containers to become healthy
+- [devbox docs](devbox_docs.md) — Generate documentation for devbox commands
+  - [devbox docs generate](devbox_docs_generate.md) — Generate reference documentation
+  - [devbox docs help](devbox_docs_help.md) — Help about any command
+- [devbox down](devbox_down.md) — Stop and remove compose services
+- [devbox help](devbox_help.md) — Help about any command
+- [devbox info](devbox_info.md) — Display project info, URLs, credentials and available commands
+- [devbox logs](devbox_logs.md) — View compose service logs
+- [devbox ps](devbox_ps.md) — List compose containers
+- [devbox render](devbox_render.md) — Render derived artifacts from the merged devbox config
+  - [devbox render env](devbox_render_env.md) — Generate .env from exports.env spec (stdout or --output <file>)
+  - [devbox render help](devbox_render_help.md) — Help about any command
+  - [devbox render ide](devbox_render_ide.md) — Generate IDE configs into service directories
+- [devbox reset](devbox_reset.md) — Reset pipeline commands
+  - [devbox reset config](devbox_reset_config.md) — Reset config subcommands
+    - [devbox reset config check](devbox_reset_config_check.md) — Validate the reset pipeline config (devbox/reset.yml)
+    - [devbox reset config help](devbox_reset_config_help.md) — Help about any command
+  - [devbox reset help](devbox_reset_help.md) — Help about any command
+  - [devbox reset plan](devbox_reset_plan.md) — Show resolved reset plan
+  - [devbox reset run](devbox_reset_run.md) — Execute the reset pipeline
+  - [devbox reset step](devbox_reset_step.md) — Run a single reset step by <phase>/<step> address
+- [devbox restart](devbox_restart.md) — Restart compose services
+- [devbox services](devbox_services.md) — Manage application services
+  - [devbox services disable](devbox_services_disable.md) — Disable an optional service (writes to devbox/local.yml)
+  - [devbox services enable](devbox_services_enable.md) — Enable an optional service (writes to devbox/local.yml)
+  - [devbox services help](devbox_services_help.md) — Help about any command
+  - [devbox services list](devbox_services_list.md) — List all services and their status
+- [devbox shell](devbox_shell.md) — Open a shell in a service container
+- [devbox status](devbox_status.md) — Show services and tools topology
+- [devbox stop](devbox_stop.md) — Stop compose services without removing them
+- [devbox tools](devbox_tools.md) — Manage optional tools
+  - [devbox tools disable](devbox_tools_disable.md) — Disable an optional tool (writes to devbox/local.yml)
+  - [devbox tools enable](devbox_tools_enable.md) — Enable an optional tool (writes to devbox/local.yml)
+  - [devbox tools help](devbox_tools_help.md) — Help about any command
+  - [devbox tools list](devbox_tools_list.md) — List all tools and their status
+- [devbox up](devbox_up.md) — Start compose services
+- [devbox version](devbox_version.md) — Print version information
+- [devbox wait](devbox_wait.md) — Wait for all compose containers to become healthy

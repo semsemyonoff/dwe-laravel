@@ -21,10 +21,10 @@ The project exists to solve the "Make-as-DSL" problem in the legacy devbox, wher
 ### CLI (Go)
 - Go is the only language for CLI (cross-platform binary, no runtime dependencies).
 - CLI is the single control plane for Docker Compose. `devbox docker` is the public lifecycle API; `devbox compose` is the low-level diagnostic layer. No direct `docker compose` calls in Makefiles, YAML commands, or deploy steps.
-- Keep packages focused: `config` (loading/merging), `render` (ANSI output), `tpl` (templates), `command` (cobra wiring), `docker` (compose execution).
+- Keep packages focused: `config` (loading/merging), `render` (ANSI output), `ui` (Lipgloss styled output), `tpl` (templates), `command` (cobra wiring), `docker` (compose execution), `version` (version vars).
 - Errors bubble up with `fmt.Errorf` wrapping. Root command catches and renders them via `render.Stdout().Error()`.
-- Minimal dependencies. Current set: cobra, yaml.v3, go-figure. Do not add dependencies without strong justification.
-- All user-visible output formatting lives in the `render` package. Make recipes must not produce styled output directly — they call CLI print subcommands via macros.
+- Minimal dependencies. Current set: cobra, yaml.v3, go-figure, fang, lipgloss. Do not add dependencies without strong justification.
+- Styled user-facing output (info dashboard, root summary) lives in the `ui` package (Lipgloss). Plain passthrough output (deploy, docker logs, compose raw) stays in the `render` package. Make recipes must not produce styled output directly — they call CLI print subcommands via macros.
 
 ### Config
 - Three layers merged in strict order: `devbox.yml` (structure) → `devbox/defaults.yml` (versioned defaults) → `devbox/local.yml` (gitignored user overrides). Later wins, maps merge recursively.
@@ -67,7 +67,7 @@ devbox/docker.local.yml             # docker policy local overrides (gitignored)
 devbox/docker.local.example.yml     # tracked template for docker policy overrides
 devbox/local.yml                    # local overrides (gitignored)
 devbox/local.example.yml            # tracked template for local overrides
-devbox/help.yml                     # declarative info/help screen config
+devbox/info.yml                     # declarative info dashboard config (renamed from help.yml)
 devbox/commands/                    # declarative command definitions (YAML, grouped by subdirectory)
 devbox/commands/db.yml              # db group: db.up, db.wait, db.start (workflow)
 devbox/commands/app.yml             # app group: app.install (installer container)
@@ -111,26 +111,37 @@ cd devbox-cli && make lint    # golangci-lint
 
 ### Package structure
 
-- `cmd/devbox/main.go` — entry point
-- `internal/config/` — `DevboxConfig` struct, layered `LoadConfig()`, `LoadDeployConfig()`, `LoadDockerConfig()`, `ResolvePath()`, `ExportRule`, `ComposeConfig`, `DockerConfig`, `DeployConfig`, `IDEConfig`
+- `cmd/devbox/main.go` — entry point (uses `fang.Execute` for styled help/errors)
+- `internal/version/` — `Version`, `Commit`, `Date`, `BuiltBy` vars; `Info()` formatter; injected via `-ldflags -X` at build time
+- `internal/config/` — `DevboxConfig` struct, layered `LoadConfig()`, `LoadDeployConfig()`, `LoadDockerConfig()`, `ResolvePath()`, `ExportRule`, `ComposeConfig`, `DockerConfig`, `DeployConfig`, `IDEConfig`, `InfoConfig` (renamed from `HelpConfig`), `LoadInfoConfig()`
 - `internal/docker/` — `Compose` struct for building and executing `docker compose` commands with policy args
-- `internal/render/` — `Writer` with ANSI output methods (Success, Error, Warning, Info, Definition, TableHeader, ASCII art)
+- `internal/render/` — `Writer` with ANSI output methods (Success, Error, Warning, Info, Definition, TableHeader, ASCII art); plain passthrough for logs/deploy output
+- `internal/ui/` — Lipgloss styled output: `RenderSummary(cfg)` for compact root summary, `RenderInfo(cfg, infoCfg)` for full info dashboard; terminal width detection
 - `internal/tpl/` — Go template engine with `Render()`, `EvalCondition()`, custom `FuncMap` (`appURL`)
 - `internal/commands/` — declarative command system: `CommandFile`, `Registry`, `HostRunner`, `DevboxRunner`, `ServiceExecRunner`, `ServiceRunRunner`, `ScriptRunner`, `WorkflowRunner`, param/context resolution, `${...}` template sugar
-- `internal/command/` — cobra commands: `info`, `render env`, `render ide`, `print {success,warning,info,error}`, `docker {up,down,stop,restart,logs,ps,exec,run,wait,project-name}`, `compose {files,argv,raw}`, `services`, `deploy {plan,run,step,config}`, `command list`, `command inspect`, `command run`
+- `internal/command/` — cobra commands with Fang integration and command groups:
+  - Root: `devbox` (no args) shows ASCII header + compact summary + help
+  - Core: `info` (styled dashboard), `version`
+  - Environment: `up`, `down`, `stop`, `restart`, `logs`, `ps`, `wait`, `shell [service]`, `status`
+  - Configuration: `services {list,enable,disable}`, `tools {list,enable,disable}`, `render {env,ide}`
+  - Pipelines: `deploy {plan,run,step,config}`, `reset {plan,run,step,config}`
+  - Advanced: `commands {list,inspect,run}`, `docker {up,down,stop,restart,logs,ps,exec,run,wait,project-name}`, `compose {files,argv,raw}`, `docs generate`
+  - Internal (hidden): `print {success,warning,info,error}` (Make macro compatibility)
 
 ### Dependencies
 
 - `github.com/spf13/cobra` — CLI framework
 - `gopkg.in/yaml.v3` — YAML parsing
 - `github.com/common-nighthawk/go-figure` — ASCII art
+- `github.com/charmbracelet/fang` — styled help/errors, Fang Execute wrapper
+- `github.com/charmbracelet/lipgloss` — terminal styling for `internal/ui`
 
 ### Key patterns
 
 - Config layers merge via `deepMerge` (maps recurse, scalars: later wins)
 - `DevboxConfig.Raw` holds the merged map for dot-path resolution in export rules
 - Export rules (`defaults.yml` → `exports.env`) are declarative: `name`, `from` (dot-path), `format`, `when` (condition), `required`
-- All `text`/`value`/`when` fields in `help.yml` support Go template expressions against `DevboxConfig`
+- All `text`/`value`/`when` fields in `info.yml` support Go template expressions against `DevboxConfig`
 - Errors bubble up with `fmt.Errorf` wrapping; root command silences cobra errors and renders via `render.Stdout().Error()`
 
 ## Config model

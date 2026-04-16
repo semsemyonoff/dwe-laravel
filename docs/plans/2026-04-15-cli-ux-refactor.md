@@ -212,10 +212,10 @@ Restructure `devbox-cli` from a "core for Make" into the primary user interface 
 
 ### Task 16: Update documentation
 
-- [ ] update CLAUDE.md command tree and package structure sections
-- [ ] update CLAUDE.md dependencies list
-- [ ] run `devbox docs generate` to produce reference docs
-- [ ] commit all changes in `devbox-cli/` repo on feature branch
+- [x] update CLAUDE.md command tree and package structure sections
+- [x] update CLAUDE.md dependencies list
+- [x] run `devbox docs generate` to produce reference docs
+- [x] commit all changes in `devbox-cli/` repo on feature branch
 
 ## Technical Details
 
