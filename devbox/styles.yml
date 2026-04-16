@@ -24,14 +24,14 @@ colors:
   info: "210"
 
   # Semantic status colors (used in tables/status)
-  enabled: "2"           # green — enabled/running/active
-  disabled: "245"        # neutral gray — disabled/off
-  mandatory: "203"       # Laravel red — mandatory items
-  partial: "214"         # amber — partially running / stopped
+  enabled: "2" # green — enabled/running/active
+  disabled: "245" # neutral gray — disabled/off
+  mandatory: "203" # Laravel red — mandatory items
+  partial: "214" # amber — partially running / stopped
 
   # Table colors (shared across all Lipgloss tables) — Laravel red accents
-  table_border: "167"    # darker coral — table border lines
-  table_header: "203"    # Laravel red — table header text
+  table_border: "167" # darker coral — table border lines
+  table_header: "203" # Laravel red — table header text
 
 # Separator character between label and value in definitions
 separator: "—"
