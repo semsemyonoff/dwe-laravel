@@ -214,12 +214,12 @@ Stack: running ●
 - [x] Run tests — must pass before next task
 
 ### Task 7: Rewrite `services list` to use Lipgloss tables
-- [ ] Rewrite `runServiceList()` in `internal/command/service.go` to use `ui.RenderServiceTable()` (or similar)
-- [ ] Table columns: NAME, CONTAINER, STATE, RUNNING — same data, Lipgloss table rendering
-- [ ] Use semantic style vars (`styleEnabled`, `styleDisabled`, `styleMandatory`) for row colors
-- [ ] Load and apply styles config before rendering
-- [ ] Update tests for new output format
-- [ ] Run tests — must pass before next task
+- [x] Rewrite `runServiceList()` in `internal/command/service.go` to use `ui.RenderServiceTable()` (or similar)
+- [x] Table columns: NAME, CONTAINER, STATE, RUNNING — same data, Lipgloss table rendering
+- [x] Use semantic style vars (`styleEnabled`, `styleDisabled`, `styleMandatory`) for row colors
+- [x] Load and apply styles config before rendering
+- [x] Update tests for new output format
+- [x] Run tests — must pass before next task
 
 ### Task 8: Rewrite `tools list` to use Lipgloss tables
 - [ ] Rewrite `runToolList()` in `internal/command/tools.go` to use `ui.RenderToolTable()` (or similar)
