@@ -27,6 +27,9 @@ services:
     extends: main
     compose:
       - compose/services/main/debug.yml
+    cli:
+      env:
+        - XDEBUG_CONFIG="cli_color=1"
 
   second:
     type: app

@@ -13,3 +13,8 @@
 # Disable automatic .env generation before lifecycle commands:
 # env:
 #   auto_generate: false
+
+# Extra environment variables passed to every docker compose process.
+# Use to suppress unwanted Docker CLI output:
+# process_env:
+#   DOCKER_CLI_HINTS: "false"
