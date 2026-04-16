@@ -159,13 +159,13 @@ Restructure `devbox-cli` from a "core for Make" into the primary user interface 
 
 ### Task 11: Add shell completion
 
-- [ ] enable Fang/Cobra built-in `completion` command (bash, zsh, fish, powershell)
-- [ ] add dynamic completion for `devbox commands inspect <id>` — read registry, return IDs
-- [ ] add dynamic completion for `devbox commands run <id>` — read registry, return IDs with descriptions via `cobra.CompletionWithDesc`
-- [ ] add dynamic completion for service/tool names where applicable (`shell`, `services enable/disable`, `tools enable/disable`)
-- [ ] add Active Help hints for key commands (`commands run`, `deploy step`, `render ide`)
-- [ ] write tests for completion functions (registry ID completion, service name completion)
-- [ ] run tests - must pass before next task
+- [x] enable Fang/Cobra built-in `completion` command (bash, zsh, fish, powershell)
+- [x] add dynamic completion for `devbox commands inspect <id>` — read registry, return IDs
+- [x] add dynamic completion for `devbox commands run <id>` — read registry, return IDs with descriptions via `cobra.CompletionWithDesc`
+- [x] add dynamic completion for service/tool names where applicable (`shell`, `services enable/disable`, `tools enable/disable`)
+- [x] add Active Help hints for key commands (`commands run`, `deploy step`, `render ide`)
+- [x] write tests for completion functions (registry ID completion, service name completion)
+- [x] run tests - must pass before next task
 
 ### Task 12: Add `devbox docs generate` command
 
