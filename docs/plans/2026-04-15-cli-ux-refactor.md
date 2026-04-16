@@ -74,13 +74,13 @@ Restructure `devbox-cli` from a "core for Make" into the primary user interface 
 
 ### Task 3: Rename `help.yml` to `info.yml` and update config
 
-- [ ] rename `devbox/help.yml` -> `devbox/info.yml` in the parent project
-- [ ] rename `HelpConfig` -> `InfoConfig` in `internal/config/help.go` (rename file to `info.go`)
-- [ ] rename `HelpSettings` -> `InfoSettings`, `HelpHeader` -> `InfoHeader`, `HelpSection` -> `InfoSection`, `HelpItem` -> `InfoItem`, `HelpASCII` -> `InfoASCII`, `HelpIndent` -> `InfoIndent`
-- [ ] rename `LoadHelpConfig` -> `LoadInfoConfig`, update path default to `devbox/info.yml`
-- [ ] update all references in `internal/command/info.go` and other consumers
-- [ ] update config test file (rename `help_test.go` -> `info_test.go`, update test functions)
-- [ ] run tests - must pass before next task
+- [x] rename `devbox/help.yml` -> `devbox/info.yml` in the parent project
+- [x] rename `HelpConfig` -> `InfoConfig` in `internal/config/help.go` (rename file to `info.go`)
+- [x] rename `HelpSettings` -> `InfoSettings`, `HelpHeader` -> `InfoHeader`, `HelpSection` -> `InfoSection`, `HelpItem` -> `InfoItem`, `HelpASCII` -> `InfoASCII`, `HelpIndent` -> `InfoIndent`
+- [x] rename `LoadHelpConfig` -> `LoadInfoConfig`, update path default to `devbox/info.yml`
+- [x] update all references in `internal/command/info.go` and other consumers
+- [x] update config test file (rename `help_test.go` -> `info_test.go`, update test functions)
+- [x] run tests - must pass before next task
 
 ### Task 4: Add `internal/ui` package for styled rendering
 
