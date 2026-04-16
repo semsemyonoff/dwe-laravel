@@ -66,11 +66,11 @@ Restructure `devbox-cli` from a "core for Make" into the primary user interface 
 
 ### Task 2: Add `internal/version` package
 
-- [ ] create `internal/version/version.go` with `Version`, `Commit`, `Date`, `BuiltBy` vars (default `"dev"`)
-- [ ] add `Info() string` function that formats version info
-- [ ] update `devbox-cli/Makefile` build target to inject `-ldflags -X` for version fields
-- [ ] write tests for `version.Info()` output formatting
-- [ ] run tests - must pass before next task
+- [x] create `internal/version/version.go` with `Version`, `Commit`, `Date`, `BuiltBy` vars (default `"dev"`)
+- [x] add `Info() string` function that formats version info
+- [x] update `devbox-cli/Makefile` build target to inject `-ldflags -X` for version fields
+- [x] write tests for `version.Info()` output formatting
+- [x] run tests - must pass before next task
 
 ### Task 3: Rename `help.yml` to `info.yml` and update config
 
