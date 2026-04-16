@@ -11,32 +11,32 @@ include make/macros.mk
 .PHONY: all help env up down stop restart logs cli cli-root deploy deploy-plan reset print-test
 
 help:
-	@$(DEVBOX_BIN) info
+	@$(DEVBOX_BIN)
 
 env:
 	@$(DEVBOX_BIN) render env -o .env
 	@$(call ok,.env generated)
 
 up:
-	@$(DEVBOX_BIN) docker up
+	@$(DEVBOX_BIN) up
 
 down:
-	@$(DEVBOX_BIN) docker down
+	@$(DEVBOX_BIN) down
 
 stop:
-	@$(DEVBOX_BIN) docker stop
+	@$(DEVBOX_BIN) stop
 
 restart:
-	@$(DEVBOX_BIN) docker restart
+	@$(DEVBOX_BIN) restart
 
 logs:
-	@$(DEVBOX_BIN) docker logs
+	@$(DEVBOX_BIN) logs
 
 cli:
-	@$(DEVBOX_BIN) services cli main
+	@$(DEVBOX_BIN) shell main
 
 cli-root:
-	@$(DEVBOX_BIN) services cli main --root
+	@$(DEVBOX_BIN) shell main --root
 
 deploy-plan:
 	@$(DEVBOX_BIN) deploy plan

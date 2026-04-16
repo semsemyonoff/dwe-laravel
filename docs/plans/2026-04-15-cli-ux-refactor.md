@@ -187,10 +187,10 @@ Restructure `devbox-cli` from a "core for Make" into the primary user interface 
 
 ### Task 14: Update parent project Makefile
 
-- [ ] update `make help` target: change from `devbox info` to `devbox` (new root behavior) or keep as `devbox info` if preferred
-- [ ] verify all Make targets still work (`up`, `down`, `stop`, `restart`, `logs`, `deploy`, `reset`)
-- [ ] verify `devbox print` still works for Make macros
-- [ ] run Make targets to confirm integration
+- [x] update `make help` target: change from `devbox info` to `devbox` (new root behavior) or keep as `devbox info` if preferred
+- [x] verify all Make targets still work (`up`, `down`, `stop`, `restart`, `logs`, `deploy`, `reset`)
+- [x] verify `devbox print` still works for Make macros
+- [x] run Make targets to confirm integration
 
 ### Task 15: Verify acceptance criteria
 
