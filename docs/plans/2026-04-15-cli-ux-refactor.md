@@ -94,16 +94,16 @@ Restructure `devbox-cli` from a "core for Make" into the primary user interface 
 
 ### Task 5: Restructure command tree — promote lifecycle commands to root
 
-- [ ] create `internal/command/up.go` — `devbox up [services...]` (delegates to docker up)
-- [ ] create `internal/command/down.go` — `devbox down` (delegates to docker down)
-- [ ] create `internal/command/stop.go` — `devbox stop [services...]` (delegates to docker stop)
-- [ ] create `internal/command/restart.go` — `devbox restart [services...]` (delegates to docker restart)
-- [ ] create `internal/command/logs.go` — `devbox logs [services...]` (delegates to docker logs)
-- [ ] create `internal/command/ps.go` — `devbox ps` (delegates to docker ps)
-- [ ] create `internal/command/wait.go` — `devbox wait` (delegates to docker wait)
-- [ ] keep `docker` subcommand group intact (advanced usage) with same subcommands
-- [ ] write tests for new root-level lifecycle commands
-- [ ] run tests - must pass before next task
+- [x] create `internal/command/up.go` — `devbox up [services...]` (delegates to docker up)
+- [x] create `internal/command/down.go` — `devbox down` (delegates to docker down)
+- [x] create `internal/command/stop.go` — `devbox stop [services...]` (delegates to docker stop)
+- [x] create `internal/command/restart.go` — `devbox restart [services...]` (delegates to docker restart)
+- [x] create `internal/command/logs.go` — `devbox logs [services...]` (delegates to docker logs)
+- [x] create `internal/command/ps.go` — `devbox ps` (delegates to docker ps)
+- [x] create `internal/command/wait.go` — `devbox wait` (delegates to docker wait)
+- [x] keep `docker` subcommand group intact (advanced usage) with same subcommands
+- [x] write tests for new root-level lifecycle commands
+- [x] run tests - must pass before next task
 
 ### Task 6: Restructure command tree — rename and reorganize
 
