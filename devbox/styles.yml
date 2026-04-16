@@ -1,0 +1,37 @@
+# ASCII art header (moved from info.yml)
+# Laravel-inspired: red header for brand recognition
+header:
+  lines:
+    - "Welcome to"
+    - "Devbox Next"
+  font: doom
+  color: red
+
+# UI element colors — ANSI 256-color palette codes
+# Palette inspired by Laravel brand identity (coral-red + warm accents + neutral grays)
+colors:
+  # Definition label text (e.g., "Project", "URL") — Laravel coral red
+  label: "203"
+  # Section header text (e.g., "── URLs ──") — darker coral for structure
+  section_title: "167"
+  # Sub-section headers within a section — warm salmon
+  subheader: "209"
+  # Secondary/muted text (counts, separators, state labels) — neutral gray
+  muted: "245"
+  # Warning messages — amber
+  warning: "214"
+  # Informational messages — light coral (Laravel-warm)
+  info: "210"
+
+  # Semantic status colors (used in tables/status)
+  enabled: "2"           # green — enabled/running/active
+  disabled: "245"        # neutral gray — disabled/off
+  mandatory: "203"       # Laravel red — mandatory items
+  partial: "214"         # amber — partially running / stopped
+
+  # Table colors (shared across all Lipgloss tables) — Laravel red accents
+  table_border: "167"    # darker coral — table border lines
+  table_header: "203"    # Laravel red — table header text
+
+# Separator character between label and value in definitions
+separator: "—"

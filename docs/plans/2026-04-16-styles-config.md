@@ -185,11 +185,11 @@ Stack: running ●
 - [x] Run tests — must pass before next task
 
 ### Task 3: Create devbox/styles.yml and update info.yml
-- [ ] Create `devbox/styles.yml` with header block (from info.yml) and color defaults matching current hardcoded values
-- [ ] Remove `header` block from `devbox/info.yml`
-- [ ] Update `InfoConfig` struct — remove `Header` field
-- [ ] Update `LoadInfoConfig` tests to reflect removed header
-- [ ] Run tests — must pass before next task
+- [x] Create `devbox/styles.yml` with header block (from info.yml) and color defaults matching current hardcoded values
+- [x] Remove `header` block from `devbox/info.yml`
+- [x] Update `InfoConfig` struct — remove `Header` field
+- [x] Update `LoadInfoConfig` tests to reflect removed header
+- [x] Run tests — must pass before next task
 
 ### Task 4: Add ApplyStyles to ui package
 - [ ] Add `ApplyStyles(cfg *config.StylesConfig)` in `internal/ui/styles.go`

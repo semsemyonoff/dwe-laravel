@@ -1,11 +1,3 @@
-header:
-  ascii:
-    lines:
-      - "Welcome to"
-      - "Devbox Next"
-    font: doom
-    color: red
-
 sections:
   - id: devbox_info
     items:
