@@ -71,16 +71,16 @@
 - [x] Run tests — must pass before next task
 
 ### Task 2: Add CLI flags to shell command
-- [ ] Add `--mode` string flag (default: empty, values: `auto`, `exec`, `run`) to `newShellCmd`
-- [ ] Add `--shell` string flag (default: empty) to `newShellCmd`
-- [ ] Add `--user` string flag (default: empty) to `newShellCmd`
-- [ ] Add `--workdir` string flag (default: empty) to `newShellCmd`
-- [ ] Add validation: `--root` and `--user` are mutually exclusive (error if both set)
-- [ ] Add validation: `--mode` must be one of `auto`, `exec`, `run` (or empty)
-- [ ] Update command Long description and Example to reflect new flags
-- [ ] Pass new flags to `runServicesCLI` (update function signature)
-- [ ] Write tests for flag registration, mutual exclusion, mode validation
-- [ ] Run tests — must pass before next task
+- [x] Add `--mode` string flag (default: empty, values: `auto`, `exec`, `run`) to `newShellCmd`
+- [x] Add `--shell` string flag (default: empty) to `newShellCmd`
+- [x] Add `--user` string flag (default: empty) to `newShellCmd`
+- [x] Add `--workdir` string flag (default: empty) to `newShellCmd`
+- [x] Add validation: `--root` and `--user` are mutually exclusive (error if both set)
+- [x] Add validation: `--mode` must be one of `auto`, `exec`, `run` (or empty)
+- [x] Update command Long description and Example to reflect new flags
+- [x] Pass new flags to `runServicesCLI` (update function signature)
+- [x] Write tests for flag registration, mutual exclusion, mode validation
+- [x] Run tests — must pass before next task
 
 ### Task 3: Implement 3-tier value resolution (flags -> config -> defaults)
 - [ ] Create `shellOptions` struct to hold resolved values: `Mode`, `Shell`, `User`, `WorkDir`, `Env`
