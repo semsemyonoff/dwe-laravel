@@ -63,12 +63,12 @@
 ## Implementation Steps
 
 ### Task 1: Extend ServiceCLIConfig with Mode and Env
-- [ ] Add `Mode string` field to `ServiceCLIConfig` in `devbox-cli/internal/config/devbox.go` (yaml tag: `mode`)
-- [ ] Add `Env map[string]string` field to `ServiceCLIConfig` (yaml tag: `env`)
-- [ ] Update `LoadServicesConfig` extends resolution to inherit `Mode` and `Env` from parent
-- [ ] Update `services.yml` — add `mode: auto` to `main` service's `cli` block
-- [ ] Write tests for config loading with new fields (mode, env, extends inheritance)
-- [ ] Run tests — must pass before next task
+- [x] Add `Mode string` field to `ServiceCLIConfig` in `devbox-cli/internal/config/devbox.go` (yaml tag: `mode`)
+- [x] Add `Env map[string]string` field to `ServiceCLIConfig` (yaml tag: `env`)
+- [x] Update `LoadServicesConfig` extends resolution to inherit `Mode` and `Env` from parent
+- [x] Update `services.yml` — add `mode: auto` to `main` service's `cli` block
+- [x] Write tests for config loading with new fields (mode, env, extends inheritance)
+- [x] Run tests — must pass before next task
 
 ### Task 2: Add CLI flags to shell command
 - [ ] Add `--mode` string flag (default: empty, values: `auto`, `exec`, `run`) to `newShellCmd`

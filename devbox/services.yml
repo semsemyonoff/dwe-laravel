@@ -15,6 +15,7 @@ services:
     configs:
       - .env
     cli:
+      mode: auto
       shell: bash
       user: www-data
       workdir: /workspace/src
