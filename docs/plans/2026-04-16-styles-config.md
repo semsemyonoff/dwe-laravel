@@ -179,10 +179,10 @@ Stack: running ●
 - [x] Run tests — must pass before next task
 
 ### Task 2: Add StylesConfig and LoadStylesConfig
-- [ ] Create `devbox-cli/internal/config/styles.go` with `StylesConfig`, `StylesHeader`, `StylesColors` structs
-- [ ] Implement `LoadStylesConfig(path string) (*StylesConfig, error)` following `LoadInfoConfig` pattern
-- [ ] Write tests for `LoadStylesConfig` — valid file, missing file, partial fields
-- [ ] Run tests — must pass before next task
+- [x] Create `devbox-cli/internal/config/styles.go` with `StylesConfig`, `StylesHeader`, `StylesColors` structs
+- [x] Implement `LoadStylesConfig(path string) (*StylesConfig, error)` following `LoadInfoConfig` pattern
+- [x] Write tests for `LoadStylesConfig` — valid file, missing file, partial fields
+- [x] Run tests — must pass before next task
 
 ### Task 3: Create devbox/styles.yml and update info.yml
 - [ ] Create `devbox/styles.yml` with header block (from info.yml) and color defaults matching current hardcoded values
