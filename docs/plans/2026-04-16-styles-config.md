@@ -260,8 +260,8 @@ Stack: running ●
 - [x] Run linter — 0 issues
 
 ### Task 12: [Final] Update documentation
-- [ ] Update CLAUDE.md — add `devbox/styles.yml` to project layout, config model, and package descriptions
-- [ ] Regenerate reference docs (`./bin/devbox docs generate`)
+- [x] Update CLAUDE.md — add `devbox/styles.yml` to project layout, config model, and package descriptions
+- [x] Regenerate reference docs (`./bin/devbox docs generate`)
 
 ## Post-Completion
 
