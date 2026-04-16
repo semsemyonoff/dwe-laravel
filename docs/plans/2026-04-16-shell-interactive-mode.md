@@ -103,7 +103,7 @@
 - [x] Run tests — must pass before next task
 
 ### Task 5: Add bubbletea dependency and shared selector component
-- [x] Add `github.com/charmbracelet/bubbletea/v2` v2.0.5 and `github.com/charmbracelet/bubbles/v2` v2.1.0
+- [x] Add `charm.land/bubbletea/v2` v2.0.5 (`bubbles/v2` was evaluated but not needed — selector built directly with bubbletea)
 - [x] Create `devbox-cli/internal/ui/selector.go` — reusable interactive list selector model
 - [x] Selector model features:
   - Items are `[]SelectorItem` with `Label`, `Description`, `Status` (e.g. "enabled"/"disabled"), `Disabled` (non-selectable)
@@ -243,9 +243,9 @@ func RunSelector(title string, items []SelectorItem) (int, error)
 
 ### Dependencies
 ```
-github.com/charmbracelet/bubbletea/v2 v2.0.5
-github.com/charmbracelet/bubbles/v2   v2.1.0
+charm.land/bubbletea/v2 v2.0.5
 ```
+(`bubbles/v2` was evaluated and not added — the selector is built directly with bubbletea without the bubbles list component)
 
 ## Post-Completion
 

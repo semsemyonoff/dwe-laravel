@@ -23,8 +23,9 @@ The project exists to solve the "Make-as-DSL" problem in the legacy devbox, wher
 - CLI is the single control plane for Docker Compose. `devbox docker` is the public lifecycle API; `devbox compose` is the low-level diagnostic layer. No direct `docker compose` calls in Makefiles, YAML commands, or deploy steps.
 - Keep packages focused: `config` (loading/merging), `render` (ANSI output), `ui` (Lipgloss styled output), `tpl` (templates), `command` (cobra wiring), `docker` (compose execution), `version` (version vars).
 - Errors bubble up with `fmt.Errorf` wrapping. Root command catches and renders them via `render.Stdout().Error()`.
-- Minimal dependencies. Current set: cobra, yaml.v3, go-figure, fang, lipgloss. Do not add dependencies without strong justification.
+- Minimal dependencies. Current set: cobra, yaml.v3, go-figure, fang, lipgloss, bubbletea (interactive selectors). Do not add dependencies without strong justification.
 - Styled user-facing output (info dashboard, root summary) lives in the `ui` package (Lipgloss). Plain passthrough output (deploy, docker logs, compose raw) stays in the `render` package. Make recipes must not produce styled output directly — they call CLI print subcommands via macros.
+- Interactive terminal selectors (service/tool/command pickers) are implemented in `internal/ui/selector.go` using bubbletea. Use `RunSelector(title, items)` for any new picker; do not inline bubbletea models in command packages.
 
 ### Config
 - Three layers merged in strict order: `devbox.yml` (structure) → `devbox/defaults.yml` (versioned defaults) → `devbox/local.yml` (gitignored user overrides). Later wins, maps merge recursively.
@@ -60,6 +61,7 @@ The project exists to solve the "Make-as-DSL" problem in the legacy devbox, wher
 
 ```
 devbox.yml                          # structural spec: project + services
+devbox/services.yml                 # per-service cli config: shell, user, workdir, mode, env (tracked)
 devbox/defaults.yml                 # versioned defaults: tools, runtime, ports, hosts, exports, compose, ide
 devbox/deploy.yml                   # deploy pipeline declaration (phases + steps, loaded separately)
 devbox/docker.yml                   # docker/compose execution policy (project name, args, env triggers)
@@ -122,7 +124,7 @@ cd devbox-cli && make lint    # golangci-lint
 - `internal/config/` — `DevboxConfig` struct, layered `LoadConfig()`, `LoadDeployConfig()`, `LoadDockerConfig()`, `ResolvePath()`, `ExportRule`, `ComposeConfig`, `DockerConfig`, `DeployConfig`, `IDEConfig`, `InfoConfig` (renamed from `HelpConfig`), `LoadInfoConfig()`, `StylesConfig`, `LoadStylesConfig()`
 - `internal/docker/` — `Compose` struct for building and executing `docker compose` commands with policy args
 - `internal/render/` — `Writer` with ANSI output methods (Success, Error, Warning, Info, Definition, TableHeader, ASCII art); plain passthrough for logs/deploy output
-- `internal/ui/` — Lipgloss styled output: `RenderSummary(cfg)` for compact root summary, `RenderInfo(cfg, infoCfg)` for full info dashboard, `RenderServiceTable()` and `RenderToolTable()` for Lipgloss tables, `RenderTopology()` for dependency tree; `ApplyStyles(stylesCfg)` to hot-apply palette from `styles.yml`; terminal width detection
+- `internal/ui/` — Lipgloss styled output: `RenderSummary(cfg)` for compact root summary, `RenderInfo(cfg, infoCfg)` for full info dashboard, `RenderServiceTable()` and `RenderToolTable()` for Lipgloss tables, `RenderTopology()` for dependency tree; `ApplyStyles(stylesCfg)` to hot-apply palette from `styles.yml`; terminal width detection; `RunSelector(title, items)` for interactive bubbletea list selectors (service/tool/command pickers)
 - `internal/tpl/` — Go template engine with `Render()`, `EvalCondition()`, custom `FuncMap` (`appURL`)
 - `internal/commands/` — declarative command system: `CommandFile`, `Registry`, `HostRunner`, `DevboxRunner`, `ServiceExecRunner`, `ServiceRunRunner`, `ScriptRunner`, `WorkflowRunner`, param/context resolution, `${...}` template sugar
 - `internal/command/` — cobra commands with Fang integration and command groups:
@@ -139,8 +141,9 @@ cd devbox-cli && make lint    # golangci-lint
 - `github.com/spf13/cobra` — CLI framework
 - `gopkg.in/yaml.v3` — YAML parsing
 - `github.com/common-nighthawk/go-figure` — ASCII art
-- `github.com/charmbracelet/fang` — styled help/errors, Fang Execute wrapper
-- `github.com/charmbracelet/lipgloss` — terminal styling for `internal/ui`
+- `charm.land/fang/v2` — styled help/errors, Fang Execute wrapper
+- `charm.land/lipgloss/v2` — terminal styling for `internal/ui`
+- `charm.land/bubbletea/v2` — interactive terminal selectors (service/tool/command pickers in `internal/ui`)
 
 ### Key patterns
 
@@ -149,6 +152,7 @@ cd devbox-cli && make lint    # golangci-lint
 - Export rules (`defaults.yml` → `exports.env`) are declarative: `name`, `from` (dot-path), `format`, `when` (condition), `required`
 - All `text`/`value`/`when` fields in `info.yml` support Go template expressions against `DevboxConfig`
 - Errors bubble up with `fmt.Errorf` wrapping; root command silences cobra errors and renders via `render.Stdout().Error()`
+- `devbox shell` resolves options with three-tier priority: CLI flags (highest) → `ServiceCLIConfig` from `devbox/services.yml` → built-in defaults (mode=auto, shell=bash, user=current UID). `--root` is highest-priority for user, mutually exclusive with `--user`. `--env KEY=VALUE` overrides matching keys from `cli.env` config.
 
 ## Config model
 
@@ -169,7 +173,8 @@ services: { main: { type: app, dir: ./services/main } }
 ### Config structs (key additions in Phases 2+)
 
 - `ComposeConfig` — `Base string` + `Overlays map[string]string` (key → file path)
-- `ServiceConfig` — adds `Container string`, `DirInternal string`, `Configs []ServiceConfigFile`
+- `ServiceConfig` — adds `Container string`, `DirInternal string`, `Configs []ServiceConfigFile`, `CLI ServiceCLIConfig`
+- `ServiceCLIConfig` — `Shell string`, `User string`, `WorkDir string`, `Mode string` (auto|exec|run), `Env map[string]string`; read from `devbox/services.yml` service `cli:` block; all fields optional, fall back to built-in defaults
 - `ServiceConfigFile` — `Src`, `Dest`, `Mode` (default/update/replace)
 - `DeployConfig` — `Phases []DeployPhase`
 - `DeployPhase` — `Name`, `Description`, `Steps []DeployStep`
