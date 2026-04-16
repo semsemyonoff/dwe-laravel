@@ -119,15 +119,15 @@ Restructure `devbox-cli` from a "core for Make" into the primary user interface 
 
 ### Task 7: Add command groups to help output
 
-- [ ] define command groups in root.go: Core, Environment, Configuration, Pipelines, Advanced
-- [ ] assign `info`, `version` to Core group
-- [ ] assign `up`, `down`, `stop`, `restart`, `logs`, `ps`, `wait`, `shell`, `status` to Environment group
-- [ ] assign `services`, `tools`, `render` to Configuration group
-- [ ] assign `deploy`, `reset` to Pipelines group
-- [ ] assign `commands`, `docker`, `compose`, `docs` to Advanced group
-- [ ] mark `print` as hidden (internal Make compatibility)
-- [ ] write test verifying group assignments in help output
-- [ ] run tests - must pass before next task
+- [x] define command groups in root.go: Core, Environment, Configuration, Pipelines, Advanced
+- [x] assign `info`, `version` to Core group
+- [x] assign `up`, `down`, `stop`, `restart`, `logs`, `ps`, `wait`, `shell`, `status` to Environment group
+- [x] assign `services`, `tools`, `render` to Configuration group
+- [x] assign `deploy`, `reset` to Pipelines group
+- [x] assign `commands`, `docker`, `compose`, `docs` to Advanced group (docs skipped — not yet implemented, Task 12)
+- [x] mark `print` as hidden (internal Make compatibility)
+- [x] write test verifying group assignments in help output
+- [x] run tests - must pass before next task
 
 ### Task 8: Wire Fang into entrypoint
 
