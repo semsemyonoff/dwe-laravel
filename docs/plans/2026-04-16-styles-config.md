@@ -208,10 +208,10 @@ Stack: running ●
 - [x] Run tests — must pass before next task
 
 ### Task 6: Add Lipgloss table renderer to ui package
-- [ ] Add `internal/ui/table.go` with helper functions to build Lipgloss tables using shared table styles
-- [ ] Table helper accepts rows/headers, applies `styleTableBorder`, `styleTableHeader` from styles
-- [ ] Write tests for table rendering (verify border/header colors are applied)
-- [ ] Run tests — must pass before next task
+- [x] Add `internal/ui/table.go` with helper functions to build Lipgloss tables using shared table styles
+- [x] Table helper accepts rows/headers, applies `styleTableBorder`, `styleTableHeader` from styles
+- [x] Write tests for table rendering (verify border/header colors are applied)
+- [x] Run tests — must pass before next task
 
 ### Task 7: Rewrite `services list` to use Lipgloss tables
 - [ ] Rewrite `runServiceList()` in `internal/command/service.go` to use `ui.RenderServiceTable()` (or similar)
