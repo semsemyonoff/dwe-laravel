@@ -131,13 +131,13 @@ Restructure `devbox-cli` from a "core for Make" into the primary user interface 
 
 ### Task 8: Wire Fang into entrypoint
 
-- [ ] update `cmd/devbox/main.go` to use `fang.Execute()` instead of `root.Execute()`
-- [ ] configure Fang: styled help, styled errors, `--version` flag (using `internal/version`)
-- [ ] verify `SilenceErrors` / `ErrSilent` flow still works with Fang
-- [ ] verify `devbox help`, `devbox help <cmd>`, `devbox <cmd> --help` all produce Fang-styled output
-- [ ] verify `devbox --version` prints version info
-- [ ] write tests for root command with Fang integration (help output, version flag, error handling)
-- [ ] run tests - must pass before next task
+- [x] update `cmd/devbox/main.go` to use `fang.Execute()` instead of `root.Execute()`
+- [x] configure Fang: styled help, styled errors, `--version` flag (using `internal/version`)
+- [x] verify `SilenceErrors` / `ErrSilent` flow still works with Fang
+- [x] verify `devbox help`, `devbox help <cmd>`, `devbox <cmd> --help` all produce Fang-styled output
+- [x] verify `devbox --version` prints version info
+- [x] write tests for root command with Fang integration (help output, version flag, error handling)
+- [x] run tests - must pass before next task
 
 ### Task 9: Implement new root command behavior (summary + help)
 
