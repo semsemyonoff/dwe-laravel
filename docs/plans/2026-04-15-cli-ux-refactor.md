@@ -179,11 +179,11 @@ Restructure `devbox-cli` from a "core for Make" into the primary user interface 
 
 ### Task 13: Clean up messages and descriptions
 
-- [ ] replace all `make <target>` references in Short/Long/Example/error messages with `devbox <command>` equivalents
-- [ ] fill in missing `Long` and `Example` fields for all public commands
-- [ ] ensure all commands have meaningful `Short` descriptions
-- [ ] update error messages and suggestions to reference new command names
-- [ ] run tests - must pass before next task
+- [x] replace all `make <target>` references in Short/Long/Example/error messages with `devbox <command>` equivalents
+- [x] fill in missing `Long` and `Example` fields for all public commands
+- [x] ensure all commands have meaningful `Short` descriptions
+- [x] update error messages and suggestions to reference new command names
+- [x] run tests - must pass before next task
 
 ### Task 14: Update parent project Makefile
 
