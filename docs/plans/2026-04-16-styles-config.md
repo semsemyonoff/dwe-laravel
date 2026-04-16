@@ -192,13 +192,13 @@ Stack: running ●
 - [x] Run tests — must pass before next task
 
 ### Task 4: Add ApplyStyles to ui package
-- [ ] Add `ApplyStyles(cfg *config.StylesConfig)` in `internal/ui/styles.go`
-- [ ] Rebuild all package-level style vars from config colors (skip empty = keep default)
-- [ ] Change `defSep` from const to var, update from config `Separator`
-- [ ] Add new style vars for semantic colors: `styleEnabled`, `styleDisabled`, `styleMandatory`, `stylePartial`
-- [ ] Add new style vars for tables: `styleTableBorder`, `styleTableHeader`
-- [ ] Write tests: `ApplyStyles` changes output, empty config preserves defaults
-- [ ] Run tests — must pass before next task
+- [x] Add `ApplyStyles(cfg *config.StylesConfig)` in `internal/ui/styles.go`
+- [x] Rebuild all package-level style vars from config colors (skip empty = keep default)
+- [x] Change `defSep` from const to var, update from config `Separator`
+- [x] Add new style vars for semantic colors: `styleEnabled`, `styleDisabled`, `styleMandatory`, `stylePartial`
+- [x] Add new style vars for tables: `styleTableBorder`, `styleTableHeader`
+- [x] Write tests: `ApplyStyles` changes output, empty config preserves defaults
+- [x] Run tests — must pass before next task
 
 ### Task 5: Wire styles loading into commands
 - [ ] Update `internal/command/root.go` — load `StylesConfig`, call `ApplyStyles`, use `StylesConfig.Header` for ASCII
