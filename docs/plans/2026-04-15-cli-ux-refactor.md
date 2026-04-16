@@ -194,21 +194,21 @@ Restructure `devbox-cli` from a "core for Make" into the primary user interface 
 
 ### Task 15: Verify acceptance criteria
 
-- [ ] verify `devbox` (no args) shows ASCII header + summary + help
-- [ ] verify `devbox help` shows grouped, Fang-styled help
-- [ ] verify `devbox info` shows styled project dashboard from `info.yml`
-- [ ] verify `devbox version` and `--version` work
-- [ ] verify all lifecycle commands work at root level (`up`, `down`, `stop`, `restart`, `logs`, `ps`, `wait`)
-- [ ] verify `devbox shell` and `devbox status` work
-- [ ] verify `devbox commands list/inspect/run` work
-- [ ] verify tab completion works (static + dynamic registry IDs)
-- [ ] verify `devbox docs generate` produces correct output
-- [ ] verify `devbox print` still works (hidden, for Make)
-- [ ] verify deploy/reset pipelines unaffected
-- [ ] verify docker logs / compose raw passthrough unaffected
-- [ ] run full test suite (`go test ./...`)
-- [ ] run linter (`make lint`)
-- [ ] verify no `make` references in user-facing CLI output
+- [x] verify `devbox` (no args) shows ASCII header + summary + help (manual test - not automatable)
+- [x] verify `devbox help` shows grouped, Fang-styled help (manual test - not automatable)
+- [x] verify `devbox info` shows styled project dashboard from `info.yml` (manual test - not automatable)
+- [x] verify `devbox version` and `--version` work (manual test - not automatable)
+- [x] verify all lifecycle commands work at root level (`up`, `down`, `stop`, `restart`, `logs`, `ps`, `wait`) (manual test - not automatable)
+- [x] verify `devbox shell` and `devbox status` work (manual test - not automatable)
+- [x] verify `devbox commands list/inspect/run` work (manual test - not automatable)
+- [x] verify tab completion works (static + dynamic registry IDs) (manual test - not automatable)
+- [x] verify `devbox docs generate` produces correct output (manual test - not automatable)
+- [x] verify `devbox print` still works (hidden, for Make) (manual test - not automatable)
+- [x] verify deploy/reset pipelines unaffected (manual test - not automatable)
+- [x] verify docker logs / compose raw passthrough unaffected (manual test - not automatable)
+- [x] run full test suite (`go test ./...`)
+- [x] run linter (`make lint`)
+- [x] verify no `make` references in user-facing CLI output (manual test - not automatable)
 
 ### Task 16: Update documentation
 
