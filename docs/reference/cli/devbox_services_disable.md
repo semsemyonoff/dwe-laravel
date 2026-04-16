@@ -9,8 +9,11 @@ Disable an optional service by writing services.<name>.enabled = false to devbox
 The .env file is regenerated automatically after the change.
 Use 'devbox stop <container>' or 'devbox down' to stop the service.
 
+When no service name is given, an interactive selector shows all currently
+enabled optional services.
+
 ```
-devbox services disable <service> [flags]
+devbox services disable [service] [flags]
 ```
 
 ### Examples

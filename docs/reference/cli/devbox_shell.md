@@ -6,14 +6,16 @@ Open a shell in a service container
 
 Open an interactive shell in the specified service container.
 
-If the container is running, connects via 'docker exec'.
-If the container does not exist, starts a new one via 'docker compose run --rm'.
-If the container is stopped (exited), an error is returned.
+Mode controls how the shell is opened (--mode auto|exec|run):
+  auto  — connect via 'docker exec' if running, 'compose run' if absent, error if stopped (default)
+  exec  — always use 'docker exec'; error if container is not running
+  run   — always start a new container via 'docker compose run --rm'
 
-Shell, user, and working directory defaults are read from the cli: section
-in devbox/services.yml and can be overridden with flags.
+Shell, user, working directory, and env defaults are read from the service
+cli config block in devbox/defaults.yml and can be overridden with flags.
 
-When only one service is defined, the service argument may be omitted.
+When no service argument is given, the command auto-selects if only one enabled
+service exists, or shows an interactive selector when multiple services are enabled.
 
 ```
 devbox shell [service] [flags]
@@ -25,13 +27,19 @@ devbox shell [service] [flags]
   devbox shell
   devbox shell main
   devbox shell main --root
+  devbox shell main --mode run --shell sh
+  devbox shell main --user deploy --workdir /app
 ```
 
 ### Options
 
 ```
-  -h, --help   help for shell
-      --root   run as root user
+  -h, --help             help for shell
+      --mode string      shell mode: auto, exec, or run
+      --root             run as root user
+      --shell string     shell binary to use (e.g. bash, sh, zsh)
+      --user string      user to run as inside the container
+      --workdir string   working directory inside the container
 ```
 
 ### Options inherited from parent commands

@@ -9,8 +9,11 @@ Enable an optional service by writing services.<name>.enabled = true to devbox/l
 The .env file is regenerated automatically after the change.
 Use 'devbox up' to start the newly enabled service.
 
+When no service name is given, an interactive selector shows all currently
+disabled optional services.
+
 ```
-devbox services enable <service> [flags]
+devbox services enable [service] [flags]
 ```
 
 ### Examples

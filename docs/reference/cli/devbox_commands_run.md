@@ -9,13 +9,20 @@ Execute a declarative command by its dot-separated ID.
 Use --set key=value to override declared params at runtime.
 Private commands cannot be run directly.
 
+When called without an argument, an interactive selector lists all public
+commands.  When called with a group prefix (e.g. 'services.main'), the
+selector is filtered to that group.  When called with a full command ID,
+it runs directly without showing a selector.
+
 ```
-devbox commands run <id> [flags]
+devbox commands run [id|group] [flags]
 ```
 
 ### Examples
 
 ```
+  devbox commands run
+  devbox commands run services.main
   devbox commands run db.up
   devbox commands run services.main.migrate --set db=mydb
 ```

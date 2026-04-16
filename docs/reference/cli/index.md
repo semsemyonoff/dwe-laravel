@@ -55,7 +55,7 @@ Generated reference for the `devbox` command tree.
   - [devbox services enable](devbox_services_enable.md) — Enable an optional service (writes to devbox/local.yml)
   - [devbox services list](devbox_services_list.md) — List all services and their status
 - [devbox shell](devbox_shell.md) — Open a shell in a service container
-- [devbox status](devbox_status.md) — Show services and tools topology
+- [devbox status](devbox_status.md) — Show stack health and services/tools status
 - [devbox stop](devbox_stop.md) — Stop compose services without removing them
 - [devbox tools](devbox_tools.md) — Manage optional tools
   - [devbox tools disable](devbox_tools_disable.md) — Disable an optional tool (writes to devbox/local.yml)

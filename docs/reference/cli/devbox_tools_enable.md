@@ -9,8 +9,11 @@ Enable an optional tool by writing tools.<name>.enabled = true to devbox/local.y
 Available tools: adminer, redis_insight, mailpit.
 The .env file is regenerated automatically after the change.
 
+When no tool name is given, an interactive selector shows all currently
+disabled tools.
+
 ```
-devbox tools enable <tool> [flags]
+devbox tools enable [tool] [flags]
 ```
 
 ### Examples

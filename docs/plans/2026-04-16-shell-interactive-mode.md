@@ -178,8 +178,8 @@
 - [x] Verify test coverage meets project standard — all tasks have unit tests covering new functionality
 
 ### Task 11: [Final] Update documentation
-- [ ] Update `devbox docs generate` output (CLI reference) by verifying help text is correct
-- [ ] Update CLAUDE.md: add bubbletea/bubbles to dependency list, document interactive selector pattern in `internal/ui`
+- [x] Update `devbox docs generate` output (CLI reference) by verifying help text is correct
+- [x] Update CLAUDE.md: add bubbletea/bubbles to dependency list, document interactive selector pattern in `internal/ui`
 
 ## Technical Details
 

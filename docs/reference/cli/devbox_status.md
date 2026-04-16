@@ -1,13 +1,13 @@
 ## devbox status
 
-Show services and tools topology
+Show stack health and services/tools status
 
 ### Synopsis
 
-Display a tree view of all services and optional tools defined in the project.
+Display the running status of the entire devbox stack.
 
-Shows which services and tools are enabled or disabled, along with
-their compose file overlays and container assignments.
+Shows a health indicator (running/partial/stopped), a services table,
+a tools table with live container status, and a compose topology tree.
 
 ```
 devbox status [flags]

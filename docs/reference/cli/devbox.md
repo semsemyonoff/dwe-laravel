@@ -38,7 +38,7 @@ devbox [flags]
 * [devbox restart](devbox_restart.md)	 - Restart compose services
 * [devbox services](devbox_services.md)	 - Manage application services
 * [devbox shell](devbox_shell.md)	 - Open a shell in a service container
-* [devbox status](devbox_status.md)	 - Show services and tools topology
+* [devbox status](devbox_status.md)	 - Show stack health and services/tools status
 * [devbox stop](devbox_stop.md)	 - Stop compose services without removing them
 * [devbox tools](devbox_tools.md)	 - Manage optional tools
 * [devbox up](devbox_up.md)	 - Start compose services
