@@ -141,11 +141,11 @@ Restructure `devbox-cli` from a "core for Make" into the primary user interface 
 
 ### Task 9: Implement new root command behavior (summary + help)
 
-- [ ] change root `RunE` from `runInfo()` to new function that: loads config, prints ASCII header, prints compact summary via `ui.RenderSummary()`, then prints help via cobra/fang
-- [ ] ensure `devbox` (no args) shows: header -> summary -> help
-- [ ] ensure `devbox info` shows full styled dashboard (separate path)
-- [ ] write tests for root command output (summary present, help present, no duplicate info)
-- [ ] run tests - must pass before next task
+- [x] change root `RunE` from `runInfo()` to new function that: loads config, prints ASCII header, prints compact summary via `ui.RenderSummary()`, then prints help via cobra/fang
+- [x] ensure `devbox` (no args) shows: header -> summary -> help
+- [x] ensure `devbox info` shows full styled dashboard (separate path)
+- [x] write tests for root command output (summary present, help present, no duplicate info)
+- [x] run tests - must pass before next task
 
 ### Task 10: Implement styled `devbox info` with Lipgloss
 
