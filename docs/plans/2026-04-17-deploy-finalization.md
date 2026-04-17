@@ -81,10 +81,10 @@
 - [x] Run tests — must pass before next task
 
 ### Task 3: Replace `create-dirs` shell commands in deploy YAML
-- [ ] Update `devbox/deploy/main.yml`: replace `run: mkdir -p ...` step with `builtin: service_dirs_ensure` + `with: { service: main }`
-- [ ] Update `devbox/deploy/second.yml`: same replacement for second service
-- [ ] Verify `devbox deploy plan` output reflects the new builtin steps
-- [ ] Run tests — must pass before next task
+- [x] Update `devbox/deploy/main.yml`: replace `run: mkdir -p ...` step with `builtin: service_dirs_ensure` + `with: { service: main }`
+- [x] Update `devbox/deploy/second.yml`: same replacement for second service
+- [x] Verify `devbox deploy plan` output reflects the new builtin steps
+- [x] Run tests — must pass before next task
 
 ### Task 4: Implement `builtin: message`
 - [ ] Create `devbox-cli/internal/builtin/message.go`

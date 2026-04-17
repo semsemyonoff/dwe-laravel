@@ -13,7 +13,9 @@ phases:
     when: "dir-empty services/main/src"
     steps:
       - name: create-dirs
-        run: mkdir -p services/main/src services/main/configs services/main/logs services/main/home services/main/runtime
+        builtin: service_dirs_ensure
+        with:
+          service: main
         description: Create service hub directories
       - name: install
         command: app.install
