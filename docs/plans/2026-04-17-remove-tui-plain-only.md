@@ -73,14 +73,14 @@
 - [x] Run `make test` — must pass before next task
 
 ### Task 5: Suppress output for untracked phases in PlainReporter (devbox-cli)
-- [ ] `PlainReporter.EnterPhase()`: if `phase.Untracked`, return early (no phase header)
-- [ ] `PlainReporter.SkipPhase()`: if `phase.Untracked`, return early
-- [ ] `PlainReporter.StartStep()`: if `index == 0 && total == 0` (untracked), return early (no step message)
-- [ ] `PlainReporter.FinishStep()`: same — suppress for untracked
-- [ ] `PlainReporter.SkipStep()`: same — suppress for untracked
-- [ ] `PlainReporter.FailStep()`: keep failure output even for untracked (failures should always be visible)
-- [ ] Write tests for untracked suppression (phase header, step start/done/skip all silent; fail still prints)
-- [ ] Run `make test` — must pass before next task
+- [x] `PlainReporter.EnterPhase()`: if `phase.Untracked`, return early (no phase header)
+- [x] `PlainReporter.SkipPhase()`: if `phase.Untracked`, return early
+- [x] `PlainReporter.StartStep()`: if `index == 0 && total == 0` (untracked), return early (no step message)
+- [x] `PlainReporter.FinishStep()`: same — suppress for untracked
+- [x] `PlainReporter.SkipStep()`: same — suppress for untracked
+- [x] `PlainReporter.FailStep()`: keep failure output even for untracked (failures should always be visible)
+- [x] Write tests for untracked suppression (phase header, step start/done/skip all silent; fail still prints)
+- [x] Run `make test` — must pass before next task
 
 ### Task 6: Fix color passthrough for `devbox info` in deploy pipeline (devbox-cli)
 - [ ] In `execStep()` (`internal/command/pipeline.go`): when step is `devbox:` type, pass `cmd.Stdout = os.Stdout` and `cmd.Stderr = os.Stderr` directly (TTY preserved). Write to logWriter separately by reading from a pipe or teeing after the fact. Alternative: set `CLICOLOR_FORCE=1` env var on the child process so lipgloss detects color support.
