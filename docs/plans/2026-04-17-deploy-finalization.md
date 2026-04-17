@@ -114,22 +114,22 @@
 - [x] Run tests — must pass before next task
 
 ### Task 6: Define reporter interface and implement PlainReporter
-- [ ] Create `devbox-cli/internal/pipeline/reporter.go` with `Reporter` interface:
+- [x] Create `devbox-cli/internal/pipeline/reporter.go` with `Reporter` interface:
   - `StartPipeline(name string, totalSteps int)`
-  - `EnterPhase(phase DeployPhase)`
-  - `SkipPhase(phase DeployPhase, reason string)`
-  - `StartStep(step DeployStep, index int, total int)`
-  - `SkipStep(step DeployStep, index int, total int, reason string)`
-  - `FinishStep(step DeployStep, index int, total int)`
-  - `FailStep(step DeployStep, index int, total int, err error)`
+  - `EnterPhase(phaseKey string, phase DeployPhase)` — phaseKey added for service prefix support
+  - `SkipPhase(phaseKey string, phase DeployPhase, reason string)`
+  - `StartStep(stepAddr string, step DeployStep, index int, total int)` — stepAddr added for full address
+  - `SkipStep(stepAddr string, step DeployStep, index int, total int, reason string)`
+  - `FinishStep(stepAddr string, step DeployStep, index int, total int)`
+  - `FailStep(stepAddr string, step DeployStep, index int, total int, err error)`
   - `FinishPipeline(success bool)`
   - `SuspendForExec()` — TUI releases terminal before external command
   - `ResumeAfterExec()` — TUI reclaims terminal after external command
-- [ ] Create `devbox-cli/internal/pipeline/plain.go` implementing `PlainReporter`
-- [ ] `PlainReporter` reproduces current deploy output format exactly (phase labels, `[N/M]` progress, Done/Skipped/Failed)
-- [ ] `SuspendForExec`/`ResumeAfterExec` are no-ops for PlainReporter
-- [ ] Write tests for PlainReporter event sequence and output format
-- [ ] Run tests — must pass before next task
+- [x] Create `devbox-cli/internal/pipeline/plain.go` implementing `PlainReporter`
+- [x] `PlainReporter` reproduces current deploy output format exactly (phase labels, `[N/M]` progress, Done/Skipped/Failed)
+- [x] `SuspendForExec`/`ResumeAfterExec` are no-ops for PlainReporter
+- [x] Write tests for PlainReporter event sequence and output format
+- [x] Run tests — must pass before next task
 
 ### Task 7: Refactor deploy/reset execution to use reporter
 - [ ] Extract pipeline execution logic from `pipeline.go` into a function that accepts `Reporter`
