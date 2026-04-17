@@ -141,18 +141,18 @@
 - [x] Run tests — must pass before next task
 
 ### Task 8: Add `--ui` flag and terminal capability detection
-- [ ] Add `--ui auto|plain|tui` flag to `deploy run` and `reset run` commands
-- [ ] Implement terminal capability detection in `devbox-cli/internal/pipeline/detect.go`:
+- [x] Add `--ui auto|plain|tui` flag to `deploy run` and `reset run` commands
+- [x] Implement terminal capability detection in `devbox-cli/internal/pipeline/detect.go`:
   - Check `os.Stdout` / `os.Stderr` / `os.Stdin` are TTY
   - Check `TERM != dumb`
   - Check common CI env vars (`CI`, `GITHUB_ACTIONS`, `JENKINS_URL`, etc.)
-- [ ] `auto` mode: use TUI if terminal is capable, fall back to plain
-- [ ] `plain` mode: always PlainReporter
-- [ ] `tui` mode: use TUI if capable, warn and fall back to plain if not
-- [ ] Respect `phase.ui: plain` — when TUI is active, plain phases bypass TUI rendering
-- [ ] Write tests for terminal detection logic (TTY, dumb term, CI vars)
-- [ ] Write tests for `--ui` flag resolution
-- [ ] Run tests — must pass before next task
+- [x] `auto` mode: use TUI if terminal is capable, fall back to plain
+- [x] `plain` mode: always PlainReporter
+- [x] `tui` mode: use TUI if capable, warn and fall back to plain if not
+- [x] Respect `phase.ui: plain` — when TUI is active, plain phases bypass TUI rendering (no-op until TUIReporter is implemented in Task 9)
+- [x] Write tests for terminal detection logic (TTY, dumb term, CI vars)
+- [x] Write tests for `--ui` flag resolution
+- [x] Run tests — must pass before next task
 
 ### Task 9: Implement TUIReporter
 - [ ] Create `devbox-cli/internal/pipeline/tui.go` using Bubble Tea
