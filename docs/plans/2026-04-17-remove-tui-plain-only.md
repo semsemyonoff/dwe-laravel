@@ -132,8 +132,8 @@
 - [x] Run linter — fixed slices.Contains modernize issue in pipeline_run_test.go
 
 ### Task 13: [Final] Update documentation
-- [ ] Update README.md if needed
-- [ ] Verify docs/reference/config/ is correct in devbox-cli
+- [x] Update README.md if needed — no root README.md exists in next-laravel, nothing to update
+- [x] Verify docs/reference/config/ is correct in devbox-cli — confirmed, no TUI/--ui/progress_bar references remain
 
 ## Technical Details
 
