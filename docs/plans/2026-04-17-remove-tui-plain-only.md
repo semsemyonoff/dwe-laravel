@@ -97,10 +97,10 @@
 - [x] Run `make test` — must pass before next task
 
 ### Task 8: Remove `progress_bar` from StylesColors config (devbox-cli)
-- [ ] `internal/config/styles.go`: remove `ProgressBar` field from `StylesColors`
-- [ ] `internal/ui/styles.go`: remove `progressBarColor` variable, `ProgressBarColor()` func, and the `if c.ProgressBar != ""` block in `ApplyStyles`
-- [ ] Update/remove tests for progress bar color in `styles_test.go` and `config/styles_test.go`
-- [ ] Run `make test` — must pass before next task
+- [x] `internal/config/styles.go`: remove `ProgressBar` field from `StylesColors`
+- [x] `internal/ui/styles.go`: remove `progressBarColor` variable, `ProgressBarColor()` func, and the `if c.ProgressBar != ""` block in `ApplyStyles`
+- [x] Update/remove tests for progress bar color in `styles_test.go` and `config/styles_test.go`
+- [x] Run `make test` — must pass before next task
 
 ### Task 9: Remove `ui: plain` from deploy.yml config (next-laravel)
 - [ ] `devbox/deploy.yml`: remove `ui: plain` from post-deploy phase
