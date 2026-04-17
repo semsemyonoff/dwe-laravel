@@ -89,12 +89,12 @@
 - [x] Run `make test` — must pass before next task
 
 ### Task 7: Add elapsed time to Done message (devbox-cli)
-- [ ] Add `startTime time.Time` field to `PlainReporter`
-- [ ] In `StartPipeline()`: record `time.Now()`
-- [ ] In `FinishPipeline(success bool)`: if success, print styled "Done" message with elapsed time (e.g. `✓ Done (1m 23s)`). Use `r.w.Success()` for the icon/Done part. Print elapsed time in a visually distinct (muted) style.
-- [ ] Update `deploy.go` and `reset.go` to rely on `FinishPipeline` for the Done message (currently they print log path after pipeline — keep log path, add Done before it)
-- [ ] Write tests for FinishPipeline output (success with time, failure no Done)
-- [ ] Run `make test` — must pass before next task
+- [x] Add `startTime time.Time` field to `PlainReporter`
+- [x] In `StartPipeline()`: record `time.Now()`
+- [x] In `FinishPipeline(success bool)`: if success, print styled "Done" message with elapsed time (e.g. `✓ Done (1m 23s)`). Use `r.w.Success()` for the icon/Done part. Print elapsed time in a visually distinct (muted) style.
+- [x] Update `deploy.go` and `reset.go` to rely on `FinishPipeline` for the Done message (currently they print log path after pipeline — keep log path, add Done before it)
+- [x] Write tests for FinishPipeline output (success with time, failure no Done)
+- [x] Run `make test` — must pass before next task
 
 ### Task 8: Remove `progress_bar` from StylesColors config (devbox-cli)
 - [ ] `internal/config/styles.go`: remove `ProgressBar` field from `StylesColors`
