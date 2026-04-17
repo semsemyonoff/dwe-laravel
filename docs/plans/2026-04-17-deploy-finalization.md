@@ -195,9 +195,9 @@
 - [x] Run tests — must pass before next task
 
 ### Task 12: [Final] Update project documentation
-- [ ] Update `CLAUDE.md` with new builtin names, reporter interface, `--ui` flag, `phase.ui` field, `dirs` in ServiceConfig
-- [ ] Update `devbox/local.example.yml` if new override options exist
-- [ ] Run `./bin/devbox docs generate` to refresh CLI reference docs
+- [x] Update `CLAUDE.md` with new builtin names, reporter interface, `--ui` flag, `phase.ui` field, `dirs` in ServiceConfig
+- [x] Update `devbox/local.example.yml` if new override options exist
+- [x] Run `./bin/devbox docs generate` to refresh CLI reference docs
 
 ## Technical Details
 
