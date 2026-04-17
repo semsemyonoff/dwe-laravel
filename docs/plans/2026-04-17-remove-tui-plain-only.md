@@ -52,11 +52,11 @@
 - [x] Run `make test` — must pass before next task
 
 ### Task 2: Remove `--ui` flag and TUI wiring from deploy/reset commands (devbox-cli)
-- [ ] `internal/command/deploy.go`: remove `uiFlag` variable, `ParseUIMode` call, `--ui` flag registration. Create reporter directly: `rep := pipeline.NewPlainReporter(w)`
-- [ ] `internal/command/reset.go`: same removal of `uiFlag`, `ParseUIMode`, `--ui` flag. Create reporter directly.
-- [ ] `internal/command/pipeline.go`: remove TUI-specific confirm wiring (lines ~404-407 checking `*pipeline.TUIReporter`). Remove `ui: plain` phase handling (line ~482 `rs.phase.UI == "plain"` check). Remove import of `pipeline` package if no longer needed (it still is for Reporter interface).
-- [ ] Write/update tests for deploy run and reset run command creation (verify no `--ui` flag)
-- [ ] Run `make test` — must pass before next task
+- [x] `internal/command/deploy.go`: remove `uiFlag` variable, `ParseUIMode` call, `--ui` flag registration. Create reporter directly: `rep := pipeline.NewPlainReporter(w)`
+- [x] `internal/command/reset.go`: same removal of `uiFlag`, `ParseUIMode`, `--ui` flag. Create reporter directly.
+- [x] `internal/command/pipeline.go`: remove TUI-specific confirm wiring (lines ~404-407 checking `*pipeline.TUIReporter`). Remove `ui: plain` phase handling (line ~482 `rs.phase.UI == "plain"` check). Remove import of `pipeline` package if no longer needed (it still is for Reporter interface).
+- [x] Write/update tests for deploy run and reset run command creation (verify no `--ui` flag)
+- [x] Run `make test` — must pass before next task
 
 ### Task 3: Remove `UI` field from DeployPhase config (devbox-cli)
 - [ ] `internal/config/devbox.go`: remove `UI string` field from `DeployPhase` struct
