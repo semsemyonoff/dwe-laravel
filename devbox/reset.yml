@@ -10,6 +10,7 @@
 phases:
   - name: pre
     description: Confirm destructive reset
+    untracked: true
     steps:
       - name: confirm
         builtin: confirm
