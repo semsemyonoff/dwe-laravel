@@ -68,17 +68,17 @@
 - [x] Run tests — must pass before next task
 
 ### Task 2: Implement `service_dirs_ensure` builtin
-- [ ] Create `devbox-cli/internal/builtin/dirs_ensure.go`
-- [ ] Implement `Builtin` interface: `Validate`, `Describe`, `Run`
-- [ ] Parameters: `service` (required), `mode` (optional: `skip`|`error`|`recreate`, default `skip`)
-- [ ] Behavior: resolve service from config, build full dir list (mandatory `src`, `configs` + configured `dirs`), deduplicate, resolve relative to service `dir`
-- [ ] `skip` mode: create missing dirs, skip existing
-- [ ] `error` mode: fail if any path exists and is not a directory
-- [ ] `recreate` mode: remove and recreate dirs (except `src` and `configs` which use `skip` semantics in `recreate` mode for safety — document this)
-- [ ] Register `service_dirs_ensure` in builtin registry
-- [ ] Write tests for all three modes (success cases)
-- [ ] Write tests for error cases: missing service, path-is-file conflict, security validation (no `..`, no absolute paths)
-- [ ] Run tests — must pass before next task
+- [x] Create `devbox-cli/internal/builtin/dirs_ensure.go`
+- [x] Implement `Builtin` interface: `Validate`, `Describe`, `Run`
+- [x] Parameters: `service` (required), `mode` (optional: `skip`|`error`|`recreate`, default `skip`)
+- [x] Behavior: resolve service from config, build full dir list (mandatory `src`, `configs` + configured `dirs`), deduplicate, resolve relative to service `dir`
+- [x] `skip` mode: create missing dirs, skip existing
+- [x] `error` mode: fail if any path exists and is not a directory
+- [x] `recreate` mode: remove and recreate dirs (except `src` and `configs` which use `skip` semantics in `recreate` mode for safety — document this)
+- [x] Register `service_dirs_ensure` in builtin registry
+- [x] Write tests for all three modes (success cases)
+- [x] Write tests for error cases: missing service, path-is-file conflict, security validation (no `..`, no absolute paths)
+- [x] Run tests — must pass before next task
 
 ### Task 3: Replace `create-dirs` shell commands in deploy YAML
 - [ ] Update `devbox/deploy/main.yml`: replace `run: mkdir -p ...` step with `builtin: service_dirs_ensure` + `with: { service: main }`
