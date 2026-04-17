@@ -61,17 +61,17 @@ Add `Untracked bool` field so phases like `post-deploy` are excluded from progre
 ### Task 3: Rewrite TUI model with bubbles progress bar and stopwatch
 Replace the custom ASCII progress bar with `bubbles/progress` and add elapsed time display with `bubbles/stopwatch`.
 
-- [ ] Import `charm.land/bubbles/v2/progress` and `charm.land/bubbles/v2/stopwatch` in `tui.go`
-- [ ] Replace custom `spinnerFrames` with `charm.land/bubbles/v2/spinner` (Dot or MiniDot style)
-- [ ] Add `progress.Model` field to `tuiModel` — configure with `progress.WithScaledGradient()` using the progress bar color from styles
-- [ ] Add `stopwatch.Model` field to `tuiModel` — starts on `tuiStartPipelineMsg`
-- [ ] Remove custom `progressBar()` function, use `progress.Model.ViewAs(percent)` instead
-- [ ] Update `Init()` to batch spinner, stopwatch, and progress tick commands
-- [ ] Update `Update()` to forward messages to spinner, stopwatch, and progress sub-models
-- [ ] Update `View()` to render: title + timer, phase, progress bar + count, spinner + current step, completed steps list
-- [ ] Write tests for model Init/Update state transitions with new sub-models
-- [ ] Write tests for View output format (title, timer placeholder, progress bar, step list)
-- [ ] Run tests — must pass before next task
+- [x] Import `charm.land/bubbles/v2/progress` and `charm.land/bubbles/v2/stopwatch` in `tui.go`
+- [x] Replace custom `spinnerFrames` with `charm.land/bubbles/v2/spinner` (Dot or MiniDot style)
+- [x] Add `progress.Model` field to `tuiModel` — configure with `progress.WithColors()` using the progress bar color from styles
+- [x] Add `stopwatch.Model` field to `tuiModel` — started by Init()
+- [x] Remove custom `progressBar()` function, use `progress.Model.ViewAs(percent)` instead
+- [x] Update `Init()` to batch spinner, stopwatch, and progress tick commands
+- [x] Update `Update()` to forward messages to spinner, stopwatch, and progress sub-models
+- [x] Update `View()` to render: title + timer, phase, progress bar + count, spinner + current step, completed steps list
+- [x] Write tests for model Init/Update state transitions with new sub-models
+- [x] Write tests for View output format (title, timer placeholder, progress bar, step list)
+- [x] Run tests — must pass before next task
 
 ### Task 4: Show completed step history in TUI (plain-style formatting)
 Expand the recent steps display to show all completed/skipped/failed steps with plain-style formatting.
