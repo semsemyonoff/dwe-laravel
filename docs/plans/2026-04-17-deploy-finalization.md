@@ -87,16 +87,16 @@
 - [x] Run tests — must pass before next task
 
 ### Task 4: Implement `builtin: message`
-- [ ] Create `devbox-cli/internal/builtin/message.go`
-- [ ] Implement `Builtin` interface
-- [ ] Parameters: `level` (required: `info`|`success`|`warning`|`error`), `text` (required)
-- [ ] Behavior: delegate to `ExecContext.Output` methods (`Success`, `Info`, `Warning`, `Error`)
-- [ ] Support Go template expressions in `text` field (evaluate against `DevboxConfig`)
-- [ ] Register `message` in builtin registry
-- [ ] Write tests for all four levels
-- [ ] Write tests for template evaluation in text
-- [ ] Write tests for validation errors (missing level, invalid level, missing text)
-- [ ] Run tests — must pass before next task
+- [x] Create `devbox-cli/internal/builtin/message.go`
+- [x] Implement `Builtin` interface
+- [x] Parameters: `level` (required: `info`|`success`|`warning`|`error`), `text` (required)
+- [x] Behavior: delegate to `ExecContext.Output` methods (`Success`, `Info`, `Warning`, `Error`)
+- [x] Support Go template expressions in `text` field (evaluate against `DevboxConfig`)
+- [x] Register `message` in builtin registry
+- [x] Write tests for all four levels
+- [x] Write tests for template evaluation in text
+- [x] Write tests for validation errors (missing level, invalid level, missing text)
+- [x] Run tests — must pass before next task
 
 ### Task 5: Add `post-deploy` phase and `finalize` phase to deploy pipelines
 - [ ] Add `phase.UI` field (`string`, yaml `ui`) to `DeployPhase` struct: values `plain`|`inherit`, default `inherit`
