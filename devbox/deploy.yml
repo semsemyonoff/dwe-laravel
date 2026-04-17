@@ -28,6 +28,7 @@ phases:
   - name: post-deploy
     description: Post-deploy summary (runs only if all prior phases succeeded)
     ui: plain
+    untracked: true
     steps:
       - name: info
         devbox: "info"
