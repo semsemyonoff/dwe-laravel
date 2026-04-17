@@ -1,6 +1,6 @@
 ## devbox info
 
-Display project info, URLs, credentials and available commands
+Display project info dashboard (URLs, hosts, services, tools)
 
 ### Synopsis
 
