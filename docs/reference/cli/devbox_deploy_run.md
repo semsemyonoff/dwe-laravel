@@ -19,7 +19,6 @@ devbox deploy run [flags]
 ```
   devbox deploy run
   devbox deploy run --service main
-  devbox deploy run --ui plain
 ```
 
 ### Options
@@ -27,7 +26,6 @@ devbox deploy run [flags]
 ```
   -h, --help             help for run
       --service string   deploy a single service only
-      --ui string        output mode: auto, plain, or tui (default "auto")
 ```
 
 ### Options inherited from parent commands

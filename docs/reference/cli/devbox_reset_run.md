@@ -9,9 +9,8 @@ devbox reset run [flags]
 ### Options
 
 ```
-  -h, --help        help for run
-      --ui string   output mode: auto, plain, or tui (default "auto")
-  -y, --yes         skip confirmation prompts
+  -h, --help   help for run
+  -y, --yes    skip confirmation prompts
 ```
 
 ### Options inherited from parent commands

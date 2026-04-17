@@ -183,7 +183,7 @@ services: { main: { type: app, dir: ./services/main } }
 - `ServiceConfigFile` — `Src`, `Dest`, `Mode` (default/update/replace)
 - `DeployConfig` — `Phases []DeployPhase`
 - `DeployPhase` — `Name`, `Description`, `Untracked bool` (yaml `untracked`: suppresses phase header and step messages in PlainReporter), `Steps []DeployStep`; `untracked: true` used for post-deploy phases that should not produce system output
-- `DeployStep` — `Name`, `Cmd`, `Command`, `With`, `Description`, `When` (exactly one of Cmd/Command set; `Make` removed)
+- `DeployStep` — `Name`, `Cmd`, `Command`, `Builtin`, `With`, `Description`, `When` (exactly one of Cmd/Command/Builtin set; `Make` removed)
 - `DockerConfig` — `ProjectName string`, `Args` (Global + per-command `[]string`), `Env` (AutoGenerate, Commands)
 - `IDEConfig` — per-editor blocks: `VSCode`, `JetBrains`, `Devcontainer` (each with `Enabled bool`)
 - `StylesConfig` — `Header StylesHeader` (lines, font, color) + `Colors StylesColors` (label, section_title, subheader, muted, warning, info, enabled, disabled, mandatory, partial, table_border, table_header) + `Separator string`

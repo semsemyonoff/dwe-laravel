@@ -9,6 +9,7 @@
 #   run:     — shell command (executed directly)
 #   devbox:  — devbox subcommand (binary path resolved automatically)
 #   command: — devbox command ID dispatched via command runner
+#   builtin: — Go builtin step ID (e.g. service_dirs_ensure, message, confirm)
 
 phases:
   - name: services
