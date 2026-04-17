@@ -59,13 +59,13 @@
 ## Implementation Steps
 
 ### Task 1: Add `dirs` field to ServiceConfig and services.yml
-- [ ] Add `Dirs []string` field to `ServiceConfig` in `devbox-cli/internal/config/devbox.go`
-- [ ] Update service inheritance merge in `LoadServicesConfig` to merge parent+child dirs (deduplicated)
-- [ ] Add `dirs: [logs, home, runtime]` to `main` service in `devbox/services.yml`
-- [ ] Add `dirs` to `second` service in `devbox/services.yml` (inherits from main or declares own)
-- [ ] Write tests for `Dirs` field loading and inheritance merge (success + edge cases)
-- [ ] Write tests for deduplication of dirs across parent/child
-- [ ] Run tests — must pass before next task
+- [x] Add `Dirs []string` field to `ServiceConfig` in `devbox-cli/internal/config/devbox.go`
+- [x] Update service inheritance merge in `LoadServicesConfig` to merge parent+child dirs (deduplicated)
+- [x] Add `dirs: [logs, home, runtime]` to `main` service in `devbox/services.yml`
+- [x] Add `dirs` to `second` service in `devbox/services.yml` (inherits from main or declares own)
+- [x] Write tests for `Dirs` field loading and inheritance merge (success + edge cases)
+- [x] Write tests for deduplication of dirs across parent/child
+- [x] Run tests — must pass before next task
 
 ### Task 2: Implement `service_dirs_ensure` builtin
 - [ ] Create `devbox-cli/internal/builtin/dirs_ensure.go`

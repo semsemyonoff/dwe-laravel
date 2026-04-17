@@ -14,6 +14,10 @@ services:
     work_dir_internal: /workspace/src
     configs:
       - .env
+    dirs:
+      - logs
+      - home
+      - runtime
     cli:
       mode: auto
       shell: bash
@@ -40,6 +44,10 @@ services:
     dir: ./services/second
     dir_internal: /workspace
     work_dir_internal: /workspace/src
+    dirs:
+      - logs
+      - home
+      - runtime
     configs:
       - file: .env
         mountpoint: src/.env
