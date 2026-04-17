@@ -60,7 +60,7 @@ Exactly one execution type field must be set per step.
 
 ### `run: <shell command>`
 
-Executes a shell command directly via `os/exec`. No shell interpolation — arguments are split on whitespace.
+Executes a shell command via `sh -c`. Full shell semantics apply: environment variable expansion, globbing, pipes, redirection, and `&&`/`||` operators all work as expected.
 
 ```yaml
 - name: chmod-scripts
