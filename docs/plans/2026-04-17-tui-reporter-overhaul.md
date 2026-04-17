@@ -140,8 +140,8 @@ Apply Lipgloss styles to TUI elements using colors from styles.yml for a polishe
 - [x] Run linter (`cd devbox-cli && make lint`) — all issues must be fixed
 
 ### Task 9: [Final] Update documentation
-- [ ] Update CLAUDE.md if new patterns or config fields were added (DeployPhase.Untracked, StylesColors.ProgressBar)
-- [ ] Update `devbox/styles.yml` comments if needed
+- [x] Update CLAUDE.md if new patterns or config fields were added (DeployPhase.Untracked, StylesColors.ProgressBar)
+- [x] Update `devbox/styles.yml` comments if needed
 
 ## Technical Details
 
