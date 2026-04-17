@@ -24,3 +24,17 @@ phases:
       - name: wait-healthy
         devbox: "docker wait"
         description: Wait for all containers to become healthy
+
+  - name: post-deploy
+    description: Post-deploy summary (runs only if all prior phases succeeded)
+    ui: plain
+    steps:
+      - name: info
+        devbox: "info"
+        description: Show environment summary
+      - name: success
+        builtin: message
+        with:
+          level: success
+          text: Deploy completed successfully
+        description: Print deploy success message

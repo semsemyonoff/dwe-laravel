@@ -99,19 +99,19 @@
 - [x] Run tests — must pass before next task
 
 ### Task 5: Add `post-deploy` phase and `finalize` phase to deploy pipelines
-- [ ] Add `phase.UI` field (`string`, yaml `ui`) to `DeployPhase` struct: values `plain`|`inherit`, default `inherit`
-- [ ] Add `post-deploy` phase to `devbox/deploy.yml` with `ui: plain`:
+- [x] Add `phase.UI` field (`string`, yaml `ui`) to `DeployPhase` struct: values `plain`|`inherit`, default `inherit`
+- [x] Add `post-deploy` phase to `devbox/deploy.yml` with `ui: plain`:
   - step `info`: `devbox: "info"`
   - step `success`: `builtin: message` with `level: success`, `text: Deploy completed successfully`
-- [ ] Add `finalize` phase to `devbox/deploy/main.yml`:
+- [x] Add `finalize` phase to `devbox/deploy/main.yml`:
   - step `render-ide`: `devbox: "render ide main"`
-- [ ] Add `finalize` phase to `devbox/deploy/second.yml`:
+- [x] Add `finalize` phase to `devbox/deploy/second.yml`:
   - step `render-ide`: `devbox: "render ide second"`
-- [ ] Implement `post-deploy` semantics: phase executes only if all prior phases succeeded (skip on any failure)
-- [ ] Verify `devbox deploy plan` shows new phases and steps
-- [ ] Write tests for `phase.UI` field loading
-- [ ] Write tests for post-deploy skip-on-failure semantics
-- [ ] Run tests — must pass before next task
+- [x] Implement `post-deploy` semantics: phase executes only if all prior phases succeeded (skip on any failure)
+- [x] Verify `devbox deploy plan` shows new phases and steps
+- [x] Write tests for `phase.UI` field loading
+- [x] Write tests for post-deploy skip-on-failure semantics
+- [x] Run tests — must pass before next task
 
 ### Task 6: Define reporter interface and implement PlainReporter
 - [ ] Create `devbox-cli/internal/pipeline/reporter.go` with `Reporter` interface:
