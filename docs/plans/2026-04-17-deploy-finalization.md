@@ -132,13 +132,13 @@
 - [x] Run tests — must pass before next task
 
 ### Task 7: Refactor deploy/reset execution to use reporter
-- [ ] Extract pipeline execution logic from `pipeline.go` into a function that accepts `Reporter`
-- [ ] Replace direct `render.Writer` calls in deploy execution with reporter method calls
-- [ ] Wire `PlainReporter` as default for `deploy run` and `reset run`
-- [ ] Ensure logging contract unchanged: pipeline events + raw child output in log, no reporter artifacts
-- [ ] Verify existing deploy/reset behavior is identical (no output changes)
-- [ ] Write tests verifying reporter is called with correct events in correct order
-- [ ] Run tests — must pass before next task
+- [x] Extract pipeline execution logic from `pipeline.go` into a function that accepts `Reporter`
+- [x] Replace direct `render.Writer` calls in deploy execution with reporter method calls
+- [x] Wire `PlainReporter` as default for `deploy run` and `reset run`
+- [x] Ensure logging contract unchanged: pipeline events + raw child output in log, no reporter artifacts
+- [x] Verify existing deploy/reset behavior is identical (no output changes)
+- [x] Write tests verifying reporter is called with correct events in correct order
+- [x] Run tests — must pass before next task
 
 ### Task 8: Add `--ui` flag and terminal capability detection
 - [ ] Add `--ui auto|plain|tui` flag to `deploy run` and `reset run` commands
