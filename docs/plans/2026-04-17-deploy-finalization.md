@@ -155,21 +155,21 @@
 - [x] Run tests — must pass before next task
 
 ### Task 9: Implement TUIReporter
-- [ ] Create `devbox-cli/internal/pipeline/tui.go` using Bubble Tea
-- [ ] Minimal UI elements:
+- [x] Create `devbox-cli/internal/pipeline/tui.go` using Bubble Tea
+- [x] Minimal UI elements:
   - Pipeline name header
   - Current phase name
   - Current step with spinner
   - Progress bar (steps completed / total)
   - Compact list of recent steps with status icons (running/skipped/done/failed)
-- [ ] `SuspendForExec()`: call `bubbletea.Program.ReleaseTerminal()` or equivalent to yield terminal to child process
-- [ ] `ResumeAfterExec()`: reclaim terminal and redraw current state
-- [ ] Handle `phase.ui: plain` — suspend TUI for the entire phase, resume after
-- [ ] Do not proxy child process stdio through Bubble Tea
-- [ ] TUI frames must NOT appear in log file
-- [ ] Write tests for TUI reporter event handling (model updates, not visual output)
-- [ ] Write tests for suspend/resume lifecycle
-- [ ] Run tests — must pass before next task
+- [x] `SuspendForExec()`: call `bubbletea.Program.ReleaseTerminal()` or equivalent to yield terminal to child process
+- [x] `ResumeAfterExec()`: reclaim terminal and redraw current state
+- [x] Handle `phase.ui: plain` — suspend TUI for the entire phase, resume after
+- [x] Do not proxy child process stdio through Bubble Tea
+- [x] TUI frames must NOT appear in log file
+- [x] Write tests for TUI reporter event handling (model updates, not visual output)
+- [x] Write tests for suspend/resume lifecycle
+- [x] Run tests — must pass before next task
 
 ### Task 10: Verify acceptance criteria
 - [ ] Verify `devbox deploy plan` shows all new phases (finalize, post-deploy) and builtin steps
