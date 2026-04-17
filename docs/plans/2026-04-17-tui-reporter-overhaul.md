@@ -87,18 +87,18 @@ Expand the recent steps display to show all completed/skipped/failed steps with 
 ### Task 5: Implement Bubble Tea confirmation model for TUI
 Replace the plain stdin-based confirm with a native Bubble Tea confirmation within the TUI.
 
-- [ ] Create `tuiConfirmMsg` message type with `message`, `okMsg`, `stopMsg` fields
-- [ ] Create `tuiConfirmResultMsg` with `confirmed bool` field
-- [ ] Add confirmation state to `tuiModel`: `confirmActive bool`, `confirmMessage string`, etc.
-- [ ] Update `View()` to render confirmation prompt when `confirmActive` is true (e.g., `⚠️ <message> [Y/n]` with highlighted keys)
-- [ ] Update `Update()` to handle key events (y/Y → confirm, n/N/Esc → deny) when `confirmActive`
-- [ ] Add `ConfirmCh` channel to `TUIReporter` — confirm builtin sends request, blocks on response
-- [ ] Update `builtin.ExecContext` to carry a `ConfirmFunc func(msg, okMsg, stopMsg string) (bool, error)` callback
-- [ ] Update confirm builtin to use `ConfirmFunc` when available (TUI mode), fall back to stdin prompt (plain mode)
-- [ ] Wire `ConfirmFunc` in `runPipeline()` when reporter is `*TUIReporter`
-- [ ] Write tests for confirmation model state transitions (key handling)
-- [ ] Write tests for confirm builtin with both ConfirmFunc and fallback paths
-- [ ] Run tests — must pass before next task
+- [x] Create `tuiConfirmMsg` message type with `message`, `okMsg`, `stopMsg` fields
+- [x] Create `tuiConfirmResponseSentMsg` (no-op Msg returned by response cmd)
+- [x] Add confirmation state to `tuiModel`: `confirmActive bool`, `confirmMessage string`, etc.
+- [x] Update `View()` to render confirmation prompt when `confirmActive` is true (`⚠  <message>` + `[Y]/[N]`)
+- [x] Update `Update()` to handle key events (y/Y → confirm, n/N/Esc → deny) when `confirmActive`
+- [x] Add `Confirm()` method to `TUIReporter` — sends `tuiConfirmMsg` and blocks on respCh
+- [x] Update `builtin.ExecContext` to carry a `ConfirmFunc func(msg, okMsg, stopMsg string) (bool, error)` callback
+- [x] Update confirm builtin to use `ConfirmFunc` when available (TUI mode), fall back to stdin prompt (plain mode)
+- [x] Wire `ConfirmFunc` in `runPipeline()` when reporter is `*TUIReporter`; skip SuspendForExec for `builtin: confirm` in TUI mode
+- [x] Write tests for confirmation model state transitions (key handling)
+- [x] Write tests for confirm builtin with both ConfirmFunc and fallback paths
+- [x] Run tests — must pass before next task
 
 ### Task 6: Fix log file output in TUI mode
 Ensure TUI mode log files match plain mode output (no escape sequences, no Bubble Tea frames).
