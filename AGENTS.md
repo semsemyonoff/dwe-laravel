@@ -23,7 +23,7 @@ The project exists to solve the "Make-as-DSL" problem in the legacy devbox, wher
 - CLI is the single control plane for Docker Compose. `devbox docker` is the public lifecycle API; `devbox compose` is the low-level diagnostic layer. No direct `docker compose` calls in Makefiles, YAML commands, or deploy steps.
 - Keep packages focused: `config` (loading/merging), `render` (ANSI output), `ui` (Lipgloss styled output), `tpl` (templates), `command` (cobra wiring), `docker` (compose execution), `version` (version vars).
 - Errors bubble up with `fmt.Errorf` wrapping. Root command catches and renders them via `render.Stdout().Error()`.
-- Minimal dependencies. Current set: cobra, yaml.v3, go-figure, fang, lipgloss, bubbletea (interactive selectors). Do not add dependencies without strong justification.
+- Minimal dependencies. Current set: cobra, yaml.v3, go-figure, fang, lipgloss, bubbletea (interactive selectors), bubbles (progress bar, stopwatch, spinner components for deploy/reset TUI). Do not add dependencies without strong justification.
 - Styled user-facing output (info dashboard, root summary) lives in the `ui` package (Lipgloss). Plain passthrough output (deploy, docker logs, compose raw) stays in the `render` package. Make recipes must not produce styled output directly — they call CLI print subcommands via macros.
 - Interactive terminal selectors (service/tool/command pickers) are implemented in `internal/ui/selector.go` using bubbletea. Use `RunSelector(title, items)` for any new picker; do not inline bubbletea models in command packages.
 
@@ -183,11 +183,11 @@ services: { main: { type: app, dir: ./services/main } }
 - `ServiceCLIConfig` — `Shell string`, `User string`, `WorkDir string`, `Mode string` (auto|exec|run), `Env map[string]string`; read from `devbox/services.yml` service `cli:` block; all fields optional, fall back to built-in defaults
 - `ServiceConfigFile` — `Src`, `Dest`, `Mode` (default/update/replace)
 - `DeployConfig` — `Phases []DeployPhase`
-- `DeployPhase` — `Name`, `Description`, `UI string` (yaml `ui`: `plain`|`inherit`, default `inherit`), `Steps []DeployStep`; `ui: plain` causes TUI to suspend for the entire phase so steps output plain text
+- `DeployPhase` — `Name`, `Description`, `UI string` (yaml `ui`: `plain`|`inherit`, default `inherit`), `Untracked bool` (yaml `untracked`: excludes phase steps from progress bar and step counter), `Steps []DeployStep`; `ui: plain` causes TUI to suspend for the entire phase so steps output plain text; `untracked: true` used for post-deploy phases that should not affect progress counting
 - `DeployStep` — `Name`, `Cmd`, `Command`, `With`, `Description`, `When` (exactly one of Cmd/Command set; `Make` removed)
 - `DockerConfig` — `ProjectName string`, `Args` (Global + per-command `[]string`), `Env` (AutoGenerate, Commands)
 - `IDEConfig` — per-editor blocks: `VSCode`, `JetBrains`, `Devcontainer` (each with `Enabled bool`)
-- `StylesConfig` — `Header StylesHeader` (lines, font, color) + `Colors StylesColors` (label, section_title, subheader, muted, warning, info, enabled, disabled, mandatory, partial, table_border, table_header) + `Separator string`
+- `StylesConfig` — `Header StylesHeader` (lines, font, color) + `Colors StylesColors` (label, section_title, subheader, muted, warning, info, enabled, disabled, mandatory, partial, table_border, table_header, progress_bar) + `Separator string`; `progress_bar` color controls TUI deploy/reset progress bar fill (ANSI 256 code, default `"203"` coral red)
 
 ### Variable flow
 
