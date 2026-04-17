@@ -51,12 +51,12 @@ Add `Untracked bool` field so phases like `post-deploy` are excluded from progre
 - [x] Run tests — must pass before next task
 
 ### Task 2: Add charmbracelet/bubbles dependency and progress bar color to styles
-- [ ] Add `charm.land/bubbles/v2` dependency to `go.mod` (`go get charm.land/bubbles/v2`)
-- [ ] Add `progress_bar` color field to `StylesColors` struct in `internal/config/styles.go`
-- [ ] Add `progress_bar: "203"` (coral red, matching theme) to `devbox/styles.yml`
-- [ ] Wire the progress bar color into `ui.ApplyStyles()` so it's accessible at runtime
-- [ ] Write tests for styles config loading with new `progress_bar` field
-- [ ] Run tests — must pass before next task
+- [x] Add `charm.land/bubbles/v2` dependency to `go.mod` (`go get charm.land/bubbles/v2`)
+- [x] Add `progress_bar` color field to `StylesColors` struct in `internal/config/styles.go`
+- [x] Add `progress_bar: "203"` (coral red, matching theme) to `devbox/styles.yml`
+- [x] Wire the progress bar color into `ui.ApplyStyles()` so it's accessible at runtime
+- [x] Write tests for styles config loading with new `progress_bar` field
+- [x] Run tests — must pass before next task
 
 ### Task 3: Rewrite TUI model with bubbles progress bar and stopwatch
 Replace the custom ASCII progress bar with `bubbles/progress` and add elapsed time display with `bubbles/stopwatch`.

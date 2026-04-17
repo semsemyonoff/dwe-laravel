@@ -33,6 +33,9 @@ colors:
   table_border: "167" # darker coral — table border lines
   table_header: "203" # Laravel red — table header text
 
+  # TUI deploy/reset progress bar fill color — coral red matching project theme
+  progress_bar: "203"
+
   # Help/CLI output colors (Fang color scheme)
   help:
     title: "203"       # section headers (USAGE, COMMANDS, etc.) — Laravel coral
