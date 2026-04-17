@@ -183,4 +183,4 @@ services:
 - `devbox shell [service]` — open shell in service container
 - `devbox services list` — list all services with status
 - `devbox services enable/disable <service>` — toggle optional services
-- `devbox deploy step setup` — runs `service_dirs_ensure` as part of deploy
+- `devbox deploy run` — runs the full deploy pipeline, including `service_dirs_ensure` in the setup phase

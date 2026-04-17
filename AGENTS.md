@@ -64,6 +64,9 @@ devbox.yml                          # structural spec: project + services
 devbox/services.yml                 # per-service cli config: shell, user, workdir, mode, env (tracked)
 devbox/defaults.yml                 # versioned defaults: tools, runtime, ports, hosts, exports, compose, ide
 devbox/deploy.yml                   # deploy pipeline declaration (phases + steps, loaded separately)
+devbox/deploy/main.yml              # per-service deploy pipeline for main service
+devbox/deploy/second.yml            # per-service deploy pipeline for second service
+devbox/reset.yml                    # reset pipeline declaration (loaded separately)
 devbox/docker.yml                   # docker/compose execution policy (project name, args, env triggers)
 devbox/docker.local.yml             # docker policy local overrides (gitignored)
 devbox/docker.local.example.yml     # tracked template for docker policy overrides
@@ -91,6 +94,7 @@ docs/plans/                         # implementation plans (markdown)
 docs/reference/                     # generated reference documentation (devbox docs generate)
 docs/reference/cli/                 # cobra command reference (one file per command)
 docs/reference/commands/            # declarative command registry reference (one file per command)
+docs/reference/config/              # config system reference (hand-authored): index, layering, per-file pages
 services/                           # service hubs (gitignored, created by deploy)
 devbox-cli/                         # Go module (gitignored, built separately into bin/)
 legacy/                             # old devbox repos (gitignored)
@@ -126,6 +130,8 @@ cd devbox-cli && make lint    # golangci-lint
 - `internal/render/` — `Writer` with ANSI output methods (Success, Error, Warning, Info, Definition, TableHeader, ASCII art); plain passthrough for logs/deploy output
 - `internal/ui/` — Lipgloss styled output: `RenderSummary(cfg)` for compact root summary, `RenderInfo(cfg, infoCfg)` for full info dashboard, `RenderServiceTable()` and `RenderToolTable()` for Lipgloss tables, `RenderTopology()` for dependency tree; `ApplyStyles(stylesCfg)` to hot-apply palette from `styles.yml`; terminal width detection; `RunSelector(title, items)` for interactive bubbletea list selectors (service/tool/command pickers)
 - `internal/tpl/` — Go template engine with `Render()`, `EvalCondition()`, custom `FuncMap` (`appURL`)
+- `internal/builtin/` — builtin step registry: `Builtin` interface (`Validate`, `Describe`, `Run`), `ExecContext` carrier; registered builtins: `configs_copy`, `confirm`, `volumes_create`, `service_dirs_ensure` (creates service hub dirs with skip/error/recreate modes), `message` (outputs text at info/success/warning/error level with Go template support)
+- `internal/pipeline/` — deploy/reset reporter abstraction: `Reporter` interface (StartPipeline, EnterPhase, SkipPhase, StartStep, SkipStep, FinishStep, FailStep, FinishPipeline, SuspendForExec, ResumeAfterExec); `PlainReporter` (mirrors pre-refactor output); `TUIReporter` (Bubble Tea progress UI with terminal yield); `DetectReporter(mode)` for `--ui auto|plain|tui` resolution with TTY + CI env detection
 - `internal/commands/` — declarative command system: `CommandFile`, `Registry`, `HostRunner`, `DevboxRunner`, `ServiceExecRunner`, `ServiceRunRunner`, `ScriptRunner`, `WorkflowRunner`, param/context resolution, `${...}` template sugar
 - `internal/command/` — cobra commands with Fang integration and command groups:
   - Root: `devbox` (no args) shows ASCII header + compact summary + help
@@ -173,11 +179,11 @@ services: { main: { type: app, dir: ./services/main } }
 ### Config structs (key additions in Phases 2+)
 
 - `ComposeConfig` — `Base string` + `Overlays map[string]string` (key → file path)
-- `ServiceConfig` — adds `Container string`, `DirInternal string`, `Configs []ServiceConfigFile`, `CLI ServiceCLIConfig`
+- `ServiceConfig` — adds `Container string`, `DirInternal string`, `Dirs []string`, `Configs []ServiceConfigFile`, `CLI ServiceCLIConfig`; `Dirs` lists additional hub subdirs beyond mandatory `src` and `configs` (inherited and deduplicated from parent service)
 - `ServiceCLIConfig` — `Shell string`, `User string`, `WorkDir string`, `Mode string` (auto|exec|run), `Env map[string]string`; read from `devbox/services.yml` service `cli:` block; all fields optional, fall back to built-in defaults
 - `ServiceConfigFile` — `Src`, `Dest`, `Mode` (default/update/replace)
 - `DeployConfig` — `Phases []DeployPhase`
-- `DeployPhase` — `Name`, `Description`, `Steps []DeployStep`
+- `DeployPhase` — `Name`, `Description`, `UI string` (yaml `ui`: `plain`|`inherit`, default `inherit`), `Steps []DeployStep`; `ui: plain` causes TUI to suspend for the entire phase so steps output plain text
 - `DeployStep` — `Name`, `Cmd`, `Command`, `With`, `Description`, `When` (exactly one of Cmd/Command set; `Make` removed)
 - `DockerConfig` — `ProjectName string`, `Args` (Global + per-command `[]string`), `Env` (AutoGenerate, Commands)
 - `IDEConfig` — per-editor blocks: `VSCode`, `JetBrains`, `Devcontainer` (each with `Enabled bool`)
@@ -195,14 +201,17 @@ devbox.yml + defaults.yml + local.yml
 
 ### Deploy pipeline
 
-Steps have three execution modes:
+Steps have four execution modes:
 - `run: <command>` — shell command executed directly via `os/exec`
 - `command: <id>` — declarative command ID resolved via the command registry (supports `with:` param overrides)
 - `devbox: "<subcommand>"` — invokes a devbox CLI subcommand (e.g. `devbox: "docker up"`, `devbox: "docker wait"`)
+- `builtin: <id>` — Go builtin step; parameters passed via `with:` (e.g. `builtin: service_dirs_ensure`, `with: { service: main }`)
 
 `.env` generation is always the implicit first step (CLI inserts it before phase 1).
 
-The `make:` step type has been removed. All service-level operations are now expressed as `command:` references pointing to YAML command definitions in `devbox/commands/`.
+The `make:` step type has been removed. All service-level operations are now expressed as `command:` or `builtin:` references.
+
+`devbox deploy run` and `devbox reset run` accept `--ui auto|plain|tui` to control reporter. `auto` (default) detects TTY + CI env and picks TUI or plain automatically. `tui` warns and falls back to plain if terminal is not capable. Reporter pipeline: `PlainReporter` for plain/non-TTY, `TUIReporter` (Bubble Tea) for interactive TTY runs.
 
 ## Make macros
 
