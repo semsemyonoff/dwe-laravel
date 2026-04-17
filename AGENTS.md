@@ -94,7 +94,6 @@ docs/plans/                         # implementation plans (markdown)
 docs/reference/                     # generated reference documentation (devbox docs generate)
 docs/reference/cli/                 # cobra command reference (one file per command)
 docs/reference/commands/            # declarative command registry reference (one file per command)
-docs/reference/config/              # config system reference (hand-authored): index, layering, per-file pages
 services/                           # service hubs (gitignored, created by deploy)
 devbox-cli/                         # Go module (gitignored, built separately into bin/)
 legacy/                             # old devbox repos (gitignored)

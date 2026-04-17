@@ -107,10 +107,10 @@
 - [x] Verify `untracked: true` remains on post-deploy phase (controls output suppression now)
 
 ### Task 10: Move docs/reference/config/ to devbox-cli repo
-- [ ] Copy `docs/reference/config/` files into `devbox-cli/docs/reference/config/`
-- [ ] Update content: remove references to TUI mode, `--ui` flag, `ui:` phase field, `progress_bar` style
-- [ ] Remove `docs/reference/config/` from the next-laravel repo
-- [ ] Commit in both repos
+- [x] Copy `docs/reference/config/` files into `devbox-cli/docs/reference/config/`
+- [x] Update content: remove references to TUI mode, `--ui` flag, `ui:` phase field, `progress_bar` style
+- [x] Remove `docs/reference/config/` from the next-laravel repo
+- [x] Commit in both repos
 
 ### Task 11: Update CLAUDE.md documentation (next-laravel)
 - [ ] Remove TUI references: `TUIReporter`, `DetectReporter`, `--ui auto|plain|tui`, Bubble Tea progress UI
