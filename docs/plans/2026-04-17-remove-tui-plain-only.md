@@ -64,13 +64,13 @@
 - [x] Run `make test` — must pass before next task
 
 ### Task 4: Add icons to PlainReporter output (devbox-cli)
-- [ ] Add icon constants to `internal/pipeline/plain.go`: `✓` (done), `✗` (failed), `◎` (skipped), `·` (running/start)
-- [ ] Update `StartStep()`: prefix with `·` icon — `  · [N/M] stepAddr: description`
-- [ ] Update `FinishStep()`: prefix with `✓` icon — `  ✓ [N/M] Done: stepAddr`
-- [ ] Update `SkipStep()`: prefix with `◎` icon — `  ◎ [N/M] Skipped: stepAddr (reason)`
-- [ ] Update `FailStep()`: prefix with `✗` icon in error message
-- [ ] Write tests for each icon in PlainReporter output
-- [ ] Run `make test` — must pass before next task
+- [x] Add icon constants to `internal/pipeline/plain.go`: `✓` (done), `✗` (failed), `◎` (skipped), `·` (running/start)
+- [x] Update `StartStep()`: prefix with `·` icon — `  · [N/M] stepAddr: description`
+- [x] Update `FinishStep()`: prefix with `✓` icon — `  ✓ [N/M] Done: stepAddr`
+- [x] Update `SkipStep()`: prefix with `◎` icon — `  ◎ [N/M] Skipped: stepAddr (reason)`
+- [x] Update `FailStep()`: prefix with `✗` icon in error message
+- [x] Write tests for each icon in PlainReporter output
+- [x] Run `make test` — must pass before next task
 
 ### Task 5: Suppress output for untracked phases in PlainReporter (devbox-cli)
 - [ ] `PlainReporter.EnterPhase()`: if `phase.Untracked`, return early (no phase header)
