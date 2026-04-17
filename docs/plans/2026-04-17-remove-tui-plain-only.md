@@ -59,9 +59,9 @@
 - [x] Run `make test` — must pass before next task
 
 ### Task 3: Remove `UI` field from DeployPhase config (devbox-cli)
-- [ ] `internal/config/devbox.go`: remove `UI string` field from `DeployPhase` struct
-- [ ] Update any tests in `internal/config/` that reference `DeployPhase.UI`
-- [ ] Run `make test` — must pass before next task
+- [x] `internal/config/devbox.go`: remove `UI string` field from `DeployPhase` struct
+- [x] Update any tests in `internal/config/` that reference `DeployPhase.UI`
+- [x] Run `make test` — must pass before next task
 
 ### Task 4: Add icons to PlainReporter output (devbox-cli)
 - [ ] Add icon constants to `internal/pipeline/plain.go`: `✓` (done), `✗` (failed), `◎` (skipped), `·` (running/start)
