@@ -183,16 +183,16 @@
 - [x] Run linter (`cd devbox-cli && make lint`) — all issues must be fixed
 
 ### Task 11: Write config reference documentation
-- [ ] Create `docs/reference/config/index.md` — overview of all config files, which are merged vs standalone, navigation
-- [ ] Create `docs/reference/config/layering.md` — merge order, precedence rules, how CLI uses merged config
-- [ ] Create `docs/reference/config/devbox.md` — `devbox.yml`, `defaults.yml`, `local.yml`: structure, sections, per-layer guidance
-- [ ] Create `docs/reference/config/services.md` — `services.yml`: service declaration, extends, depends_on, dirs, cli config, configs
-- [ ] Create `docs/reference/config/deploy.md` — `deploy.yml`, `deploy/<service>.yml`, `reset.yml`: phases, steps, when/check, builtins, post-deploy semantics
-- [ ] Create `docs/reference/config/docker.md` — `docker.yml`, `docker.local.yml`: project name, args, env triggers, devbox docker vs compose boundary
-- [ ] Create `docs/reference/config/styles.md` — `styles.yml`: header, palette, separator, fallback defaults
-- [ ] Create `docs/reference/config/info.md` — `info.yml`: dashboard sections, template expressions, text/value/when fields
-- [ ] Each page follows: purpose, load order, merge behavior, example, field reference, related commands, common pitfalls
-- [ ] Run tests — must pass before next task
+- [x] Create `docs/reference/config/index.md` — overview of all config files, which are merged vs standalone, navigation
+- [x] Create `docs/reference/config/layering.md` — merge order, precedence rules, how CLI uses merged config
+- [x] Create `docs/reference/config/devbox.md` — `devbox.yml`, `defaults.yml`, `local.yml`: structure, sections, per-layer guidance
+- [x] Create `docs/reference/config/services.md` — `services.yml`: service declaration, extends, depends_on, dirs, cli config, configs
+- [x] Create `docs/reference/config/deploy.md` — `deploy.yml`, `deploy/<service>.yml`, `reset.yml`: phases, steps, when/check, builtins, post-deploy semantics
+- [x] Create `docs/reference/config/docker.md` — `docker.yml`, `docker.local.yml`: project name, args, env triggers, devbox docker vs compose boundary
+- [x] Create `docs/reference/config/styles.md` — `styles.yml`: header, palette, separator, fallback defaults
+- [x] Create `docs/reference/config/info.md` — `info.yml`: dashboard sections, template expressions, text/value/when fields
+- [x] Each page follows: purpose, load order, merge behavior, example, field reference, related commands, common pitfalls
+- [x] Run tests — must pass before next task
 
 ### Task 12: [Final] Update project documentation
 - [ ] Update `CLAUDE.md` with new builtin names, reporter interface, `--ui` flag, `phase.ui` field, `dirs` in ServiceConfig
