@@ -119,15 +119,15 @@ Ensure TUI mode log files match plain mode output (no escape sequences, no Bubbl
 ### Task 7: Polish TUI view with Lipgloss styling
 Apply Lipgloss styles to TUI elements using colors from styles.yml for a polished look.
 
-- [ ] Style pipeline title with `section_title` color (bold)
-- [ ] Style phase label with `subheader` color
-- [ ] Style elapsed time with `muted` color
-- [ ] Style step icons: `✓` with `enabled` color, `◎` with `muted`, `✗` with `warning`/red
-- [ ] Style current step spinner with `info` color
-- [ ] Style progress count (`5/12`) with `muted` color
-- [ ] Ensure all styled output is terminal-only (not written to logWriter)
-- [ ] Write tests for View output containing expected style markers
-- [ ] Run tests — must pass before next task
+- [x] Style pipeline title with `section_title` color (bold)
+- [x] Style phase label with `subheader` color
+- [x] Style elapsed time with `muted` color
+- [x] Style step icons: `✓` with `enabled` color, `◎` with `muted`, `✗` with `warning`/red
+- [x] Style current step spinner with `info` color
+- [x] Style progress count (`5/12`) with `muted` color
+- [x] Ensure all styled output is terminal-only (not written to logWriter)
+- [x] Write tests for View output containing expected style markers
+- [x] Run tests — must pass before next task
 
 ### Task 8: Verify acceptance criteria
 - [ ] Verify confirm prompt works in TUI without escape code garbage
