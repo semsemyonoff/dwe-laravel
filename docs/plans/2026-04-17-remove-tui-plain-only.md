@@ -113,13 +113,13 @@
 - [x] Commit in both repos
 
 ### Task 11: Update CLAUDE.md documentation (next-laravel)
-- [ ] Remove TUI references: `TUIReporter`, `DetectReporter`, `--ui auto|plain|tui`, Bubble Tea progress UI
-- [ ] Remove `UI string` from `DeployPhase` description
-- [ ] Remove `progress_bar` from `StylesColors` description
-- [ ] Update `DeployPhase` description: remove `ui: plain|inherit` explanation
-- [ ] Update pipeline package description: only PlainReporter, no TUI
-- [ ] Keep `bubbletea` and `bubbles` in dependencies list (still used by selector)
-- [ ] Remove `terminal yield` and `TUI` references from `TUIReporter` mentions in pipeline description
+- [x] Remove TUI references: `TUIReporter`, `DetectReporter`, `--ui auto|plain|tui`, Bubble Tea progress UI
+- [x] Remove `UI string` from `DeployPhase` description
+- [x] Remove `progress_bar` from `StylesColors` description
+- [x] Update `DeployPhase` description: remove `ui: plain|inherit` explanation
+- [x] Update pipeline package description: only PlainReporter, no TUI
+- [x] Keep `bubbletea` and `bubbles` in dependencies list (still used by selector)
+- [x] Remove `terminal yield` and `TUI` references from `TUIReporter` mentions in pipeline description
 
 ### Task 12: Verify acceptance criteria
 - [ ] Verify: `devbox deploy run` works with plain output only (no `--ui` flag)
