@@ -83,10 +83,10 @@
 - [x] Run `make test` — must pass before next task
 
 ### Task 6: Fix color passthrough for `devbox info` in deploy pipeline (devbox-cli)
-- [ ] In `execStep()` (`internal/command/pipeline.go`): when step is `devbox:` type, pass `cmd.Stdout = os.Stdout` and `cmd.Stderr = os.Stderr` directly (TTY preserved). Write to logWriter separately by reading from a pipe or teeing after the fact. Alternative: set `CLICOLOR_FORCE=1` env var on the child process so lipgloss detects color support.
-- [ ] Verify that log file still receives ANSI-stripped output
-- [ ] Write test verifying child process inherits real stdout (or env var is set)
-- [ ] Run `make test` — must pass before next task
+- [x] In `execStep()` (`internal/command/pipeline.go`): extracted `buildDevboxCmd()` helper that sets `CLICOLOR_FORCE=1` in the child process env so lipgloss enables colors even when stdout is wrapped in `io.MultiWriter` (which the child sees as a pipe). Log tee via ansiStripper is unaffected.
+- [x] Verify that log file still receives ANSI-stripped output
+- [x] Write test verifying child process inherits real stdout (or env var is set)
+- [x] Run `make test` — must pass before next task
 
 ### Task 7: Add elapsed time to Done message (devbox-cli)
 - [ ] Add `startTime time.Time` field to `PlainReporter`
