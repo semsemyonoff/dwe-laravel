@@ -103,18 +103,18 @@ Replace the plain stdin-based confirm with a native Bubble Tea confirmation with
 ### Task 6: Fix log file output in TUI mode
 Ensure TUI mode log files match plain mode output (no escape sequences, no Bubble Tea frames).
 
-- [ ] Identify the issue: in TUI mode, `SuspendForExec()` releases terminal, child process writes to `io.MultiWriter(os.Stdout, logStripped)` — but reporter events (phase/step start/finish) are only rendered by Bubble Tea, never reaching the log writer
-- [ ] Add a `logWriter` field to `TUIReporter` — receives plain-text lifecycle events for the log file
-- [ ] In `TUIReporter.EnterPhase()`, write `Phase: <key>[: desc]` to logWriter (matching PlainReporter format)
-- [ ] In `TUIReporter.StartStep()`, write `[N/M] <addr>[: desc]` to logWriter
-- [ ] In `TUIReporter.FinishStep()`, write `[N/M] Done: <addr>` to logWriter
-- [ ] In `TUIReporter.SkipStep()`, write `[N/M] Skipped: <addr> (reason)` to logWriter
-- [ ] In `TUIReporter.FailStep()`, write error lines to logWriter
-- [ ] Update `NewTUIReporter()` to accept `logWriter io.Writer` parameter
-- [ ] Update `NewReporter()` factory and callers (deploy.go, reset.go) to pass `logFile` to TUI reporter
-- [ ] Write tests that verify logWriter receives plain-formatted output for each event
-- [ ] Write tests that logWriter receives no ANSI sequences
-- [ ] Run tests — must pass before next task
+- [x] Identify the issue: in TUI mode, `SuspendForExec()` releases terminal, child process writes to `io.MultiWriter(os.Stdout, logStripped)` — but reporter events (phase/step start/finish) are only rendered by Bubble Tea, never reaching the log writer
+- [x] Add a `logWriter` field to `TUIReporter` — receives plain-text lifecycle events for the log file
+- [x] In `TUIReporter.EnterPhase()`, write `Phase: <key>[: desc]` to logWriter (matching PlainReporter format)
+- [x] In `TUIReporter.StartStep()`, write `[N/M] <addr>[: desc]` to logWriter
+- [x] In `TUIReporter.FinishStep()`, write `[N/M] Done: <addr>` to logWriter
+- [x] In `TUIReporter.SkipStep()`, write `[N/M] Skipped: <addr> (reason)` to logWriter
+- [x] In `TUIReporter.FailStep()`, write error lines to logWriter
+- [x] Update `NewTUIReporter()` to accept `logWriter io.Writer` parameter
+- [x] Update `NewReporter()` factory and callers (deploy.go, reset.go) to pass `logFile` to TUI reporter
+- [x] Write tests that verify logWriter receives plain-formatted output for each event
+- [x] Write tests that logWriter receives no ANSI sequences
+- [x] Run tests — must pass before next task
 
 ### Task 7: Polish TUI view with Lipgloss styling
 Apply Lipgloss styles to TUI elements using colors from styles.yml for a polished look.
