@@ -103,8 +103,8 @@
 - [x] Run `make test` — must pass before next task
 
 ### Task 9: Remove `ui: plain` from deploy.yml config (next-laravel)
-- [ ] `devbox/deploy.yml`: remove `ui: plain` from post-deploy phase
-- [ ] Verify `untracked: true` remains on post-deploy phase (controls output suppression now)
+- [x] `devbox/deploy.yml`: remove `ui: plain` from post-deploy phase
+- [x] Verify `untracked: true` remains on post-deploy phase (controls output suppression now)
 
 ### Task 10: Move docs/reference/config/ to devbox-cli repo
 - [ ] Copy `docs/reference/config/` files into `devbox-cli/docs/reference/config/`
