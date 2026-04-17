@@ -76,13 +76,13 @@ Replace the custom ASCII progress bar with `bubbles/progress` and add elapsed ti
 ### Task 4: Show completed step history in TUI (plain-style formatting)
 Expand the recent steps display to show all completed/skipped/failed steps with plain-style formatting.
 
-- [ ] Remove `maxRecentSteps` cap — store all completed steps (pipelines are finite, typically <20 steps)
-- [ ] Update `tuiStepRecord` to include `index`, `total`, and `reason` (for skip reason display)
-- [ ] Update `View()` to render completed steps in plain-reporter style: `✓ [N/M] Done: addr`, `◎ [N/M] Skipped: addr (reason)`, `✗ [N/M] Failed: addr`
-- [ ] For untracked phase steps, display without index numbering or with separate visual treatment
-- [ ] Write tests for step record accumulation (no cap)
-- [ ] Write tests for View rendering of various step states with indices
-- [ ] Run tests — must pass before next task
+- [x] Remove `maxRecentSteps` cap — store all completed steps (pipelines are finite, typically <20 steps)
+- [x] Update `tuiStepRecord` to include `index`, `total`, and `reason` (for skip reason display)
+- [x] Update `View()` to render completed steps in plain-reporter style: `✓ [N/M] Done: addr`, `◎ [N/M] Skipped: addr (reason)`, `✗ [N/M] Failed: addr`
+- [x] For untracked phase steps, display without index numbering or with separate visual treatment
+- [x] Write tests for step record accumulation (no cap)
+- [x] Write tests for View rendering of various step states with indices
+- [x] Run tests — must pass before next task
 
 ### Task 5: Implement Bubble Tea confirmation model for TUI
 Replace the plain stdin-based confirm with a native Bubble Tea confirmation within the TUI.
