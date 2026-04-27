@@ -122,7 +122,7 @@ Dependencies identified:
 - [x] `cd devbox-cli && make test && make lint` — must pass before Task 3
 
 ### Task 3: Add a MultiSelect primitive in internal/ui
-- [ ] add `devbox-cli/internal/ui/multiselect.go`:
+- [x] add `devbox-cli/internal/ui/multiselect.go`:
   - `type MultiSelectItem struct { Key string; Label string; Description string; Locked bool; Selected bool }`
   - `type MultiSelectResult struct { Kept []string; Locked []string }` — caller decides what to render
   - `RunMultiSelect(title string, items []MultiSelectItem) (MultiSelectResult, error)` — pure data return, **no I/O side effects in this package**. `Kept` is the keys the user left checked; `Locked` is the keys of all locked items (always present, regardless of the form). `ErrCancelled` on user abort.
@@ -133,16 +133,16 @@ Dependencies identified:
     4. Run the form; on success return `MultiSelectResult{Kept: form-result, Locked: locked-keys}`
     5. On `huh.ErrUserAborted` (or context cancellation), return zero-value result and `ErrCancelled`
   - implementation via `huh.NewMultiSelect[string]().Options(...).Title(title).Value(&keys).WithTheme(Theme()).Run()`
-- [ ] inside `internal/ui`: add unexported `runMultiSelectFn` for `internal/ui`'s own tests to swap; expose an unexported helper `partitionMultiSelect(items) (locked, toggleable []MultiSelectItem)` for direct testing. **Cross-package fakes follow the wrapper-var pattern documented in "Test hook visibility" — `internal/command` will hold its own `runMultiSelect = ui.RunMultiSelect` so its tests can swap that local var.**
-- [ ] **command-side responsibility**: `services list` / `tools list` (Tasks 5–6) print the "Always on: ..." header line themselves using `render.Stdout()` and `ui.StyleMuted` / `ui.StyleSubheader`, based on `result.Locked`. `internal/ui` stays I/O-free at this primitive's level.
-- [ ] write tests `devbox-cli/internal/ui/multiselect_test.go`:
+- [x] inside `internal/ui`: add unexported `runMultiSelectFn` for `internal/ui`'s own tests to swap; expose an unexported helper `partitionMultiSelect(items) (locked, toggleable []MultiSelectItem)` for direct testing. **Cross-package fakes follow the wrapper-var pattern documented in "Test hook visibility" — `internal/command` will hold its own `runMultiSelect = ui.RunMultiSelect` so its tests can swap that local var.**
+- [x] **command-side responsibility**: `services list` / `tools list` (Tasks 5–6) print the "Always on: ..." header line themselves using `render.Stdout()` and `ui.StyleMuted` / `ui.StyleSubheader`, based on `result.Locked`. `internal/ui` stays I/O-free at this primitive's level.
+- [x] write tests `devbox-cli/internal/ui/multiselect_test.go`:
   - `partitionMultiSelect` keeps order within each partition
   - building options from `toggleable` preserves order and pre-checks `Selected: true` items
   - `result.Locked` is always populated regardless of the toggleable selection (drive `RunMultiSelect` via injected fake `runMultiSelectFn`)
   - "all locked" short-circuit returns `MultiSelectResult{Locked: ..., Kept: nil}` without calling the form
   - aborting (fake returns `ErrCancelled`) propagates `ErrCancelled` and returns the zero-value result
   - tests assert no writes to any `io.Writer` (the primitive does no printing)
-- [ ] `cd devbox-cli && make test && make lint` — must pass before Task 4
+- [x] `cd devbox-cli && make test && make lint` — must pass before Task 4
 
 ### Task 4: Add `services status` and `tools status` subcommands
 - [ ] in `devbox-cli/internal/command/service.go`: add `newServiceStatusCmd(flags)` that wires the existing `runServiceList` table renderer; register it via `cmd.AddCommand` in `newServiceCmd`
