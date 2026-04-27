@@ -175,16 +175,16 @@ Dependencies identified:
 - [x] `cd devbox-cli && make test && make lint` — must pass before Task 6
 
 ### Task 6: Repurpose `tools list` as interactive multi-toggle
-- [ ] mirror Task 5 for tools in `devbox-cli/internal/command/tool_toggle.go`:
+- [x] mirror Task 5 for tools in `devbox-cli/internal/command/tool_toggle.go`:
   - `diffToolSelection(rows []toolRow, kept []string) (toEnable, toDisable []string)` — tools have no mandatory concept, simpler diff
   - rewrite `newToolListCmd.RunE` using `ui.IsInteractiveFn(cmd.InOrStdin())` for the TTY/non-TTY split
   - batch `setToolEnabled` calls; regenerate `.env` once at the end (refactor `setToolEnabled` like `setServiceEnabled`)
-- [ ] update `Long`/`Example` of `tools list`
-- [ ] write tests `devbox-cli/internal/command/tool_toggle_test.go`:
+- [x] update `Long`/`Example` of `tools list`
+- [x] write tests `devbox-cli/internal/command/tool_toggle_test.go`:
   - `diffToolSelection` table-driven cases
   - command-level test swapping the package-local `runMultiSelect` wrapper + override of `ui.IsInteractiveFn`
   - non-TTY fallback prints the table
-- [ ] `cd devbox-cli && make test && make lint` — must pass before Task 7
+- [x] `cd devbox-cli && make test && make lint` — must pass before Task 7
 
 ### Task 7: Replace confirmations with huh.NewConfirm
 - [ ] **plumb stdin through the contexts** (prerequisite for clean fallback testing):
