@@ -236,11 +236,11 @@ Dependencies identified:
 - [x] `cd devbox-cli && make test && make lint` — must pass before Task 8
 
 ### Task 8: Remove dead code and tighten imports
-- [ ] grep `devbox-cli/` for `selectorModel`, `prevSelectable`, `nextSelectable`, `initialCursor`, `styleSelectorAccent`, `styleSelectorMuted`, `styleSelectorEnabled`, `styleSelectorHint` — must be 0 results
-- [ ] run `go mod tidy` and verify the `require` block is minimal; if `charm.land/bubbletea/v2` is now only transitive, drop the explicit line and leave it in the indirect block
-- [ ] confirm `internal/ui` no longer imports `charm.land/bubbletea/v2` directly
-- [ ] re-verify the existing test suite still passes (no test file touches removed symbols)
-- [ ] `cd devbox-cli && make test && make lint`
+- [x] grep `devbox-cli/` for `selectorModel`, `prevSelectable`, `nextSelectable`, `initialCursor`, `styleSelectorAccent`, `styleSelectorMuted`, `styleSelectorEnabled`, `styleSelectorHint` — must be 0 results
+- [x] run `go mod tidy` and verify the `require` block is minimal; if `charm.land/bubbletea/v2` is now only transitive, drop the explicit line and leave it in the indirect block
+- [x] confirm `internal/ui` no longer imports `charm.land/bubbletea/v2` directly
+- [x] re-verify the existing test suite still passes (no test file touches removed symbols)
+- [x] `cd devbox-cli && make test && make lint`
 
 ### Task 9: Documentation and reference regeneration
 - [ ] update root `CLAUDE.md`:
