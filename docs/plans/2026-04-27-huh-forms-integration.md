@@ -145,14 +145,14 @@ Dependencies identified:
 - [x] `cd devbox-cli && make test && make lint` — must pass before Task 4
 
 ### Task 4: Add `services status` and `tools status` subcommands
-- [ ] in `devbox-cli/internal/command/service.go`: add `newServiceStatusCmd(flags)` that wires the existing `runServiceList` table renderer; register it via `cmd.AddCommand` in `newServiceCmd`
-- [ ] in `devbox-cli/internal/command/tools.go`: add `newToolStatusCmd(flags)` that wires `runToolList`; register in `newToolCmd`
-- [ ] update `Long`/`Example` strings of the parent `services` / `tools` commands to mention `status`
-- [ ] keep `list` behavior unchanged in this task — repurposing happens in Tasks 5–6
-- [ ] write tests:
+- [x] in `devbox-cli/internal/command/service.go`: add `newServiceStatusCmd(flags)` that wires the existing `runServiceList` table renderer; register it via `cmd.AddCommand` in `newServiceCmd`
+- [x] in `devbox-cli/internal/command/tools.go`: add `newToolStatusCmd(flags)` that wires `runToolList`; register in `newToolCmd`
+- [x] update `Long`/`Example` strings of the parent `services` / `tools` commands to mention `status`
+- [x] keep `list` behavior unchanged in this task — repurposing happens in Tasks 5–6
+- [x] write tests:
   - `devbox-cli/internal/command/services_test.go`: `services status` prints the same output `services list` currently produces (use existing test helpers for the table)
   - `devbox-cli/internal/command/tools_test.go`: same for `tools status`
-- [ ] `cd devbox-cli && make test && make lint` — must pass before Task 5
+- [x] `cd devbox-cli && make test && make lint` — must pass before Task 5
 
 ### Task 5: Repurpose `services list` as interactive multi-toggle
 - [ ] add `devbox-cli/internal/command/service_toggle.go` (new file) with the pure logic:
