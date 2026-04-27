@@ -23,7 +23,7 @@ The project exists to solve the "Make-as-DSL" problem in the legacy devbox, wher
 - CLI is the single control plane for Docker Compose. `devbox docker` is the public lifecycle API; `devbox compose` is the low-level diagnostic layer. No direct `docker compose` calls in Makefiles, YAML commands, or deploy steps.
 - Keep packages focused: `config` (loading/merging), `render` (ANSI output), `ui` (Lipgloss styled output), `tpl` (templates), `command` (cobra wiring), `docker` (compose execution), `version` (version vars).
 - Errors bubble up with `fmt.Errorf` wrapping. Root command catches and renders them via `render.Stdout().Error()`.
-- Minimal dependencies. Current set: cobra, yaml.v3, go-figure, fang, lipgloss, bubbletea (interactive selectors), bubbles (list/spinner components for interactive selectors). Do not add dependencies without strong justification.
+- Minimal dependencies. Current set: cobra, yaml.v3, go-figure, fang, lipgloss, huh (interactive forms), bubbletea (transitive via huh). Do not add dependencies without strong justification.
 - Styled user-facing output (info dashboard, root summary) lives in the `ui` package (Lipgloss). Plain passthrough output (deploy, docker logs, compose raw) stays in the `render` package. Make recipes must not produce styled output directly — they call CLI print subcommands via macros.
 - Interactive terminal selectors (service/tool/command pickers) are implemented in `internal/ui/` using huh. Use `RunSelector(title, items)` for single-pick, `RunMultiSelect(title, items)` for multi-toggle, `RunConfirm(title, affirmative, negative)` for confirmations; do not inline huh forms in command packages. Non-TTY callers always receive table output or stdin Y/n fallback — huh forms are never shown in non-interactive contexts.
 
@@ -159,6 +159,7 @@ cd devbox-cli && make lint    # golangci-lint
 - All `text`/`value`/`when` fields in `info.yml` support Go template expressions against `DevboxConfig`
 - Errors bubble up with `fmt.Errorf` wrapping; root command silences cobra errors and renders via `render.Stdout().Error()`
 - `devbox shell` resolves options with three-tier priority: CLI flags (highest) → `ServiceCLIConfig` from `devbox/services.yml` → built-in defaults (mode=auto, shell=bash, user=current UID). `--root` is highest-priority for user, mutually exclusive with `--user`. `--env KEY=VALUE` overrides matching keys from `cli.env` config.
+- Confirmation routing (builtin `confirm` step and workflow confirm steps): four-way dispatch — (1) `SkipConfirm` flag set → no-op; (2) `ConfirmFunc` injected → callback (tests); (3) `ui.IsInteractiveFn(stdin)` true → `ui.RunConfirm` (huh TTY form, `ErrCancelled` on Esc maps to "aborted by user"); (4) otherwise → plain stdin Y/n fallback (CI/pipe). `ExecContext.Stdin` and `RunContext.Stdin` override `os.Stdin` for tests.
 
 ## Config model
 
