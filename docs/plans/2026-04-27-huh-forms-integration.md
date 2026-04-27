@@ -243,16 +243,16 @@ Dependencies identified:
 - [x] `cd devbox-cli && make test && make lint`
 
 ### Task 9: Documentation and reference regeneration
-- [ ] update root `CLAUDE.md`:
+- [x] update root `CLAUDE.md`:
   - add Phase 7 entry under "Migration phases" describing huh integration
   - add `charm.land/huh/v2` to the dependency list under "devbox-cli → Dependencies"
   - update the `internal/ui` description to list `RunSelector`, `RunMultiSelect`, `RunConfirm` (huh-backed) and `Theme()` accessor
   - update the `services` / `tools` command bullets to mention `status` and the new interactive `list`
   - reflect that `render.Writer.Confirm` is now a non-TTY fallback only
-- [ ] **rebuild the binary first**: `cd devbox-cli && make build` — produces `../bin/devbox` reflecting the new commands (`status`) and updated `Long`/`Example` text. Without this step `docs generate` would emit reference for the previous binary.
-- [ ] regenerate CLI reference: `./bin/devbox docs generate` (run from repo root)
-- [ ] inspect diff of `docs/reference/cli/devbox_services*.md` and `docs/reference/cli/devbox_tools*.md` (note: filenames are `devbox_*` prefixed, matching cobra's default naming — verified against the existing files in `docs/reference/cli/`); commit the regenerated files
-- [ ] no test changes expected — running `make test && make lint` must still pass
+- [x] **rebuild the binary first**: `cd devbox-cli && make build` — produces `../bin/devbox` reflecting the new commands (`status`) and updated `Long`/`Example` text. Without this step `docs generate` would emit reference for the previous binary.
+- [x] regenerate CLI reference: `./bin/devbox docs generate` (run from repo root)
+- [x] inspect diff of `docs/reference/cli/devbox_services*.md` and `docs/reference/cli/devbox_tools*.md` (note: filenames are `devbox_*` prefixed, matching cobra's default naming — verified against the existing files in `docs/reference/cli/`); commit the regenerated files
+- [x] no test changes expected — running `make test && make lint` must still pass
 
 ### Task 10: Verify acceptance criteria
 - [ ] verify all four user goals from Overview are met (Select for enable/disable, status subcommand, MultiSelect for list, Confirm for confirmations)

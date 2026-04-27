@@ -25,7 +25,7 @@ The project exists to solve the "Make-as-DSL" problem in the legacy devbox, wher
 - Errors bubble up with `fmt.Errorf` wrapping. Root command catches and renders them via `render.Stdout().Error()`.
 - Minimal dependencies. Current set: cobra, yaml.v3, go-figure, fang, lipgloss, bubbletea (interactive selectors), bubbles (list/spinner components for interactive selectors). Do not add dependencies without strong justification.
 - Styled user-facing output (info dashboard, root summary) lives in the `ui` package (Lipgloss). Plain passthrough output (deploy, docker logs, compose raw) stays in the `render` package. Make recipes must not produce styled output directly — they call CLI print subcommands via macros.
-- Interactive terminal selectors (service/tool/command pickers) are implemented in `internal/ui/selector.go` using bubbletea. Use `RunSelector(title, items)` for any new picker; do not inline bubbletea models in command packages.
+- Interactive terminal selectors (service/tool/command pickers) are implemented in `internal/ui/` using huh. Use `RunSelector(title, items)` for single-pick, `RunMultiSelect(title, items)` for multi-toggle, `RunConfirm(title, affirmative, negative)` for confirmations; do not inline huh forms in command packages. Non-TTY callers always receive table output or stdin Y/n fallback — huh forms are never shown in non-interactive contexts.
 
 ### Config
 - Three layers merged in strict order: `devbox.yml` (structure) → `devbox/defaults.yml` (versioned defaults) → `devbox/local.yml` (gitignored user overrides). Later wins, maps merge recursively.
@@ -126,8 +126,8 @@ cd devbox-cli && make lint    # golangci-lint
 - `internal/version/` — `Version`, `Commit`, `Date`, `BuiltBy` vars; `Info()` formatter; injected via `-ldflags -X` at build time
 - `internal/config/` — `DevboxConfig` struct, layered `LoadConfig()`, `LoadDeployConfig()`, `LoadDockerConfig()`, `ResolvePath()`, `ExportRule`, `ComposeConfig`, `DockerConfig`, `DeployConfig`, `IDEConfig`, `InfoConfig` (renamed from `HelpConfig`), `LoadInfoConfig()`, `StylesConfig`, `LoadStylesConfig()`
 - `internal/docker/` — `Compose` struct for building and executing `docker compose` commands with policy args
-- `internal/render/` — `Writer` with ANSI output methods (Success, Error, Warning, Info, Definition, TableHeader, ASCII art); plain passthrough for logs/deploy output
-- `internal/ui/` — Lipgloss styled output: `RenderSummary(cfg)` for compact root summary, `RenderInfo(cfg, infoCfg)` for full info dashboard, `RenderServiceTable()` and `RenderToolTable()` for Lipgloss tables, `RenderTopology()` for dependency tree; `ApplyStyles(stylesCfg)` to hot-apply palette from `styles.yml`; terminal width detection; `RunSelector(title, items)` for interactive bubbletea list selectors (service/tool/command pickers)
+- `internal/render/` — `Writer` with ANSI output methods (Success, Error, Warning, Info, Definition, TableHeader, ASCII art); plain passthrough for logs/deploy output; `Writer.Confirm` is the documented non-TTY fallback for Y/n prompts (piped stdin, CI)
+- `internal/ui/` — Lipgloss styled output: `RenderSummary(cfg)` for compact root summary, `RenderInfo(cfg, infoCfg)` for full info dashboard, `RenderServiceTable()` and `RenderToolTable()` for Lipgloss tables, `RenderTopology()` for dependency tree; `ApplyStyles(stylesCfg)` to hot-apply palette from `styles.yml` (also rebuilds the huh theme); terminal width detection; huh-backed interactive primitives: `RunSelector(title, items)` (single-pick), `RunMultiSelect(title, items)` (multi-toggle), `RunConfirm(title, affirmative, negative)` (confirmation); `Theme()` accessor for the project-palette `huh.Theme`; `IsInteractiveFn(stdin)` TTY-detection helper used by all interactive callers
 - `internal/tpl/` — Go template engine with `Render()`, `EvalCondition()`, custom `FuncMap` (`appURL`)
 - `internal/builtin/` — builtin step registry: `Builtin` interface (`Validate`, `Describe`, `Run`), `ExecContext` carrier; registered builtins: `configs_copy`, `confirm`, `volumes_create`, `service_dirs_ensure` (creates service hub dirs with skip/error/recreate modes), `message` (outputs text at info/success/warning/error level with Go template support)
 - `internal/pipeline/` — deploy/reset reporter abstraction: `Reporter` interface (StartPipeline, EnterPhase, SkipPhase, StartStep, SkipStep, FinishStep, FailStep, FinishPipeline, SuspendForExec, ResumeAfterExec); `PlainReporter` — the sole reporter; outputs icons (✓ ✗ ◎ ·), suppresses untracked phase output, prints elapsed time in `FinishPipeline`
@@ -136,7 +136,7 @@ cd devbox-cli && make lint    # golangci-lint
   - Root: `devbox` (no args) shows ASCII header + compact summary + help
   - Core: `info` (styled dashboard), `version`
   - Environment: `up`, `down`, `stop`, `restart`, `logs`, `ps`, `wait`, `shell [service]`, `status`
-  - Configuration: `services {list,enable,disable}`, `tools {list,enable,disable}`, `render {env,ide}`
+  - Configuration: `services {list,status,enable,disable}`, `tools {list,status,enable,disable}`, `render {env,ide}` — `list` is an interactive huh.MultiSelect toggle (TTY) or table (non-TTY); `status` prints the read-only table always; `enable`/`disable` use huh.Select to pick a target when no arg is given
   - Pipelines: `deploy {plan,run,step,config}`, `reset {plan,run,step,config}`
   - Advanced: `commands {list,inspect,run}`, `docker {up,down,stop,restart,logs,ps,exec,run,wait,project-name}`, `compose {files,argv,raw}`, `docs generate`
   - Internal (hidden): `print {success,warning,info,error}` (Make macro compatibility)
@@ -148,7 +148,8 @@ cd devbox-cli && make lint    # golangci-lint
 - `github.com/common-nighthawk/go-figure` — ASCII art
 - `charm.land/fang/v2` — styled help/errors, Fang Execute wrapper
 - `charm.land/lipgloss/v2` — terminal styling for `internal/ui`
-- `charm.land/bubbletea/v2` — interactive terminal selectors (service/tool/command pickers in `internal/ui`)
+- `charm.land/bubbletea/v2` — terminal UI runtime (transitive via huh)
+- `charm.land/huh/v2` — interactive forms: huh.Select (single-pick), huh.MultiSelect (multi-toggle), huh.Confirm (Y/n); all styled via project palette theme
 
 ### Key patterns
 
@@ -226,6 +227,7 @@ This repo is a pilot for migrating from the legacy devbox (Make-as-DSL) to a dec
 4. **Phase 4 — Commands System** (done): Declarative YAML command definitions in `devbox/commands/`. Six command types: `command`, `devbox`, `script`, `service_exec`, `service_run`, `workflow`. Deploy steps reference commands by ID. Make reduced to lifecycle targets only (`up`, `down`, `stop`, `restart`, `logs`, `deploy`, `deploy-reset`). `make/compose.mk`, `make/service.mk`, `make/deploy.mk` removed.
 5. **Phase 5 — Docker Control Plane** (done): `devbox docker` is the single compose execution layer. Docker policy in `devbox/docker.yml`. Make lifecycle targets delegate to `devbox docker`. No direct `docker compose` calls in YAML commands or deploy steps. `devbox compose` retained as diagnostic layer (files/argv/raw).
 6. **Phase 6 — CLI UX Refactor** (done): Restructured devbox-cli into the primary user interface. Added `internal/ui` (Lipgloss) for styled output and `internal/version` for version injection. Fang integration for styled help/errors. `devbox` (no args) shows ASCII header + compact summary + help; `devbox info` is the full styled dashboard from `devbox/info.yml` (renamed from `help.yml`). Lifecycle commands promoted to root level (`devbox up`, `devbox down`, etc.). Added `devbox shell`, `devbox status`, `devbox version`, `devbox completion`, `devbox docs generate`. Command group renamed `command` → `commands`.
+7. **Phase 7 — Forms with huh** (done): Replaced bubbletea-based interactive selector and stdin Y/n confirmations with `charm.land/huh/v2` primitives. `services list` / `tools list` are now interactive `huh.MultiSelect` toggles (mandatory services filtered out, not shown in the form); `status` subcommand added to both groups for the previous read-only table view. `services enable` / `tools disable` (and their counterparts) use `huh.Select` for picking a target when no arg is given. Deploy/reset confirmations use `huh.Confirm` on TTY, falling back to `render.Writer.Confirm` (stdin Y/n) on piped input or CI. All huh widgets share the project palette via `Theme()` accessor (rebuilt on `ApplyStyles`). Non-TTY callers are unaffected.
 
 ### Success criteria
 

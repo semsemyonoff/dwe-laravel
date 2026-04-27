@@ -37,7 +37,7 @@ Generated reference for the `devbox` command tree.
 - [devbox docs](devbox_docs.md) — Generate documentation for devbox commands
   - [devbox docs generate](devbox_docs_generate.md) — Generate reference documentation
 - [devbox down](devbox_down.md) — Stop and remove compose services
-- [devbox info](devbox_info.md) — Display project info, URLs, credentials and available commands
+- [devbox info](devbox_info.md) — Display project info dashboard (URLs, hosts, services, tools)
 - [devbox logs](devbox_logs.md) — View compose service logs
 - [devbox ps](devbox_ps.md) — List compose containers
 - [devbox render](devbox_render.md) — Render derived artifacts from the merged devbox config
@@ -53,14 +53,16 @@ Generated reference for the `devbox` command tree.
 - [devbox services](devbox_services.md) — Manage application services
   - [devbox services disable](devbox_services_disable.md) — Disable an optional service (writes to devbox/local.yml)
   - [devbox services enable](devbox_services_enable.md) — Enable an optional service (writes to devbox/local.yml)
-  - [devbox services list](devbox_services_list.md) — List all services and their status
+  - [devbox services list](devbox_services_list.md) — Toggle services interactively (TTY) or show status table (non-TTY)
+  - [devbox services status](devbox_services_status.md) — Show all services and their current state (read-only table)
 - [devbox shell](devbox_shell.md) — Open a shell in a service container
 - [devbox status](devbox_status.md) — Show stack health and services/tools status
 - [devbox stop](devbox_stop.md) — Stop compose services without removing them
 - [devbox tools](devbox_tools.md) — Manage optional tools
   - [devbox tools disable](devbox_tools_disable.md) — Disable an optional tool (writes to devbox/local.yml)
   - [devbox tools enable](devbox_tools_enable.md) — Enable an optional tool (writes to devbox/local.yml)
-  - [devbox tools list](devbox_tools_list.md) — List all tools and their status
+  - [devbox tools list](devbox_tools_list.md) — Toggle tools interactively (TTY) or show status table (non-TTY)
+  - [devbox tools status](devbox_tools_status.md) — Show all tools and their current state (read-only table)
 - [devbox up](devbox_up.md) — Start compose services
 - [devbox version](devbox_version.md) — Print version information
 - [devbox wait](devbox_wait.md) — Wait for all compose containers to become healthy
