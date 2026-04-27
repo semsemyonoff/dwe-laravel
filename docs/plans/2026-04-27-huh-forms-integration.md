@@ -155,11 +155,11 @@ Dependencies identified:
 - [x] `cd devbox-cli && make test && make lint` — must pass before Task 5
 
 ### Task 5: Repurpose `services list` as interactive multi-toggle
-- [ ] add `devbox-cli/internal/command/service_toggle.go` (new file) with the pure logic:
+- [x] add `devbox-cli/internal/command/service_toggle.go` (new file) with the pure logic:
   - `func diffServiceSelection(rows []serviceRow, kept []string) (toEnable, toDisable []string)` — given current rows and the keys returned by the multi-select, compute lists, ignoring mandatory rows
   - reuse `ui.IsInteractiveFn(cmd.InOrStdin())` for the TTY check (the multi-select form needs both interactive stdin and stdout, same as confirm)
   - **add an unexported package-level wrapper** `var runMultiSelect = ui.RunMultiSelect` so `internal/command/*_test.go` files can swap in fakes (cross-package fakes can't reach `internal/ui`'s unexported vars). All call sites in `service.go` / `tools.go` use `runMultiSelect(...)` instead of `ui.RunMultiSelect(...)` directly.
-- [ ] rewrite the `RunE` of `newServiceListCmd`:
+- [x] rewrite the `RunE` of `newServiceListCmd`:
   - if `!ui.IsInteractiveFn(cmd.InOrStdin())` → call `runServiceList` (table) — non-TTY fallback (decision recorded). This also covers piped stdin: `devbox services list < /dev/null` prints the table and exits without entering the form.
   - else: build `[]ui.MultiSelectItem` from `buildServiceRows(cfg)` with `Locked: row.Mandatory`, `Selected: row.Enabled` (mandatory items have `Locked: true` so `Selected` is irrelevant — they are filtered out of the form by `RunMultiSelect`), `Description: row.Container`
   - **before** invoking the form, if `result.Locked` would be non-empty (i.e. there are mandatory services), print the "Always on: nginx, db, redis" header line using `render.Stdout()` + `ui.StyleSubheader("Always on: ")` + `ui.StyleMuted(strings.Join(lockedKeys, ", "))`. (Compute the locked keys via `partitionMultiSelect` exposed from `ui`, or just by filtering the rows here.)
@@ -167,12 +167,12 @@ Dependencies identified:
   - `result.Kept` is the toggleable subset the user left checked; mandatory rows are not in `Kept` — they are reported back via `result.Locked` for the header but are never inputs to the diff. `diffServiceSelection(rows, result.Kept)` filters mandatory rows defensively.
   - call `diffServiceSelection`, then for each name call `setServiceEnabledNoRegen(...)`; print a one-line summary (e.g. `enabled: a, b; disabled: c`) via `render.Stdout()`; finally call `regenEnv` once
   - regenerate `.env` once at the end (currently `setServiceEnabled` calls `regenEnv` per change — refactor to skip the per-call regen and do it once after the batch; keep `setServiceEnabled` semantically intact for `enable`/`disable` callers via an optional flag like `setServiceEnabled(... , skipRegen bool)`)
-- [ ] update `Long`/`Example` strings of `services list` to describe the new interactive behavior; mention non-TTY fallback prints the table
-- [ ] write tests `devbox-cli/internal/command/service_toggle_test.go`:
+- [x] update `Long`/`Example` strings of `services list` to describe the new interactive behavior; mention non-TTY fallback prints the table
+- [x] write tests `devbox-cli/internal/command/service_toggle_test.go`:
   - `diffServiceSelection` table-driven cases: nothing changed; one enabled; one disabled; mandatory included in `kept` is a no-op; mandatory missing from `kept` is also a no-op (never disabled)
   - command-level test swapping the package-local `runMultiSelect` wrapper var (and overriding `ui.IsInteractiveFn`) to verify enable/disable side effects on a temp `local.yml`
   - non-TTY test: `ui.IsInteractiveFn` returns false → prints the table, no writes to `local.yml`
-- [ ] `cd devbox-cli && make test && make lint` — must pass before Task 6
+- [x] `cd devbox-cli && make test && make lint` — must pass before Task 6
 
 ### Task 6: Repurpose `tools list` as interactive multi-toggle
 - [ ] mirror Task 5 for tools in `devbox-cli/internal/command/tool_toggle.go`:
