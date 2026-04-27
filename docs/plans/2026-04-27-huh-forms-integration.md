@@ -187,11 +187,11 @@ Dependencies identified:
 - [x] `cd devbox-cli && make test && make lint` — must pass before Task 7
 
 ### Task 7: Replace confirmations with huh.NewConfirm
-- [ ] **plumb stdin through the contexts** (prerequisite for clean fallback testing):
+- [x] **plumb stdin through the contexts** (prerequisite for clean fallback testing):
   - `devbox-cli/internal/builtin/builtin.go`: add `Stdin io.Reader` to `ExecContext` (default `os.Stdin` at the call site if nil)
   - `devbox-cli/internal/commands/runner.go`: add `Stdin io.Reader` to `RunContext` (default `os.Stdin` at the runner entry point if nil)
   - update every place that constructs an `ExecContext` or `RunContext` to pass stdin (deploy/reset pipelines, command runner, tests). Most call sites can simply assign `os.Stdin`; tests will pass `bytes.NewBufferString("y\n")` etc.
-- [ ] add `devbox-cli/internal/ui/confirm.go`:
+- [x] add `devbox-cli/internal/ui/confirm.go`:
   - `RunConfirm(title, affirmative, negative string) (bool, error)` — returns the user's choice; `ErrCancelled` on Esc/Ctrl-C
   - unexported `runConfirmFn` for `internal/ui`'s own tests; cross-package fakes use the wrapper-var pattern (each consumer package adds its own `var runConfirm = ui.RunConfirm`)
   - small interactivity helper exported for reuse from `builtin` and `commands`:
@@ -206,13 +206,13 @@ Dependencies identified:
     }
     ```
     Defined once in `ui`; callers pass `ctx.Stdin` (or `cmd.InOrStdin()`) so a piped stdin correctly routes to the stdin Y/n fallback.
-- [ ] update `devbox-cli/internal/builtin/confirm.go`:
+- [x] update `devbox-cli/internal/builtin/confirm.go`:
   - add unexported wrapper `var runConfirm = ui.RunConfirm` at package scope so tests in `internal/builtin` can swap it
   - if `ctx.SkipConfirm` → no-op (unchanged)
   - if `ctx.ConfirmFunc != nil` → use the injected callback (unchanged — tests rely on this)
   - else if `ui.IsInteractiveFn(ctx.Stdin)` → call `runConfirm(msg, okMsg, stopMsg)`
   - else → fall back to `ctx.Output.Confirm(msg, ctx.Stdin)` (replace the current `os.Stdin` literal with `ctx.Stdin`; if nil, default to `os.Stdin` inside `Run`). `ctx.Output` is `*render.Writer` (already a field on `ExecContext`) so this path stays as-is.
-- [ ] update `devbox-cli/internal/commands/runner_workflow.go::runConfirm`:
+- [x] update `devbox-cli/internal/commands/runner_workflow.go::runConfirm`:
   - **`RunContext` does not have an `Output` field** (verified — `runner.go` only has `Stdout io.Writer` and `Stderr io.Writer`). The current implementation uses `bufio.NewScanner(os.Stdin)` directly with custom `[y/N]` logic and prints via `stdout(ctx)`.
   - replace direct `os.Stdin` usage with `ctx.Stdin` (default to `os.Stdin` if nil)
   - add unexported wrapper `var runConfirm = ui.RunConfirm` at package scope for test injection
@@ -221,11 +221,11 @@ Dependencies identified:
     - else if `ui.IsInteractiveFn(ctx.Stdin)` → call `runConfirm(message, "Yes", "No")` and return error if it returned false (the workflow's existing semantics: false = abort with error)
     - else → use the existing `bufio.Scanner` over `ctx.Stdin` (or wrap it via `render.NewWriter(stdout(ctx)).Confirm(message, ctx.Stdin)` if you want to consolidate on `render.Writer.Confirm` for consistency with the builtin path; pick one and document the choice)
   - the existing `step.Confirm` is just a `string` message, so map it as `runConfirm(message, "Yes", "No")` — the affirmative/negative labels are static here
-- [ ] update `devbox-cli/internal/command/print.go::Confirm` (the `devbox print confirm` subcommand):
+- [x] update `devbox-cli/internal/command/print.go::Confirm` (the `devbox print confirm` subcommand):
   - the `command` package already declares `runConfirm = ui.RunConfirm` (added during Task 5/6 if needed; otherwise add it here)
-  - branch the same way: `ui.IsInteractiveFn(cmd.InOrStdin())` → call `runConfirm(message, "Yes", "No")`; else `render.Stdout().Confirm(message, cmd.InOrStdin())` (replace the current `os.Stdin` literal at `print.go:101`)
-- [ ] keep `render.Writer.Confirm` — it stays as the documented non-TTY fallback. Add a one-line Go doc comment recording that intent.
-- [ ] write tests:
+  - branch the same way: `ui.IsInteractiveFn(cmd.InOrStdin())` → call `runConfirm(message, "Yes", "No")`; else `render.NewWriter(cmd.OutOrStdout()).Confirm(message, cmd.InOrStdin())` (replaced the current `os.Stdin` literal; also switched to `cmd.OutOrStdout()` for testability)
+- [x] keep `render.Writer.Confirm` — it stays as the documented non-TTY fallback. Add a one-line Go doc comment recording that intent.
+- [x] write tests:
   - `confirm_test.go` (builtin): four paths —
     1. `ConfirmFunc` injected (existing test, still passes)
     2. TTY: swap the package-local `runConfirm` wrapper with a fake returning true/false; verify return value and error
@@ -233,7 +233,7 @@ Dependencies identified:
     4. piped-stdin-but-tty-stdout: `ui.IsInteractiveFn` returns false because stdin is a `bytes.Buffer` (not a TTY) — covers the `echo y | devbox reset run` case from the smoke checklist
   - `runner_workflow_test.go`: cover both TTY and non-TTY branches by swapping the package-local `runConfirm` wrapper and injecting `RunContext.Stdin`
   - `print_test.go`: cover both branches by swapping the `command` package's `runConfirm` wrapper and using `cmd.SetIn(...)`
-- [ ] `cd devbox-cli && make test && make lint` — must pass before Task 8
+- [x] `cd devbox-cli && make test && make lint` — must pass before Task 8
 
 ### Task 8: Remove dead code and tighten imports
 - [ ] grep `devbox-cli/` for `selectorModel`, `prevSelectable`, `nextSelectable`, `initialCursor`, `styleSelectorAccent`, `styleSelectorMuted`, `styleSelectorEnabled`, `styleSelectorHint` — must be 0 results
