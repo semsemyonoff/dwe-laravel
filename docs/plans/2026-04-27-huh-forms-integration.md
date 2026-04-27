@@ -105,21 +105,21 @@ Dependencies identified:
 ⚠️ Note: huh v2's exact `*huh.Styles` field layout (subgroups like `Focused`, `Blurred`, `Group`, etc.) must be inspected from the installed module — the surface differs from huh v1. If a planned palette mapping is impossible without writing a full custom `Theme` implementation, prefer extending `paletteTheme` to override only the methods that need it rather than adding YAML keys. Record the final mapping in `huh.go`.
 
 ### Task 2: Replace RunSelector internals with huh.Select
-- [ ] rewrite `devbox-cli/internal/ui/selector.go`:
+- [x] rewrite `devbox-cli/internal/ui/selector.go`:
   - keep public surface: `SelectorItem`, `ErrCancelled`, `RunSelector(title string, items []SelectorItem) (int, error)`
   - **remove the `Disabled bool` field from `SelectorItem`** — verified by grep: no production caller sets it (only old selector tests). huh v2 `huh.NewOption` exposes only `Selected` and `String`, so there is no per-option disable to map onto. Removing the field eliminates the impossible mapping and shrinks the public surface.
   - implement via `huh.NewSelect[int]().Options(...).Title(title).WithTheme(Theme()).Value(&idx).Run()`, where each option's value is the original index in `items`. The selected `idx` is returned directly to satisfy the existing index-returning contract.
   - map `SelectorItem.Status` (`"enabled"`/`"disabled"`/free text) onto the option's description text using the existing icon mapping (✓ for "enabled", ○ for "disabled", literal text otherwise)
   - empty `items` → return `(-1, fmt.Errorf("selector: no items to display"))` (preserve the current error from `selector.go:162`)
   - return `ErrCancelled` on Esc/Ctrl-C (huh returns `huh.ErrUserAborted` — translate; also accept `tea.ErrInterrupted` if it surfaces)
-- [ ] delete the now-unused `selectorModel`, `prevSelectable`, `nextSelectable`, `initialCursor`, and the bubbletea-specific style vars (`styleSelectorAccent` etc.)
-- [ ] adjust `devbox-cli/internal/ui/selector_test.go`:
+- [x] delete the now-unused `selectorModel`, `prevSelectable`, `nextSelectable`, `initialCursor`, and the bubbletea-specific style vars (`styleSelectorAccent` etc.)
+- [x] adjust `devbox-cli/internal/ui/selector_test.go`:
   - drop tests that pin bubbletea behavior (cursor wrap, key handling on the model, `Disabled`-aware tests at lines 146-187, 255-273)
   - keep tests that exercise the public `RunSelector` contract via an exported test hook (see "test hook visibility" below)
   - verify mapping of `SelectorItem` → option label/description and `huh.ErrUserAborted` → `ErrCancelled`
-- [ ] run `go mod tidy` in `devbox-cli/`; if `charm.land/bubbletea/v2` is no longer a direct dep, remove the explicit `require` line; otherwise leave it
-- [ ] verify `service.go`, `tools.go`, `command_cmd.go`, `shell.go` still compile and their existing tests pass
-- [ ] `cd devbox-cli && make test && make lint` — must pass before Task 3
+- [x] run `go mod tidy` in `devbox-cli/`; if `charm.land/bubbletea/v2` is no longer a direct dep, remove the explicit `require` line; otherwise leave it
+- [x] verify `service.go`, `tools.go`, `command_cmd.go`, `shell.go` still compile and their existing tests pass
+- [x] `cd devbox-cli && make test && make lint` — must pass before Task 3
 
 ### Task 3: Add a MultiSelect primitive in internal/ui
 - [ ] add `devbox-cli/internal/ui/multiselect.go`:
