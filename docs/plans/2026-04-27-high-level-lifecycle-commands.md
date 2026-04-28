@@ -100,30 +100,30 @@ The lifecycle pipelines are executed by the existing pipeline executor (`runPipe
 - [x] run `cd devbox-cli && make test && make lint` — must pass before next task
 
 ### Task 3: Add LifecycleConfig schema and loader
-- [ ] in `devbox-cli/internal/config/devbox.go`, add types:
+- [x] in `devbox-cli/internal/config/devbox.go`, add types:
   - `LifecycleConfig{ Run *LifecycleRunConfig; Stop *LifecycleStopConfig }`
   - `LifecycleRunConfig{ Update *LifecycleUpdate; ShowInfo bool; FinalMessage string; Phases []DeployPhase }` — note: `Update` is a **pointer** so we can distinguish "block omitted" (`nil`) from "block present with defaults"
   - `LifecycleStopConfig{ FinalMessage string; Phases []DeployPhase }`
   - `LifecycleUpdate{ Enabled *bool; Mode string; Strategy string }` — `Enabled` is `*bool` so absent (`nil`) is distinguishable from explicit `false`. `Mode` ∈ {`prompt`, `auto`, `check`, `off`}; `Strategy` defaults to `ff-only`
-- [ ] schema-presence rule (encoded in `LoadLifecycleConfig`):
+- [x] schema-presence rule (encoded in `LoadLifecycleConfig`):
   - if the `update:` block is **omitted entirely** → `Run.Update` stays `nil` → effective mode is `off` (i.e., user must explicitly opt in to the probe)
   - if the `update:` block is **present** but `enabled:` is omitted → `Update.Enabled` is set to `&true` at load time (writing `update:` is itself the opt-in)
   - if `enabled: false` is set explicitly → effective mode `off`, even if `mode:` is set
-- [ ] add a method `func (cfg *LifecycleRunConfig) EffectiveMode() string` that resolves the precedence rule **before any CLI flag is applied**:
+- [x] add a method `func (cfg *LifecycleRunConfig) EffectiveMode() string` that resolves the precedence rule **before any CLI flag is applied**:
   - if `cfg.Update == nil` → returns `"off"`
   - if `cfg.Update.Enabled == nil` → defensive: treat as `"off"` (loader is responsible for setting it; this branch only fires if a caller bypasses the loader)
   - if `*cfg.Update.Enabled == false` → returns `"off"`
   - if `*cfg.Update.Enabled == true` and `Mode` is empty → returns `"prompt"` (default within an opted-in block)
   - if `*cfg.Update.Enabled == true` and `Mode` is set → returns `Mode` (validated to one of `prompt`/`auto`/`check`/`off`)
   - the CLI flag (`--update`) layered on top in Task 6 still wins, which lets users force-enable an update probe even when the project disables it by default
-- [ ] add `LoadLifecycleConfig(path string) (*LifecycleConfig, error)`:
+- [x] add `LoadLifecycleConfig(path string) (*LifecycleConfig, error)`:
   - reuse the same `loadPipelineConfig` step-validation helper for each section's phases (factor it so it can validate a `[]DeployPhase` slice without requiring the wrapping `DeployConfig` shape — small refactor)
   - return `os.ErrNotExist` when missing (callers may treat as optional)
   - reject `deploy_services: true` phases in lifecycle pipelines (lifecycle is orchestrator-only, no per-service expansion)
   - when `Update` is non-nil: default `Update.Strategy = "ff-only"` if empty; if `Enabled` is nil, set it to a pointer to `true` (writing the block opts in)
   - validate that `Update.Mode`, when set, is one of the four allowed values; reject otherwise
   - default `FinalMessage` strings at load time: if `Run` is non-nil and `Run.FinalMessage == ""`, set it to `"Project is ready for work!"`; if `Stop` is non-nil and `Stop.FinalMessage == ""`, set it to `"Project is stopped. Have a nice day!"`. Centralizing the defaults in the loader keeps the command code free of magic strings and makes the defaults visible in unit tests of `LoadLifecycleConfig`.
-- [ ] write unit tests `devbox-cli/internal/config/devbox_test.go`:
+- [x] write unit tests `devbox-cli/internal/config/devbox_test.go`:
   - happy path (full lifecycle.yml fixture)
   - missing file → `os.ErrNotExist`
   - invalid step (e.g. two of run+devbox set) → error
@@ -132,7 +132,7 @@ The lifecycle pipelines are executed by the existing pipeline executor (`runPipe
   - invalid `update.mode` value → error
   - default `FinalMessage` for both `Run` and `Stop` when omitted in YAML; explicit values are preserved when set
   - `EffectiveMode` table-driven test: (a) `update:` block omitted → `off`, (b) block present, `enabled` omitted → `prompt`, (c) `enabled: true` + `mode: auto` → `auto`, (d) `enabled: false` + `mode: auto` → `off`, (e) `enabled: true` + `mode` omitted → `prompt`
-- [ ] run `cd devbox-cli && make test && make lint`
+- [x] run `cd devbox-cli && make test && make lint`
 
 ### Task 4: Git update probe package
 - [ ] create `devbox-cli/internal/git/git.go` with:
