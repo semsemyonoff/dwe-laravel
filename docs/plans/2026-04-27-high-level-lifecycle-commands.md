@@ -135,7 +135,7 @@ The lifecycle pipelines are executed by the existing pipeline executor (`runPipe
 - [x] run `cd devbox-cli && make test && make lint`
 
 ### Task 4: Git update probe package
-- [ ] create `devbox-cli/internal/git/git.go` with:
+- [x] create `devbox-cli/internal/git/git.go` with:
   - `type Status struct { IsRepo bool; HasUpstream bool; Branch string; Upstream string; Dirty bool; Behind int; Ahead int; FetchOK bool; FetchErr string }`
   - `func Probe(workDir string, fetch bool) (Status, error)` — order of operations. The `fetch` argument is a pure boolean (caller computes it; `Probe` knows nothing about update modes):
     1. `git rev-parse --is-inside-work-tree` (sets `IsRepo`; if false, returns early with all-zero status)
@@ -146,7 +146,7 @@ The lifecycle pipelines are executed by the existing pipeline executor (`runPipe
     6. `git rev-list --left-right --count <upstream>...HEAD` (sets `Behind`, `Ahead`); only meaningful after a successful fetch — if `FetchOK == false`, the counts come from stale remote-tracking refs and the policy must treat them as unreliable (see `Decide`).
   - `func PullFFOnly(workDir string) (moved bool, err error)` — captures `git rev-parse HEAD` before, runs `git pull --ff-only` with stdout/stderr passthrough, captures HEAD again, returns `moved = (before != after)` so callers can decide whether to reload config
   - inject a small `runner` interface (default backed by `os/exec`) so unit tests can stub git invocations without touching a real repo. The runner exposes `Run(ctx, dir, args...) (stdout, stderr string, err error)` so timeouts and stub patterns are explicit.
-- [ ] create `devbox-cli/internal/git/policy.go` with `type UpdateMode string`, `type Action int` (`ActionSkip`, `ActionWarn`, `ActionPullAuto`, `ActionPullPrompt`), and `Decide(status Status, mode UpdateMode, isInteractive bool) (action Action, msg string)`. Encodes the safety matrix:
+- [x] create `devbox-cli/internal/git/policy.go` with `type UpdateMode string`, `type Action int` (`ActionSkip`, `ActionWarn`, `ActionPullAuto`, `ActionPullPrompt`), and `Decide(status Status, mode UpdateMode, isInteractive bool) (action Action, msg string)`. Encodes the safety matrix:
   - mode=off → skip
   - not a repo → skip
   - dirty worktree → warn (no pull) — message names dirty paths if reasonable
@@ -158,8 +158,8 @@ The lifecycle pipelines are executed by the existing pipeline executor (`runPipe
   - clean and behind, mode=prompt + non-TTY → warn (no pull)
   - clean and behind, mode=check → warn (no pull)
   - up to date → skip
-- [ ] write unit tests for both files: stub the runner for `Probe` golden cases (incl. fetch-success, fetch-timeout, no-upstream); table-driven test for `Decide` covering every matrix row including the new fetch-failed case
-- [ ] run `cd devbox-cli && make test && make lint`
+- [x] write unit tests for both files: stub the runner for `Probe` golden cases (incl. fetch-success, fetch-timeout, no-upstream); table-driven test for `Decide` covering every matrix row including the new fetch-failed case
+- [x] run `cd devbox-cli && make test && make lint`
 
 ### Task 5: Lifecycle pipeline runner helper
 - [ ] in `devbox-cli/internal/command/`, add `lifecycle.go` (new file) with `runLifecyclePhases(cfg, reg, workDir, phases, name, logFileName, skipConfirm) error`:
