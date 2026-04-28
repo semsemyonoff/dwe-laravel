@@ -1,0 +1,76 @@
+# Example lifecycle.yml showing the full shape with all optional sections.
+# Copy relevant parts to devbox/lifecycle.yml and adjust for your project.
+#
+# devbox run   — update probe → pre hooks → docker up → docker wait → post hooks → info → message
+# devbox stop  — pre hooks → docker down → post hooks → message
+# devbox restart — stop, then run --no-update
+#
+# Hook phases use continue_on_error: true so a failed hook does not abort
+# the main start/stop sequence. This mirrors the legacy -@make private_jobs_* pattern.
+
+run:
+  update:
+    enabled: true
+    # mode: prompt — ask before pulling (default when update block is present)
+    # mode: auto   — pull automatically without asking
+    # mode: check  — warn if behind but never pull
+    # mode: off    — disable the probe entirely (same as --no-update flag)
+    mode: auto
+    strategy: ff-only   # only ff-only supported; future: merge, rebase
+
+  show_info: true
+  final_message: "Project is ready for work!"
+
+  phases:
+    - name: pre
+      description: Before-run hooks (continue on failure)
+      steps:
+        - name: before-run
+          command: project.before-run
+          continue_on_error: true
+          description: Custom pre-start hook (optional command, skipped if not defined)
+
+    - name: start
+      description: Start containers and wait for health
+      steps:
+        - name: up
+          devbox: "docker up"
+          description: Start all containers
+        - name: wait
+          devbox: "docker wait"
+          description: Wait for all containers to become healthy
+
+    - name: post
+      description: After-run hooks (continue on failure)
+      steps:
+        - name: after-run
+          command: project.after-run
+          continue_on_error: true
+          description: Custom post-start hook (optional command, skipped if not defined)
+
+stop:
+  final_message: "Project is stopped. Have a nice day!"
+
+  phases:
+    - name: pre
+      description: Before-stop hooks (continue on failure)
+      steps:
+        - name: before-stop
+          command: project.before-stop
+          continue_on_error: true
+          description: Custom pre-stop hook (optional command, skipped if not defined)
+
+    - name: stop
+      description: Stop and remove containers
+      steps:
+        - name: down
+          devbox: "docker down"
+          description: Stop all containers
+
+    - name: post
+      description: After-stop hooks (continue on failure)
+      steps:
+        - name: after-stop
+          command: project.after-stop
+          continue_on_error: true
+          description: Custom post-stop hook (optional command, skipped if not defined)

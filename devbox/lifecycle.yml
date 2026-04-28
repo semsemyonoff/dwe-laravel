@@ -1,0 +1,69 @@
+# Lifecycle pipeline for devbox run / devbox stop / devbox restart.
+#
+# Step types (same as deploy.yml):
+#   run:     — shell command (executed directly)
+#   devbox:  — devbox subcommand (binary path resolved automatically)
+#   command: — devbox command ID dispatched via command runner
+#   builtin: — Go builtin step ID
+#
+# Add continue_on_error: true to hook steps so a failed hook does not
+# abort the main start/stop sequence.
+
+run:
+  update:
+    enabled: true
+    mode: prompt        # prompt | auto | check | off
+    strategy: ff-only
+
+  show_info: true
+  final_message: "Project is ready for work!"
+
+  phases:
+    # Uncomment to add a pre-start hook (runs before docker up):
+    # - name: pre
+    #   steps:
+    #     - name: before-run
+    #       command: project.before-run
+    #       continue_on_error: true
+
+    - name: start
+      description: Start containers and wait for health
+      steps:
+        - name: up
+          devbox: "docker up"
+          description: Start all containers
+        - name: wait
+          devbox: "docker wait"
+          description: Wait for all containers to become healthy
+
+    # Uncomment to add a post-start hook (runs after docker wait):
+    # - name: post
+    #   steps:
+    #     - name: after-run
+    #       command: project.after-run
+    #       continue_on_error: true
+
+stop:
+  final_message: "Project is stopped. Have a nice day!"
+
+  phases:
+    # Uncomment to add a pre-stop hook (runs before docker down):
+    # - name: pre
+    #   steps:
+    #     - name: before-stop
+    #       command: project.before-stop
+    #       continue_on_error: true
+
+    - name: stop
+      description: Stop and remove containers
+      steps:
+        - name: down
+          devbox: "docker down"
+          description: Stop all containers
+
+    # Uncomment to add a post-stop hook (runs after docker down):
+    # - name: post
+    #   steps:
+    #     - name: after-stop
+    #       command: project.after-stop
+    #       continue_on_error: true

@@ -229,15 +229,15 @@ The lifecycle pipelines are executed by the existing pipeline executor (`runPipe
 - [x] run `cd devbox-cli && make test && make lint`
 
 ### Task 10: Ship a working `devbox/lifecycle.yml` and example file
-- [ ] in this repo (`next-laravel`), create `devbox/lifecycle.yml` with a minimal but functional pipeline:
+- [x] in this repo (`next-laravel`), create `devbox/lifecycle.yml` with a minimal but functional pipeline:
   - `run.update.enabled: true`, `run.update.mode: prompt`
   - `run.show_info: true`, `run.final_message: "Project is ready for work!"`
   - `run.phases`: just one `start` phase with `devbox: docker up` then `devbox: docker wait`
   - `stop.final_message: "Project is stopped. Have a nice day!"`
   - `stop.phases`: just one `stop` phase with `devbox: docker down`
   - no `pre`/`post` hook phases (no `project.before-run` etc. commands exist yet — keep YAGNI; add as comments showing the shape with `continue_on_error: true`)
-- [ ] also create `devbox/lifecycle.example.yml` (tracked) showing the full shape including pre/post hook phases with `continue_on_error: true` and an `update.mode: auto` example, so users can copy-paste
-- [ ] write tests is N/A here (config-only), but verify by running `./bin/devbox run`, `./bin/devbox stop`, `./bin/devbox restart` against the live pilot — record observed output in this plan when running Task 12
+- [x] also create `devbox/lifecycle.example.yml` (tracked) showing the full shape including pre/post hook phases with `continue_on_error: true` and an `update.mode: auto` example, so users can copy-paste
+- [x] write tests is N/A here (config-only), but verify by running `./bin/devbox run`, `./bin/devbox stop`, `./bin/devbox restart` against the live pilot — record observed output in this plan when running Task 12
 
 ### Task 11: Regenerate reference docs and update AGENTS.md
 - [ ] in `devbox-cli/`, run `cd devbox-cli && make build` to refresh `bin/devbox`
