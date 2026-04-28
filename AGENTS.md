@@ -38,7 +38,7 @@ The project exists to solve the "Make-as-DSL" problem in the legacy devbox, wher
 - All user-visible output goes through CLI macros: `$(call ok,...)`, `$(call err,...)`, `$(call warn,...)`, `$(call inf,...)`. Defined in `make/macros.mk`.
 - Public targets use `snake_case`. Internal targets use `private_*` prefix.
 - Use `@` to suppress command echo in recipes.
-- Makefile includes only `make/macros.mk`. Lifecycle targets (`up`, `down`, `stop`, `restart`, `logs`) delegate to root-level `devbox` lifecycle commands (`devbox up`, `devbox down`, etc.), which in turn delegate to `devbox docker` internally. No compose flag assembly, no `docker compose` calls in Make.
+- Makefile includes only `make/macros.mk`. `make stop` / `make restart` delegate to `devbox stop` / `devbox restart` (full lifecycle pipelines driven by `devbox/lifecycle.yml`). `make up` / `make down` / `make logs` are thin passthroughs to `devbox up` / `devbox down` / `devbox logs`. No compose flag assembly, no `docker compose` calls in Make.
 - Cross-platform: must work on macOS and Linux (including WSL). Prefer portable shell constructs.
 
 ### General
@@ -194,7 +194,7 @@ services: { main: { type: app, dir: ./services/main } }
 - `LifecycleConfig` — `Run *LifecycleRunConfig`, `Stop *LifecycleStopConfig`; loaded from `devbox/lifecycle.yml` by `LoadLifecycleConfig()`; missing file returns `os.ErrNotExist` (optional)
 - `LifecycleRunConfig` — `Update *LifecycleUpdate`, `ShowInfo bool`, `FinalMessage string`, `Phases []DeployPhase`; `EffectiveMode()` resolves update mode (nil → "off"; block present → "prompt" default; explicit mode wins)
 - `LifecycleStopConfig` — `FinalMessage string`, `Phases []DeployPhase`
-- `LifecycleUpdate` — `Enabled *bool`, `Mode string` (prompt|auto|check|off), `Strategy string` (default "ff-only"); writing the `update:` block opts in (`Enabled` defaults to true at load time)
+- `LifecycleUpdate` — `Enabled *bool`, `Mode string` (prompt|auto|check|off); writing the `update:` block opts in (`Enabled` defaults to true at load time)
 - `DockerConfig` — `ProjectName string`, `Args` (Global + per-command `[]string`), `Env` (AutoGenerate, Commands)
 - `IDEConfig` — per-editor blocks: `VSCode`, `JetBrains`, `Devcontainer` (each with `Enabled bool`)
 - `StylesConfig` — `Header StylesHeader` (lines, font, color) + `Colors StylesColors` (label, section_title, subheader, muted, warning, info, enabled, disabled, mandatory, partial, table_border, table_header) + `Separator string`

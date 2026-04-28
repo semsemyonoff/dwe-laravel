@@ -16,7 +16,6 @@ run:
     # mode: check  — warn if behind but never pull
     # mode: off    — disable the probe entirely (same as --no-update flag)
     mode: auto
-    strategy: ff-only   # only ff-only supported; future: merge, rebase
 
   show_info: true
   final_message: "Project is ready for work!"
