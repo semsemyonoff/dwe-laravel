@@ -17,12 +17,16 @@ env:
 	@$(DEVBOX_BIN) render env -o .env
 	@$(call ok,.env generated)
 
+# up/down are thin compose passthroughs (no hooks, no probe).
+# For full project lifecycle use: make run / make stop / make restart (via devbox run/stop/restart).
 up:
 	@$(DEVBOX_BIN) up
 
 down:
 	@$(DEVBOX_BIN) down
 
+# stop/restart delegate to lifecycle pipelines (devbox/lifecycle.yml: hooks + docker down/up + final message).
+# For the raw compose stop/restart use: devbox docker stop / devbox docker restart.
 stop:
 	@$(DEVBOX_BIN) stop
 

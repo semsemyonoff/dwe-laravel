@@ -222,11 +222,11 @@ The lifecycle pipelines are executed by the existing pipeline executor (`runPipe
 - [x] run `cd devbox-cli && make test && make lint`
 
 ### Task 9: Wire `up` / `down` documentation and audit Makefile
-- [ ] update `Long` strings on `up.go` and `down.go` to make the contrast explicit ("low-level Docker Compose operation; see `devbox run` / `devbox stop` for the full project lifecycle")
-- [ ] no behavior change to `up`/`down`
-- [ ] in this repo (`next-laravel`), review `Makefile` targets `up/down/stop/restart` — they continue to call the same CLI commands, but their *user-visible behavior* now changes (the make targets `make stop`/`make restart` will trigger lifecycle pipelines, not bare compose stop/restart). Add a short comment in `Makefile` clarifying this delegation, but no recipe rewrite is needed.
-- [ ] regression tests: ensure existing `up_test.go`/`down_test.go` (if present) still pass; otherwise add minimal cobra wiring tests to assert `Args` and `Use`
-- [ ] run `cd devbox-cli && make test && make lint`
+- [x] update `Long` strings on `up.go` and `down.go` to make the contrast explicit ("low-level Docker Compose operation; see `devbox run` / `devbox stop` for the full project lifecycle")
+- [x] no behavior change to `up`/`down`
+- [x] in this repo (`next-laravel`), review `Makefile` targets `up/down/stop/restart` — they continue to call the same CLI commands, but their *user-visible behavior* now changes (the make targets `make stop`/`make restart` will trigger lifecycle pipelines, not bare compose stop/restart). Add a short comment in `Makefile` clarifying this delegation, but no recipe rewrite is needed.
+- [x] regression tests: ensure existing `up_test.go`/`down_test.go` (if present) still pass; otherwise add minimal cobra wiring tests to assert `Args` and `Use`
+- [x] run `cd devbox-cli && make test && make lint`
 
 ### Task 10: Ship a working `devbox/lifecycle.yml` and example file
 - [ ] in this repo (`next-laravel`), create `devbox/lifecycle.yml` with a minimal but functional pipeline:
