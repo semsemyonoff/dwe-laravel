@@ -212,14 +212,14 @@ The lifecycle pipelines are executed by the existing pipeline executor (`runPipe
 - [x] run `cd devbox-cli && make test && make lint`
 
 ### Task 8: Rewrite `devbox restart` to delegate to stop + run
-- [ ] rewrite `devbox-cli/internal/command/restart.go`:
+- [x] rewrite `devbox-cli/internal/command/restart.go`:
   - new `Use: "restart"`, `Args: cobra.NoArgs`
   - update `Short`/`Long`: "Restart the project (stop, then run --no-update)" and point to `devbox docker restart` for the raw compose passthrough
   - flags: `-y/--yes`; pass through to both child invocations
   - implementation: directly call the same in-process helpers used by `stop` and `run` (do NOT shell out to `./bin/devbox`); for `run`, force `--no-update` so the update probe is skipped on the second leg
-- [ ] write unit tests in `restart_test.go` covering cobra wiring + the no-update propagation. Note: section-presence guards live inside the underlying stop/run helpers, so a `restart` call against a partial `lifecycle.yml` (e.g. only `run:` defined) surfaces the stop-side missing-section error during the stop leg — no extra guard is needed in `restart.go`. The test should assert this behavior.
-- [ ] update `lifecycle_test.go` to reflect the new `Use` string for `restart`
-- [ ] run `cd devbox-cli && make test && make lint`
+- [x] write unit tests in `restart_test.go` covering cobra wiring + the no-update propagation. Note: section-presence guards live inside the underlying stop/run helpers, so a `restart` call against a partial `lifecycle.yml` (e.g. only `run:` defined) surfaces the stop-side missing-section error during the stop leg — no extra guard is needed in `restart.go`. The test should assert this behavior.
+- [x] update `lifecycle_test.go` to reflect the new `Use` string for `restart`
+- [x] run `cd devbox-cli && make test && make lint`
 
 ### Task 9: Wire `up` / `down` documentation and audit Makefile
 - [ ] update `Long` strings on `up.go` and `down.go` to make the contrast explicit ("low-level Docker Compose operation; see `devbox run` / `devbox stop` for the full project lifecycle")
