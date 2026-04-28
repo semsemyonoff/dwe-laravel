@@ -83,10 +83,10 @@ The lifecycle pipelines are executed by the existing pipeline executor (`runPipe
 ## Implementation Steps
 
 ### Task 1: Branch setup in devbox-cli repo
-- [ ] in `devbox-cli/`, confirm working tree is clean and `main` is up to date with `origin/main`
-- [ ] in `devbox-cli/`, create branch `feat/lifecycle-commands`
-- [ ] no tests in this task (branch-only)
-- [ ] verify `cd devbox-cli && make test` still passes on the new branch (baseline)
+- [x] in `devbox-cli/`, confirm working tree is clean and `main` is up to date with `origin/main`
+- [x] in `devbox-cli/`, create branch `feat/lifecycle-commands`
+- [x] no tests in this task (branch-only)
+- [x] verify `cd devbox-cli && make test` still passes on the new branch (baseline)
 
 ### Task 2: Add `continue_on_error` to DeployStep and honor it in runPipeline
 - [ ] add `ContinueOnError bool \`yaml:"continue_on_error"\`` to `DeployStep` in `devbox-cli/internal/config/devbox.go`
