@@ -162,16 +162,16 @@ The lifecycle pipelines are executed by the existing pipeline executor (`runPipe
 - [x] run `cd devbox-cli && make test && make lint`
 
 ### Task 5: Lifecycle pipeline runner helper
-- [ ] in `devbox-cli/internal/command/`, add `lifecycle.go` (new file) with `runLifecyclePhases(cfg, reg, workDir, phases, name, logFileName, skipConfirm) error`:
+- [x] in `devbox-cli/internal/command/`, add `lifecycle.go` (new file) with `runLifecyclePhases(cfg, reg, workDir, phases, name, logFileName, skipConfirm) error`:
   - resolves phases via `resolvePhaseSteps` (reusing the existing helper, with empty service)
   - opens `logs/<logFileName>.log` and tees output exactly like reset.go does
   - constructs `PlainReporter` and calls `runPipeline`
   - returns `ErrSilent` propagation matching reset semantics
-- [ ] write unit tests for `runLifecyclePhases` with a stub temp workDir and a minimal phase list (e.g., one `run: "true"` step plus one `run: "false"` step with `continue_on_error: true`):
+- [x] write unit tests for `runLifecyclePhases` with a stub temp workDir and a minimal phase list (e.g., one `run: "true"` step plus one `run: "false"` step with `continue_on_error: true`):
   - verify the helper returns nil on the happy path and `ErrSilent` when an aborting step fails
   - verify the log file at `logs/<logFileName>.log` exists, is non-empty, and contains ANSI-stripped output for the executed steps
   - **scope note:** reporter event semantics (icons, untracked-phase suppression, elapsed time) are already covered by `runPipeline` / `PlainReporter` tests in `pipeline_run_test.go` and `internal/pipeline/plain_test.go`. The lifecycle helper does not re-test those — it only needs to verify the wiring (log file written, error propagation correct). No reporter injection is added.
-- [ ] run `cd devbox-cli && make test && make lint`
+- [x] run `cd devbox-cli && make test && make lint`
 
 ### Task 6: `devbox run` command
 - [ ] create `devbox-cli/internal/command/run.go` with `newRunCmd(flags *rootFlags) *cobra.Command`:
