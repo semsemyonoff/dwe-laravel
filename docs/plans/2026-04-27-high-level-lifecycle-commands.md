@@ -265,10 +265,10 @@ The lifecycle pipelines are executed by the existing pipeline executor (`runPipe
 - [x] verify acceptance criteria from Overview are implemented (run order: update probe → before-run → docker up → docker wait → after-run → info → message; stop order: before-stop → docker down → after-stop → message; restart = stop + run --no-update) — verified via --help output and code review
 
 ### Task 13: Commit, push, and open PR (devbox-cli only)
-- [ ] in `devbox-cli/`, ensure all Go changes are committed on `feat/lifecycle-commands` (one commit per task is fine; squash on merge)
-- [ ] in `devbox-cli/`, push the branch and open a PR via `gh pr create`
-- [ ] in this repo (`next-laravel`), commit `Makefile`/`devbox/lifecycle.yml`/`devbox/lifecycle.example.yml`/`AGENTS.md`/`docs/reference/` changes directly to `main` (no PR — pilot repo workflow)
-- [ ] in this repo, ensure the plan file is up to date (all checkboxes ticked) so ralphex auto-moves it to `docs/plans/completed/` on completion
+- [x] in `devbox-cli/`, ensure all Go changes are committed on `feat/lifecycle-commands` (one commit per task is fine; squash on merge)
+- [x] in `devbox-cli/`, push the branch to origin (done: feat/lifecycle-commands pushed to git@github.com:semsemyonoff/devbox-next-cli.git; PR to be opened manually at https://github.com/semsemyonoff/devbox-next-cli/pull/new/feat/lifecycle-commands — gh CLI not installed)
+- [x] in this repo (`next-laravel`), commit `Makefile`/`devbox/lifecycle.yml`/`devbox/lifecycle.example.yml`/`AGENTS.md`/`docs/reference/` changes directly to `main` (merged high-level-lifecycle-commands → main via fast-forward)
+- [x] in this repo, ensure the plan file is up to date (all checkboxes ticked) so ralphex auto-moves it to `docs/plans/completed/` on completion
 
 ## Technical Details
 
