@@ -199,7 +199,7 @@ The lifecycle pipelines are executed by the existing pipeline executor (`runPipe
 - [x] run `cd devbox-cli && make test && make lint`
 
 ### Task 7: Replace `devbox stop` body with lifecycle pipeline
-- [ ] rewrite `devbox-cli/internal/command/stop.go`:
+- [x] rewrite `devbox-cli/internal/command/stop.go`:
   - new `Use: "stop"`, `Args: cobra.NoArgs` (drop `[services...]`; per-service compose stop is now `devbox docker stop <svc>`)
   - update `Short`/`Long` to describe the lifecycle-stop semantics and point to `devbox docker stop` for the raw compose passthrough
   - flag: `-y/--yes` (skip confirmations)
@@ -207,9 +207,9 @@ The lifecycle pipelines are executed by the existing pipeline executor (`runPipe
   - require `lifecycleCfg.Stop != nil` — if the file is present but `stop:` block is missing, fail with: "lifecycle.yml has no `stop:` section — see devbox/lifecycle.example.yml". This guard runs before any pointer dereference on `lifecycleCfg.Stop`.
   - call `runLifecyclePhases(...)` for `lifecycleCfg.Stop.Phases`
   - on success print `lifecycleCfg.Stop.FinalMessage` via `render.Writer.Success` (the default `"Project is stopped. Have a nice day!"` is already applied by the loader; no fallback needed in command code)
-- [ ] write unit tests in `stop_test.go` (new) for cobra wiring and basic config-loading behavior, including: missing lifecycle.yml → clear error; lifecycle.yml present but `stop:` section omitted → clear error mentioning the missing section
-- [ ] update `lifecycle_test.go` to reflect the new `Use` string for `stop` (no `[services...]`)
-- [ ] run `cd devbox-cli && make test && make lint`
+- [x] write unit tests in `stop_test.go` (new) for cobra wiring and basic config-loading behavior, including: missing lifecycle.yml → clear error; lifecycle.yml present but `stop:` section omitted → clear error mentioning the missing section
+- [x] update `lifecycle_test.go` to reflect the new `Use` string for `stop` (no `[services...]`)
+- [x] run `cd devbox-cli && make test && make lint`
 
 ### Task 8: Rewrite `devbox restart` to delegate to stop + run
 - [ ] rewrite `devbox-cli/internal/command/restart.go`:
