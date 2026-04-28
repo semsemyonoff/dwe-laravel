@@ -223,6 +223,16 @@ The `make:` step type has been removed. All service-level operations are now exp
 
 `devbox deploy run` and `devbox reset run` use `PlainReporter` exclusively. Output includes step icons (✓ ✗ ◎ ·), untracked phases are silent, and the final Done message includes elapsed time.
 
+### Pipeline file logging
+
+Every pipeline command (`deploy`, `reset`, `run`, `stop`) supports a top-level `log:` field that toggles file logging at `logs/<pipeline>.log`. When enabled, devbox status messages and child-process stdout/stderr are teed to the log file (with ANSI codes stripped). Defaults differ by pipeline:
+
+- `devbox/deploy.yml` — `log:` defaults to `true` (deploy keeps a record by default).
+- `devbox/reset.yml` — `log:` defaults to `false`.
+- `devbox/lifecycle.yml` `run:`/`stop:` — `log:` defaults to `false`.
+
+Override per pipeline with an explicit `log: true` or `log: false`. Implementation detail: `LoadDeployConfig`/`LoadResetConfig`/`LoadLifecycleConfig` normalize the `*bool` field to the per-pipeline default; runners call `openPipelineLog(workDir, name, enabled)` (in `internal/command/pipeline.go`) which returns either a tee writer or plain stdout.
+
 ## Make macros
 
 All Make output goes through CLI: `$(call ok,msg)`, `$(call err,msg[,exit_code])`, `$(call warn,msg)`, `$(call inf,msg)`. Defined in `make/macros.mk`.

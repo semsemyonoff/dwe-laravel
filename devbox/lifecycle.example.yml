@@ -20,6 +20,10 @@ run:
   show_info: true
   final_message: "Project is ready for work!"
 
+  # File logging at logs/run.log — disabled by default for run/stop pipelines.
+  # Set to true to tee devbox status messages and child stdout/stderr to disk.
+  # log: true
+
   phases:
     - name: pre
       description: Before-run hooks (continue on failure)
@@ -49,6 +53,9 @@ run:
 
 stop:
   final_message: "Project is stopped. Have a nice day!"
+
+  # File logging at logs/stop.log — disabled by default. Enable with log: true.
+  # log: true
 
   phases:
     - name: pre
