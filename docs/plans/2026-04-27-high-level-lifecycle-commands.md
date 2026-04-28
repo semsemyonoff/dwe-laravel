@@ -89,15 +89,15 @@ The lifecycle pipelines are executed by the existing pipeline executor (`runPipe
 - [x] verify `cd devbox-cli && make test` still passes on the new branch (baseline)
 
 ### Task 2: Add `continue_on_error` to DeployStep and honor it in runPipeline
-- [ ] add `ContinueOnError bool \`yaml:"continue_on_error"\`` to `DeployStep` in `devbox-cli/internal/config/devbox.go`
-- [ ] document the new field in the `DeployStep` doc comment (semantics: when true, a failed step is reported via `FailStep` but the pipeline does not abort — the next step runs as if nothing happened)
-- [ ] update `runPipeline` in `devbox-cli/internal/command/pipeline.go`:
+- [x] add `ContinueOnError bool \`yaml:"continue_on_error"\`` to `DeployStep` in `devbox-cli/internal/config/devbox.go`
+- [x] document the new field in the `DeployStep` doc comment (semantics: when true, a failed step is reported via `FailStep` but the pipeline does not abort — the next step runs as if nothing happened)
+- [x] update `runPipeline` in `devbox-cli/internal/command/pipeline.go`:
   - on `stepErr != nil`, if `rs.step.ContinueOnError` is true, call `rep.FailStep(...)` then `continue` instead of `return ErrSilent`
   - the post-step hook and `Check` are skipped when the step failed (no behavior change for non-skipping path)
-- [ ] add `ContinueOnError` reflection only in **human table output** (`printDeployPlanTable` in `pipeline.go`): emit a small suffix tag like `[continue_on_error]` on the detail line for the step. Do **not** modify `stepCommand` — its return value is also consumed by shell-plan generation, where any non-shell tag would produce invalid output.
-- [ ] update shell-plan generation (`printDeployPlanShell` and `printResetPlanShell` in `pipeline.go` / `reset.go`) so that steps with `ContinueOnError: true` are emitted as `<command> || true` instead of being aborted by the leading `set -e`. Builtin-dispatch lines (`./bin/devbox deploy step ...` / `./bin/devbox reset step ...`) get the same treatment. Lifecycle commands do **not** expose a shell-plan flag (Task 6 / 7 only ship `run`/`stop`, no `plan` subcommand), so this only affects deploy/reset shell plans, which is the desired forward-compat behavior.
-- [ ] write unit tests in `devbox-cli/internal/command/pipeline_run_test.go` (or new file) for `runPipeline` covering: (a) failing step without flag aborts as today, (b) failing step with flag continues, (c) check/post-step-hook are not run after a failed-but-continued step, (d) shell plan output contains `|| true` exactly when `ContinueOnError` is set
-- [ ] run `cd devbox-cli && make test && make lint` — must pass before next task
+- [x] add `ContinueOnError` reflection only in **human table output** (`printDeployPlanTable` in `pipeline.go`): emit a small suffix tag like `[continue_on_error]` on the detail line for the step. Do **not** modify `stepCommand` — its return value is also consumed by shell-plan generation, where any non-shell tag would produce invalid output.
+- [x] update shell-plan generation (`printDeployPlanShell` and `printResetPlanShell` in `pipeline.go` / `reset.go`) so that steps with `ContinueOnError: true` are emitted as `<command> || true` instead of being aborted by the leading `set -e`. Builtin-dispatch lines (`./bin/devbox deploy step ...` / `./bin/devbox reset step ...`) get the same treatment. Lifecycle commands do **not** expose a shell-plan flag (Task 6 / 7 only ship `run`/`stop`, no `plan` subcommand), so this only affects deploy/reset shell plans, which is the desired forward-compat behavior.
+- [x] write unit tests in `devbox-cli/internal/command/pipeline_run_test.go` (or new file) for `runPipeline` covering: (a) failing step without flag aborts as today, (b) failing step with flag continues, (c) check/post-step-hook are not run after a failed-but-continued step, (d) shell plan output contains `|| true` exactly when `ContinueOnError` is set
+- [x] run `cd devbox-cli && make test && make lint` — must pass before next task
 
 ### Task 3: Add LifecycleConfig schema and loader
 - [ ] in `devbox-cli/internal/config/devbox.go`, add types:
