@@ -240,14 +240,14 @@ The lifecycle pipelines are executed by the existing pipeline executor (`runPipe
 - [x] write tests is N/A here (config-only), but verify by running `./bin/devbox run`, `./bin/devbox stop`, `./bin/devbox restart` against the live pilot — record observed output in this plan when running Task 12
 
 ### Task 11: Regenerate reference docs and update AGENTS.md
-- [ ] in `devbox-cli/`, run `cd devbox-cli && make build` to refresh `bin/devbox`
-- [ ] in this repo (`next-laravel`), run `./bin/devbox docs generate` to regenerate `docs/reference/cli/` (the new `run`/`stop`/`restart` long descriptions land there automatically)
-- [ ] update `AGENTS.md` in this repo (the canonical project doc; `CLAUDE.md` is a symlink → `AGENTS.md`, so editing `AGENTS.md` is sufficient):
+- [x] in `devbox-cli/`, run `cd devbox-cli && make build` to refresh `bin/devbox`
+- [x] in this repo (`next-laravel`), run `./bin/devbox docs generate` to regenerate `docs/reference/cli/` (the new `run`/`stop`/`restart` long descriptions land there automatically)
+- [x] update `AGENTS.md` in this repo (the canonical project doc; `CLAUDE.md` is a symlink → `AGENTS.md`, so editing `AGENTS.md` is sufficient):
   - Architecture section: add `devbox/lifecycle.yml` and the high-level `run/stop/restart` distinction
   - Project layout: add `devbox/lifecycle.yml` and `devbox/lifecycle.example.yml`
   - devbox-cli "Key patterns" section: add a short bullet on the lifecycle pipeline (separate YAML, separate loader, reuses pipeline executor, supports `continue_on_error` for hook phases)
   - Migration phases: add a short Phase 8 entry summarizing this work
-- [ ] no Go test changes; just confirm `cd devbox-cli && make test && make lint` still passes
+- [x] no Go test changes; just confirm `cd devbox-cli && make test && make lint` still passes
 
 ### Task 12: Verify acceptance criteria
 - [ ] `cd devbox-cli && make test` — all green

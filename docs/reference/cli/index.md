@@ -49,7 +49,8 @@ Generated reference for the `devbox` command tree.
   - [devbox reset plan](devbox_reset_plan.md) — Show resolved reset plan
   - [devbox reset run](devbox_reset_run.md) — Execute the reset pipeline
   - [devbox reset step](devbox_reset_step.md) — Run a single reset step by <phase>/<step> address
-- [devbox restart](devbox_restart.md) — Restart compose services
+- [devbox restart](devbox_restart.md) — Restart the project (stop, then run --no-update)
+- [devbox run](devbox_run.md) — Start the project (full lifecycle: update probe → up → wait → info)
 - [devbox services](devbox_services.md) — Manage application services
   - [devbox services disable](devbox_services_disable.md) — Disable an optional service (writes to devbox/local.yml)
   - [devbox services enable](devbox_services_enable.md) — Enable an optional service (writes to devbox/local.yml)
@@ -57,7 +58,7 @@ Generated reference for the `devbox` command tree.
   - [devbox services status](devbox_services_status.md) — Show all services and their current state (read-only table)
 - [devbox shell](devbox_shell.md) — Open a shell in a service container
 - [devbox status](devbox_status.md) — Show stack health and services/tools status
-- [devbox stop](devbox_stop.md) — Stop compose services without removing them
+- [devbox stop](devbox_stop.md) — Stop the project (full lifecycle: before-stop hooks → docker down → after-stop hooks)
 - [devbox tools](devbox_tools.md) — Manage optional tools
   - [devbox tools disable](devbox_tools_disable.md) — Disable an optional tool (writes to devbox/local.yml)
   - [devbox tools enable](devbox_tools_enable.md) — Enable an optional tool (writes to devbox/local.yml)

@@ -51,10 +51,11 @@ The project exists to solve the "Make-as-DSL" problem in the legacy devbox, wher
 
 - **devbox-cli** (`devbox-cli/`) — Go binary, the shared core: config loading, rendering, env generation, info display, topology, deploy planning, docker control plane
 - **Docker** — `devbox docker` is the public lifecycle API (up/down/stop/restart/logs/ps/exec/run/wait); `devbox compose` is the low-level diagnostic layer (files/argv/raw)
-- **Make** (`Makefile` + `make/`) — thin facade that delegates lifecycle targets to `devbox docker`
+- **Make** (`Makefile` + `make/`) — thin facade that delegates lifecycle targets to `devbox run` / `devbox stop` / `devbox up` / `devbox down`
 - **Config** — 3-layer YAML merge: `devbox.yml` → `devbox/defaults.yml` → `devbox/local.yml` (gitignored)
 - **Docker policy** — `devbox/docker.yml` + `devbox/docker.local.yml` (gitignored); loaded separately, controls compose execution (project name, args, .env triggers)
 - **Deploy** — `devbox/deploy.yml` loaded separately (not merged); declares phases and steps
+- **Lifecycle** — `devbox/lifecycle.yml` loaded separately by `LoadLifecycleConfig()`; declares `run` and `stop` pipelines (phases + steps, supports `continue_on_error` for hook phases). `devbox run` = update probe → before-run hooks → docker up → docker wait → after-run hooks → info → message. `devbox stop` = before-stop hooks → docker down → after-stop hooks → message. `devbox restart` = stop + run --no-update. `devbox up` / `devbox down` remain thin Docker Compose passthroughs.
 - `.env` is a **generated artifact** (`devbox render env -o .env`), never a source of truth
 
 ## Project layout
@@ -70,6 +71,8 @@ devbox/reset.yml                    # reset pipeline declaration (loaded separat
 devbox/docker.yml                   # docker/compose execution policy (project name, args, env triggers)
 devbox/docker.local.yml             # docker policy local overrides (gitignored)
 devbox/docker.local.example.yml     # tracked template for docker policy overrides
+devbox/lifecycle.yml                # lifecycle pipeline declaration: run + stop phases (loaded separately)
+devbox/lifecycle.example.yml        # tracked template showing full lifecycle shape with hook phases
 devbox/local.yml                    # local overrides (gitignored)
 devbox/local.example.yml            # tracked template for local overrides
 devbox/info.yml                     # declarative info dashboard config (renamed from help.yml)
@@ -124,10 +127,11 @@ cd devbox-cli && make lint    # golangci-lint
 
 - `cmd/devbox/main.go` — entry point (uses `fang.Execute` for styled help/errors)
 - `internal/version/` — `Version`, `Commit`, `Date`, `BuiltBy` vars; `Info()` formatter; injected via `-ldflags -X` at build time
-- `internal/config/` — `DevboxConfig` struct, layered `LoadConfig()`, `LoadDeployConfig()`, `LoadDockerConfig()`, `ResolvePath()`, `ExportRule`, `ComposeConfig`, `DockerConfig`, `DeployConfig`, `IDEConfig`, `InfoConfig` (renamed from `HelpConfig`), `LoadInfoConfig()`, `StylesConfig`, `LoadStylesConfig()`
+- `internal/config/` — `DevboxConfig` struct, layered `LoadConfig()`, `LoadDeployConfig()`, `LoadDockerConfig()`, `LoadLifecycleConfig()`, `ResolvePath()`, `ExportRule`, `ComposeConfig`, `DockerConfig`, `DeployConfig`, `LifecycleConfig`, `IDEConfig`, `InfoConfig` (renamed from `HelpConfig`), `LoadInfoConfig()`, `StylesConfig`, `LoadStylesConfig()`
 - `internal/docker/` — `Compose` struct for building and executing `docker compose` commands with policy args
 - `internal/render/` — `Writer` with ANSI output methods (Success, Error, Warning, Info, Definition, TableHeader, ASCII art); plain passthrough for logs/deploy output; `Writer.Confirm` is the documented non-TTY fallback for Y/n prompts (piped stdin, CI)
 - `internal/ui/` — Lipgloss styled output: `RenderSummary(cfg)` for compact root summary, `RenderInfo(cfg, infoCfg)` for full info dashboard, `RenderServiceTable()` and `RenderToolTable()` for Lipgloss tables, `RenderTopology()` for dependency tree; `ApplyStyles(stylesCfg)` to hot-apply palette from `styles.yml` (also rebuilds the huh theme); terminal width detection; huh-backed interactive primitives: `RunSelector(title, items)` (single-pick), `RunMultiSelect(title, items)` (multi-toggle), `RunConfirm(title, affirmative, negative)` (confirmation); `Theme()` accessor for the project-palette `huh.Theme`; `IsInteractiveFn(stdin)` TTY-detection helper used by all interactive callers
+- `internal/git/` — git update probe: `Probe(workDir, fetch)` returns `Status` (IsRepo, Dirty, Behind, Ahead, FetchOK, FetchErr); `PullFFOnly(workDir)` returns `moved bool`; `Decide(status, mode, isInteractive)` encodes the safety matrix (dirty/no-upstream/fetch-failed → warn; behind + auto → pull; behind + prompt + TTY → prompt-pull; behind + check → warn). Runner interface for unit-test stubbing.
 - `internal/tpl/` — Go template engine with `Render()`, `EvalCondition()`, custom `FuncMap` (`appURL`)
 - `internal/builtin/` — builtin step registry: `Builtin` interface (`Validate`, `Describe`, `Run`), `ExecContext` carrier; registered builtins: `configs_copy`, `confirm`, `volumes_create`, `service_dirs_ensure` (creates service hub dirs with skip/error/recreate modes), `message` (outputs text at info/success/warning/error level with Go template support)
 - `internal/pipeline/` — deploy/reset reporter abstraction: `Reporter` interface (StartPipeline, EnterPhase, SkipPhase, StartStep, SkipStep, FinishStep, FailStep, FinishPipeline, SuspendForExec, ResumeAfterExec); `PlainReporter` — the sole reporter; outputs icons (✓ ✗ ◎ ·), suppresses untracked phase output, prints elapsed time in `FinishPipeline`
@@ -135,7 +139,7 @@ cd devbox-cli && make lint    # golangci-lint
 - `internal/command/` — cobra commands with Fang integration and command groups:
   - Root: `devbox` (no args) shows ASCII header + compact summary + help
   - Core: `info` (styled dashboard), `version`
-  - Environment: `up`, `down`, `stop`, `restart`, `logs`, `ps`, `wait`, `shell [service]`, `status`
+  - Environment: `run`, `stop`, `restart`, `up`, `down`, `logs`, `ps`, `wait`, `shell [service]`, `status` — `run`/`stop`/`restart` are lifecycle pipeline commands (driven by `devbox/lifecycle.yml`); `up`/`down` are thin Docker Compose passthroughs
   - Configuration: `services {list,status,enable,disable}`, `tools {list,status,enable,disable}`, `render {env,ide}` — `list` is an interactive huh.MultiSelect toggle (TTY) or table (non-TTY); `status` prints the read-only table always; `enable`/`disable` use huh.Select to pick a target when no arg is given
   - Pipelines: `deploy {plan,run,step,config}`, `reset {plan,run,step,config}`
   - Advanced: `commands {list,inspect,run}`, `docker {up,down,stop,restart,logs,ps,exec,run,wait,project-name}`, `compose {files,argv,raw}`, `docs generate`
@@ -160,6 +164,7 @@ cd devbox-cli && make lint    # golangci-lint
 - Errors bubble up with `fmt.Errorf` wrapping; root command silences cobra errors and renders via `render.Stdout().Error()`
 - `devbox shell` resolves options with three-tier priority: CLI flags (highest) → `ServiceCLIConfig` from `devbox/services.yml` → built-in defaults (mode=auto, shell=bash, user=current UID). `--root` is highest-priority for user, mutually exclusive with `--user`. `--env KEY=VALUE` overrides matching keys from `cli.env` config.
 - Confirmation routing (builtin `confirm` step and workflow confirm steps): four-way dispatch — (1) `SkipConfirm` flag set → no-op; (2) `ConfirmFunc` injected → callback (tests); (3) `ui.IsInteractiveFn(stdin)` true → `ui.RunConfirm` (huh TTY form, `ErrCancelled` on Esc maps to "aborted by user"); (4) otherwise → plain stdin Y/n fallback (CI/pipe). `ExecContext.Stdin` and `RunContext.Stdin` override `os.Stdin` for tests.
+- Lifecycle pipeline (`devbox run` / `devbox stop`): separate YAML (`devbox/lifecycle.yml`), separate loader (`LoadLifecycleConfig`), reuses the same pipeline executor (`runPipeline`, `resolvePhaseSteps`, `PlainReporter`). `continue_on_error: true` on a step lets hook phases fail without aborting the main sequence. `devbox run` layered update-mode precedence: `--no-update` flag > `--update <mode>` flag > `EffectiveMode()` from YAML. A successful `git pull --ff-only` (HEAD moved) triggers in-process reload of `DevboxConfig`, `LifecycleConfig`, and command registry before phase execution.
 
 ## Config model
 
@@ -185,7 +190,11 @@ services: { main: { type: app, dir: ./services/main } }
 - `ServiceConfigFile` — `Src`, `Dest`, `Mode` (default/update/replace)
 - `DeployConfig` — `Phases []DeployPhase`
 - `DeployPhase` — `Name`, `Description`, `Untracked bool` (yaml `untracked`: suppresses phase header and step messages in PlainReporter), `Steps []DeployStep`; `untracked: true` used for post-deploy phases that should not produce system output
-- `DeployStep` — `Name`, `Cmd`, `Command`, `Builtin`, `With`, `Description`, `When` (exactly one of Cmd/Command/Builtin set; `Make` removed)
+- `DeployStep` — `Name`, `Cmd`, `Command`, `Builtin`, `With`, `Description`, `When`, `ContinueOnError bool` (yaml: `continue_on_error`) — when true, a failed step is reported via `FailStep` but the pipeline does not abort; post-step hook and `Check` are skipped for the failed step
+- `LifecycleConfig` — `Run *LifecycleRunConfig`, `Stop *LifecycleStopConfig`; loaded from `devbox/lifecycle.yml` by `LoadLifecycleConfig()`; missing file returns `os.ErrNotExist` (optional)
+- `LifecycleRunConfig` — `Update *LifecycleUpdate`, `ShowInfo bool`, `FinalMessage string`, `Phases []DeployPhase`; `EffectiveMode()` resolves update mode (nil → "off"; block present → "prompt" default; explicit mode wins)
+- `LifecycleStopConfig` — `FinalMessage string`, `Phases []DeployPhase`
+- `LifecycleUpdate` — `Enabled *bool`, `Mode string` (prompt|auto|check|off), `Strategy string` (default "ff-only"); writing the `update:` block opts in (`Enabled` defaults to true at load time)
 - `DockerConfig` — `ProjectName string`, `Args` (Global + per-command `[]string`), `Env` (AutoGenerate, Commands)
 - `IDEConfig` — per-editor blocks: `VSCode`, `JetBrains`, `Devcontainer` (each with `Enabled bool`)
 - `StylesConfig` — `Header StylesHeader` (lines, font, color) + `Colors StylesColors` (label, section_title, subheader, muted, warning, info, enabled, disabled, mandatory, partial, table_border, table_header) + `Separator string`
@@ -229,6 +238,7 @@ This repo is a pilot for migrating from the legacy devbox (Make-as-DSL) to a dec
 5. **Phase 5 — Docker Control Plane** (done): `devbox docker` is the single compose execution layer. Docker policy in `devbox/docker.yml`. Make lifecycle targets delegate to `devbox docker`. No direct `docker compose` calls in YAML commands or deploy steps. `devbox compose` retained as diagnostic layer (files/argv/raw).
 6. **Phase 6 — CLI UX Refactor** (done): Restructured devbox-cli into the primary user interface. Added `internal/ui` (Lipgloss) for styled output and `internal/version` for version injection. Fang integration for styled help/errors. `devbox` (no args) shows ASCII header + compact summary + help; `devbox info` is the full styled dashboard from `devbox/info.yml` (renamed from `help.yml`). Lifecycle commands promoted to root level (`devbox up`, `devbox down`, etc.). Added `devbox shell`, `devbox status`, `devbox version`, `devbox completion`, `devbox docs generate`. Command group renamed `command` → `commands`.
 7. **Phase 7 — Forms with huh** (done): Replaced bubbletea-based interactive selector and stdin Y/n confirmations with `charm.land/huh/v2` primitives. `services list` / `tools list` are now interactive `huh.MultiSelect` toggles (mandatory services filtered out, not shown in the form); `status` subcommand added to both groups for the previous read-only table view. `services enable` / `tools disable` (and their counterparts) use `huh.Select` for picking a target when no arg is given. Deploy/reset confirmations use `huh.Confirm` on TTY, falling back to `render.Writer.Confirm` (stdin Y/n) on piped input or CI. All huh widgets share the project palette via `Theme()` accessor (rebuilt on `ApplyStyles`). Non-TTY callers are unaffected.
+8. **Phase 8 — High-level Lifecycle Commands** (done): `devbox run`, `devbox stop`, `devbox restart` promoted to full project lifecycle entrypoints driven by `devbox/lifecycle.yml`. `devbox run` executes: update probe (configurable git fetch + pull, four modes: prompt/auto/check/off) → before-run hooks → `devbox docker up` → `devbox docker wait` → after-run hooks → info → message. `devbox stop` executes: before-stop → `devbox docker down` → after-stop → message. `devbox restart` = stop + run with `--no-update`. `devbox up` / `devbox down` remain thin Docker Compose passthroughs; raw `docker compose stop` / `restart` remain accessible via `devbox docker stop` / `devbox docker restart`. Added `continue_on_error` field to `DeployStep` for hook phases that should not abort the main pipeline on failure. New `internal/git` package for update probe with injected runner for unit tests.
 
 ### Success criteria
 
