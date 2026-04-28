@@ -174,7 +174,7 @@ The lifecycle pipelines are executed by the existing pipeline executor (`runPipe
 - [x] run `cd devbox-cli && make test && make lint`
 
 ### Task 6: `devbox run` command
-- [ ] create `devbox-cli/internal/command/run.go` with `newRunCmd(flags *rootFlags) *cobra.Command`:
+- [x] create `devbox-cli/internal/command/run.go` with `newRunCmd(flags *rootFlags) *cobra.Command`:
   - flags: `--no-update` (force-disable update probe regardless of config), `--update string` (override `mode`: prompt/auto/check/off), `-y/--yes` (skip confirmation prompts inside hook steps)
   - `Args: cobra.NoArgs`
   - implementation order:
@@ -185,8 +185,8 @@ The lifecycle pipelines are executed by the existing pipeline executor (`runPipe
     4. **if `PullFFOnly` returned `moved == true`**, reload all three of: `DevboxConfig`, `LifecycleConfig`, and the command registry from disk. From this point on, the command must use the reloaded `lifecycleCfg.Run.Phases`, `lifecycleCfg.Run.ShowInfo`, and `lifecycleCfg.Run.FinalMessage` — never the pre-pull copy. Note: a config reload after pull does **not** re-run the update probe (single probe per `devbox run` invocation).
     5. call `runLifecyclePhases(...)` for `lifecycleCfg.Run.Phases` (post-reload value)
     6. on success: if `lifecycleCfg.Run.ShowInfo` is true, run `devbox info` (preferably by calling the existing info renderer in-process with the just-reloaded config — no subprocess); then print `lifecycleCfg.Run.FinalMessage` via `render.Writer.Success` (the default `"Project is ready for work!"` is already applied by the loader; no fallback needed in command code)
-- [ ] register the new command in `devbox-cli/internal/command/root.go`
-- [ ] write unit tests `run_test.go`:
+- [x] register the new command in `devbox-cli/internal/command/root.go`
+- [x] write unit tests `run_test.go`:
   - cobra wiring (Use, flags exist, NoArgs)
   - `--no-update` forces probe to off
   - `--update` overrides yaml mode (incl. `enabled: false` and incl. omitted `update:` block)
@@ -196,7 +196,7 @@ The lifecycle pipelines are executed by the existing pipeline executor (`runPipe
   - missing lifecycle.yml produces a clear error
   - lifecycle.yml present but `run:` section omitted → clear error mentioning the missing section
   - after a simulated successful pull (HEAD-moved stub), the command uses the reloaded `LifecycleConfig` for `Phases`/`ShowInfo`/`FinalMessage` (drive this via a fixture that swaps lifecycle.yml on disk between probe and phase-run)
-- [ ] run `cd devbox-cli && make test && make lint`
+- [x] run `cd devbox-cli && make test && make lint`
 
 ### Task 7: Replace `devbox stop` body with lifecycle pipeline
 - [ ] rewrite `devbox-cli/internal/command/stop.go`:
