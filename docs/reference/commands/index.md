@@ -6,6 +6,12 @@ Reference for declarative commands defined in `devbox/commands/`.
 
 - [app.install](app/install.md) — Install the Laravel application via installer container
 
+## db
+
+- [db.cli](db/cli.md) — Connect to the database in the db container
+- [db.create](db/create.md) — Create a database in the db container
+- [db.drop](db/drop.md) — Drop the database in the db container
+
 ## services.main
 
 - [services.main.bootstrap](services/main/bootstrap.md) — Full bootstrap — start db, create database, install deps, generate key, run migrations

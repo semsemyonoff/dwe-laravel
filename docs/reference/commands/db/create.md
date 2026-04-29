@@ -9,7 +9,8 @@ Create a database in the db container
 | **ID** | `db.create` |
 | **Type** | `service_exec` |
 | **Group** | `db` |
-| **Private** | yes |
+| **Success message** | Database `${param.database}` is ready. |
+| **Error message** | Failed to create database `${param.database}`. |
 
 **Service:** `db`
 
