@@ -16,8 +16,8 @@ if [ "$CHECK_EXISTS" = "1" ]; then
     exit 1
   }
   echo "$db_list" | grep -qxF "$TARGET_DB_NAME" || {
-    echo "Target database $TARGET_DB_NAME does not exist. Skipping restore."
-    exit 0
+    echo "Target database $TARGET_DB_NAME does not exist." >&2
+    exit 1
   }
 fi
 
