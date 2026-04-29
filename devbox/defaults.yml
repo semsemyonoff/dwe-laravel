@@ -162,7 +162,7 @@ db:
   second_database: laravel_second
   password: root
   user: root
-  backup_dir: services/main/runtime/dumps
+  backup_dir: backups/db
 
 compose:
   base: compose.yaml

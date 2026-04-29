@@ -124,6 +124,7 @@ commands:
       target_database:
         type: string
         description: Target database to restore to
+        default_from: db.database
         required: true
         pattern: ^[a-zA-Z0-9_][a-zA-Z0-9_-]*$
       dump_dir:

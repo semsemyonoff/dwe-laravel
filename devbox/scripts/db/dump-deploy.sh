@@ -12,8 +12,8 @@ if [ "$CHECK_EXISTS" = "1" ]; then
   # warning/error lines cannot falsely match as a database name in the grep.
   _stderr_file=$(mktemp)
   trap 'rm -f "$_stderr_file"' EXIT
-  db_list=$("$DEVBOX_BIN" docker exec -T -e MYSQL_PWD db -- mariadb \
-    -u"$DB_USER" -Nse "SHOW DATABASES" 2>"$_stderr_file") || {
+  db_list=$("$DEVBOX_BIN" docker exec -T db -- mariadb \
+    -u"$DB_USER" -p"$DB_PASSWORD" -Nse "SHOW DATABASES" 2>"$_stderr_file") || {
     echo "Failed to query databases: $(cat "$_stderr_file")"
     exit 1
   }
@@ -30,5 +30,5 @@ fi
 "$DEVBOX_BIN" commands run db.create --set database="$TARGET_DB_NAME" --yes
 
 # Restore from dump file
-gunzip -c "$DUMP_FILE" | "$DEVBOX_BIN" docker exec -T -e MYSQL_PWD db -- \
-  mariadb -u"$DB_USER" -D "$TARGET_DB_NAME"
+gunzip -c "$DUMP_FILE" | "$DEVBOX_BIN" docker exec -T db -- \
+  mariadb -u"$DB_USER" -p"$DB_PASSWORD" -D "$TARGET_DB_NAME"
