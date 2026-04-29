@@ -11,6 +11,6 @@ set -euo pipefail
 TMPFILE=$(mktemp "${DUMP_FILE}.XXXXXX")
 trap 'rm -f "$TMPFILE"' EXIT
 
-MYSQL_PWD="$DB_PASSWORD" "$DEVBOX_BIN" docker exec -T db -- mariadb-dump \
+"$DEVBOX_BIN" docker exec -T -e MYSQL_PWD="$DB_PASSWORD" db -- mariadb-dump \
   -u"$DB_USER" "$DB_NAME" | gzip > "$TMPFILE"
 mv "$TMPFILE" "$DUMP_FILE"
