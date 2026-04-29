@@ -162,11 +162,11 @@ The first concrete consumers are two Laravel-pilot commands — `db.dump-create`
 - [x] `cd devbox-cli && make test && make lint` — must pass before next task
 
 ### Task 7: Extend script contract with `DEVBOX_BIN` and `DEVBOX_FILES_JSON` (devbox-cli)
-- [ ] in `runner_script.go.buildContractEnv`: resolve `DEVBOX_BIN` via `os.Executable()` (fallback to `os.Args[0]` absolute on error)
-- [ ] add `DEVBOX_FILES_JSON` containing JSON object `{"<id>": {"path": "..."}}`; empty `{}` when no files declared
-- [ ] update top-of-file doc comment listing contract env vars
-- [ ] write tests in `runner_script_test.go`: contract env contains `DEVBOX_BIN` (non-empty, exists), `DEVBOX_FILES_JSON` shape with and without files
-- [ ] `cd devbox-cli && make test && make lint` — must pass before next task
+- [x] in `runner_script.go.buildContractEnv`: resolve `DEVBOX_BIN` via `os.Executable()` (fallback to `os.Args[0]` absolute on error)
+- [x] add `DEVBOX_FILES_JSON` containing JSON object `{"<id>": {"path": "..."}}`; empty `{}` when no files declared
+- [x] update top-of-file doc comment listing contract env vars
+- [x] write tests in `runner_script_test.go`: contract env contains `DEVBOX_BIN` (non-empty, exists), `DEVBOX_FILES_JSON` shape with and without files
+- [x] `cd devbox-cli && make test && make lint` — must pass before next task
 
 ### Task 8: Loader + integration tests (devbox-cli)
 - [ ] verify `loader.go` round-trips `Files` correctly (YAML unmarshal into the new struct); add a fixture in `testdata/` if a tests-specific file is missing
