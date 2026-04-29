@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -euo pipefail
 
 # Restore a database from a dump file.
 # Uses DEVBOX_BIN to invoke commands consistently.
