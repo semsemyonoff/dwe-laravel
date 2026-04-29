@@ -261,20 +261,20 @@ Touches `devbox-cli/internal/commands/runner_script.go` and tests. Validation
 already permits `workdir` on script (it's currently silently ignored), but we
 codify allowed types in Task 4.
 
-- [ ] in `ScriptRunner.execScript`, after rendering, if `ctx.Cmd.Workdir` is
+- [x] in `ScriptRunner.execScript`, after rendering, if `ctx.Cmd.Workdir` is
       non-empty: render it via `tpl.RenderCommand`, normalize relative
       paths against `ctx.ProjectRoot`, set `c.Dir = rendered`. Otherwise
       retain the current `c.Dir = ctx.ProjectRoot` default.
-- [ ] keep `scriptPath` resolution untouched: `script.path` is **always**
+- [x] keep `scriptPath` resolution untouched: `script.path` is **always**
       resolved against `ctx.ProjectRoot` (not against the new `workdir`).
       Add a doc comment in `runner_script.go` calling this out.
-- [ ] write tests in `runner_script_test.go`: absolute `workdir` honored,
+- [x] write tests in `runner_script_test.go`: absolute `workdir` honored,
       relative `workdir` resolved against project root, `script.path`
       remains project-root-relative even when `workdir` is set, render
       error in `workdir` template surfaces a wrapped error, missing
       `workdir` falls back to project root (regression check)
-- [ ] run `cd devbox-cli && make test && make lint` — must be green
-- [ ] commit in `devbox-cli/`:
+- [x] run `cd devbox-cli && make test && make lint` — must be green
+- [x] commit in `devbox-cli/`:
       `feat(commands): apply workdir to script runner`
 
 ### Task 4: Remove `cwd`, unify on `workdir` for host commands
