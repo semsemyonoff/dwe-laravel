@@ -100,10 +100,10 @@ The first concrete consumers are two Laravel-pilot commands — `db.dump-create`
 - [x] `cd devbox-cli && make test && make lint` — must pass before next task
 
 ### Task 3: Expose `files` namespace in template context (devbox-cli)
-- [ ] in `internal/tpl/render_command.go`: define `ResolvedFile struct { Path string }` as a tiny DTO local to the `tpl` package (chosen over `map[string]map[string]any` for type safety and to avoid an import cycle from `tpl` → `commands`); add `Files map[string]ResolvedFile` to `RenderContext`
-- [ ] extend `CompileVarSyntax` to handle `${files.<id>.path}` → `{{ resolveFile .Files "<id>" "path" }}`; register `resolveFile` helper in `commandFuncMap`
-- [ ] write tests in `render_command_test.go`: `${files.dump.path}` resolves to the path; missing id → empty string; unknown subkey → empty string; `${files.foo-bar.path}` is left literal (regex doesn't match — exercises the file-id validation contract from Task 1)
-- [ ] `cd devbox-cli && make test && make lint` — must pass before next task
+- [x] in `internal/tpl/render_command.go`: define `ResolvedFile struct { Path string }` as a tiny DTO local to the `tpl` package (chosen over `map[string]map[string]any` for type safety and to avoid an import cycle from `tpl` → `commands`); add `Files map[string]ResolvedFile` to `RenderContext`
+- [x] extend `CompileVarSyntax` to handle `${files.<id>.path}` → `{{ resolveFile .Files "<id>" "path" }}`; register `resolveFile` helper in `commandFuncMap`
+- [x] write tests in `render_command_test.go`: `${files.dump.path}` resolves to the path; missing id → empty string; unknown subkey → empty string; `${files.foo-bar.path}` is left literal (regex doesn't match — exercises the file-id validation contract from Task 1)
+- [x] `cd devbox-cli && make test && make lint` — must pass before next task
 
 ### Task 4: Implement `ComputeFilePaths` (pre-confirm, non-mutating) for read/read_write (devbox-cli)
 - [ ] new file `internal/commands/resolve_files.go`: `ComputeFilePaths(ctx RunContext) (map[string]tpl.ResolvedFile, error)` — pure function, no filesystem mutation, returns map of file id → resolved path
