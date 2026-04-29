@@ -169,11 +169,11 @@ The first concrete consumers are two Laravel-pilot commands — `db.dump-create`
 - [x] `cd devbox-cli && make test && make lint` — must pass before next task
 
 ### Task 8: Loader + integration tests (devbox-cli)
-- [ ] verify `loader.go` round-trips `Files` correctly (YAML unmarshal into the new struct); add a fixture in `testdata/` if a tests-specific file is missing
-- [ ] write `runner_script_test.go` integration test: small YAML defining `files: { dump: { access: write, path: "{tmp}/x.txt", env: F } }`; run a script that writes `hello` to `$F`; assert file exists with right content
-- [ ] write integration test for read-mode: pre-create a file in tempdir, glob+match+sort selects newest, env points at it
-- [ ] write integration test for on_error: write-mode with on_error=remove + a script that exits 1 → file removed
-- [ ] `cd devbox-cli && make test && make lint` — must pass before next task
+- [x] verify `loader.go` round-trips `Files` correctly (YAML unmarshal into the new struct); add a fixture in `testdata/` if a tests-specific file is missing
+- [x] write `runner_script_test.go` integration test: small YAML defining `files: { dump: { access: write, path: "{tmp}/x.txt", env: F } }`; run a script that writes `hello` to `$F`; assert file exists with right content
+- [x] write integration test for read-mode: pre-create a file in tempdir, glob+match+sort selects newest, env points at it
+- [x] write integration test for on_error: write-mode with on_error=remove + a script that exits 1 → file removed
+- [x] `cd devbox-cli && make test && make lint` — must pass before next task
 
 ### Task 9: Add confirmation-bypass to `devbox commands run` (devbox-cli)
 
