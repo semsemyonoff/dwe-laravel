@@ -94,7 +94,7 @@ commands:
     env:
       DB_NAME: "${param.database}"
       DB_USER: "${db.user}"
-      DB_PASSWORD: "${db.password}"
+      MYSQL_PWD: "${db.password}"
     files:
       dump:
         access: write
@@ -142,7 +142,7 @@ commands:
       TARGET_DB_NAME: "${param.target_database}"
       CHECK_EXISTS: "{{ if .Params.check_exists }}1{{ else }}0{{ end }}"
       DB_USER: "${db.user}"
-      DB_PASSWORD: "${db.password}"
+      MYSQL_PWD: "${db.password}"
     files:
       dump:
         access: read

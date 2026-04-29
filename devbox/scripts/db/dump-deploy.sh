@@ -13,7 +13,7 @@ if [ "$CHECK_EXISTS" = "1" ]; then
   _stderr_file=$(mktemp)
   trap 'rm -f "$_stderr_file"' EXIT
   db_list=$("$DEVBOX_BIN" docker exec -T db -- mariadb \
-    -u"$DB_USER" -p"$DB_PASSWORD" -Nse "SHOW DATABASES" 2>"$_stderr_file") || {
+    -u"$DB_USER" -Nse "SHOW DATABASES" 2>"$_stderr_file") || {
     echo "Failed to query databases: $(cat "$_stderr_file")"
     exit 1
   }
@@ -31,4 +31,4 @@ fi
 
 # Restore from dump file
 gunzip -c "$DUMP_FILE" | "$DEVBOX_BIN" docker exec -T db -- \
-  mariadb -u"$DB_USER" -p"$DB_PASSWORD" -D "$TARGET_DB_NAME"
+  mariadb -u"$DB_USER" -D "$TARGET_DB_NAME"
