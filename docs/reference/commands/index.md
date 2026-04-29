@@ -11,6 +11,8 @@ Reference for declarative commands defined in `devbox/commands/`.
 - [db.cli](db/cli.md) — Connect to the database in the db container
 - [db.create](db/create.md) — Create a database in the db container
 - [db.drop](db/drop.md) — Drop the database in the db container
+- [db.dump-create](db/dump-create.md) — Create a database dump file
+- [db.dump-deploy](db/dump-deploy.md) — Restore a database from a dump file
 
 ## services.main
 

@@ -227,11 +227,11 @@ CLAUDE.md describes a "four-way dispatch" for confirmation but the current code 
 - [x] `cd devbox-cli && make test && make lint` — must pass before next task
 
 ### Task 14: Documentation updates
-- [ ] update `CLAUDE.md` — add a short "Files directive" subsection under "Config model" describing `files:` shape, access modes, candidates fallback, env injection, safe-cleanup semantics (existed_before), and the `${files.<id>.path}` template form
-- [ ] update `CLAUDE.md` — add `date`, `datetime`, `base`, `dir` to the template-funcs note; add `DEVBOX_BIN`, `DEVBOX_FILES_JSON` to script contract list; document `--yes` on `commands run`
-- [ ] regenerate reference docs: `./bin/devbox docs generate` (verify diff is sensible, not noise)
-- [ ] if `AGENTS.md` exists in either repo, mirror the same notes there
-- [ ] no tests for docs
+- [x] update `CLAUDE.md` — add a short "Files directive" subsection under "Config model" describing `files:` shape, access modes, candidates fallback, env injection, safe-cleanup semantics (existed_before), and the `${files.<id>.path}` template form
+- [x] update `CLAUDE.md` — add `date`, `datetime`, `base`, `dir` to the template-funcs note; add `DEVBOX_BIN`, `DEVBOX_FILES_JSON` to script contract list; document `--yes` on `commands run`
+- [x] regenerate reference docs: `./bin/devbox docs generate` (verify diff is sensible, not noise)
+- [x] if `AGENTS.md` exists in either repo, mirror the same notes there (AGENTS.md already in sync)
+- [x] no tests for docs
 
 ### Task 15: Verify acceptance criteria
 - [ ] verify all spec items: `files:` block parses; access modes work; candidates with glob+match+sort work; mkdir/overwrite/on_error work; env injection w/ conflict guard works; `${files.<id>.path}` works in templates **including `confirmation_text`**; `date`/`datetime`/`base`/`dir` funcs work; `DEVBOX_BIN` set in scripts; `--yes` skips confirmation and propagates to nested calls
