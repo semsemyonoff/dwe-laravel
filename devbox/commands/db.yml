@@ -107,6 +107,8 @@ commands:
   dump-deploy:
     type: script
     description: Restore a database from a dump file
+    confirmation: true
+    confirmation_text: "This will DROP and recreate database '${param.target_database}'. Continue?"
     params:
       database:
         type: string

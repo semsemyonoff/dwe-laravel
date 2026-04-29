@@ -8,9 +8,15 @@ set -euo pipefail
 
 # Optional: check if target database exists before dropping
 if [ "$CHECK_EXISTS" = "1" ]; then
-  MYSQL_PWD="$DB_PASSWORD" "$DEVBOX_BIN" docker exec -T db -- mariadb -u"$DB_USER" -Nse \
-    "SHOW DATABASES" | grep -qxF "$TARGET_DB_NAME" || {
-    echo "Target database $TARGET_DB_NAME does not exist. Skipping drop step."
+  # Capture db list separately so mariadb errors (auth failure, container down)
+  # are not silently treated as "database not found".
+  db_list=$(MYSQL_PWD="$DB_PASSWORD" "$DEVBOX_BIN" docker exec -T db -- mariadb \
+    -u"$DB_USER" -Nse "SHOW DATABASES" 2>&1) || {
+    echo "Failed to query databases: $db_list"
+    exit 1
+  }
+  echo "$db_list" | grep -qxF "$TARGET_DB_NAME" || {
+    echo "Target database $TARGET_DB_NAME does not exist. Skipping restore."
     exit 0
   }
 fi
