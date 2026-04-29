@@ -144,22 +144,22 @@ The first concrete consumers are two Laravel-pilot commands — `db.dump-create`
 
 **Signature change**: `BuildEnv` becomes error-returning to surface the runtime conflict guard. All callers update.
 
-- [ ] in `internal/commands/resolve.go`: change `func BuildEnv(cmd *CommandDef, params, ctx map[string]any) map[string]string` to `func BuildEnv(cmd *CommandDef, params, ctx map[string]any, files map[string]tpl.ResolvedFile) (map[string]string, error)`; merge order: context-env → params-env → files-env (`spec.Env → resolved.Path`) → command-level `env:` (templates rendered later)
-- [ ] add runtime conflict guard: if a name is set twice anywhere in the merge, return `fmt.Errorf("env conflict: %q declared by %s and %s", ...)`. This is defensive — Task 1 validation already rejects such conflicts at load — but guards against programmatic constructions in tests
-- [ ] update **all** call sites to the new signature:
+- [x] in `internal/commands/resolve.go`: change `func BuildEnv(cmd *CommandDef, params, ctx map[string]any) map[string]string` to `func BuildEnv(cmd *CommandDef, params, ctx map[string]any, files map[string]tpl.ResolvedFile) (map[string]string, error)`; merge order: context-env → params-env → files-env (`spec.Env → resolved.Path`) → command-level `env:` (templates rendered later)
+- [x] add runtime conflict guard: if a name is set twice anywhere in the merge, return `fmt.Errorf("env conflict: %q declared by %s and %s", ...)`. This is defensive — Task 1 validation already rejects such conflicts at load — but guards against programmatic constructions in tests
+- [x] update **all** call sites to the new signature:
     - `internal/commands/runner_host.go` — `buildRenderedEnv` (line ~139), pass `ctx.Render.Files` and propagate the new error
     - `internal/commands/runner_host.go:41` — direct `BuildEnv` call in `HostRunner.Run`
     - `internal/commands/runner_host.go:111` — direct `BuildEnv` call in `DevboxRunner.Run`
     - `internal/commands/runner_service.go:36` and `:86` — `ServiceExecRunner` and `ServiceRunRunner` calls
     - `internal/commands/runner_script.go:133` — `ScriptRunner.execScript`
     - any test that calls `BuildEnv` directly (search: `BuildEnv\(`)
-- [ ] thread the resolved files map through `RunContext` (Task 5 already adds `ctx.Render.Files`; this task makes `BuildEnv` consume it from the same source via `buildRenderedEnv`)
-- [ ] write tests in `resolve_test.go`:
+- [x] thread the resolved files map through `RunContext` (Task 5 already adds `ctx.Render.Files`; this task makes `BuildEnv` consume it from the same source via `buildRenderedEnv`)
+- [x] write tests in `resolve_test.go`:
     - file env appears in BuildEnv output with correct path value
     - conflict between `files[*].env` and `params[*].env` returns the documented error
     - conflict between `files[*].env` and command-level `env:` returns error
     - empty files map → BuildEnv behaves identically to today (regression)
-- [ ] `cd devbox-cli && make test && make lint` — must pass before next task
+- [x] `cd devbox-cli && make test && make lint` — must pass before next task
 
 ### Task 7: Extend script contract with `DEVBOX_BIN` and `DEVBOX_FILES_JSON` (devbox-cli)
 - [ ] in `runner_script.go.buildContractEnv`: resolve `DEVBOX_BIN` via `os.Executable()` (fallback to `os.Args[0]` absolute on error)
