@@ -7,5 +7,6 @@ bin/
 .env
 
 logs/*
+backups/*
 
 .ralphex/
