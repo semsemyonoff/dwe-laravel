@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -euo pipefail
 
 # Create a database dump using mariadb-dump and compress it with gzip.
 # Uses DEVBOX_BIN to invoke docker commands consistently.
