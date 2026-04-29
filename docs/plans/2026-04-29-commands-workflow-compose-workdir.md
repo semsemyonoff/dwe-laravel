@@ -223,26 +223,26 @@ Single devbox-cli commit at the end.
 
 Touches `devbox-cli/internal/commands/` and the inspect/docs formatters.
 
-- [ ] add `ComposeArgs []string \`yaml:"compose_args"\`` to `CommandDef`
+- [x] add `ComposeArgs []string \`yaml:"compose_args"\`` to `CommandDef`
       in `internal/commands/types.go`
-- [ ] in `CommandDef.Validate`: reject `compose_args` for any type other
+- [x] in `CommandDef.Validate`: reject `compose_args` for any type other
       than `service_exec` / `service_run` (call from
       `validateCommandType`, `validateScriptType`, `validateWorkflowType` —
       pattern matches existing field-by-type checks)
-- [ ] in `runner_service.go`, render every `cmd.ComposeArgs[i]` through
+- [x] in `runner_service.go`, render every `cmd.ComposeArgs[i]` through
       `tpl.RenderCommand` using `ctx.Render`; collect into a `[]string`
       slice; surface render errors with the
       `"render compose_args[%d]: %w"` pattern
-- [ ] thread the rendered slice into `buildDockerComposeCmd` (new parameter
+- [x] thread the rendered slice into `buildDockerComposeCmd` (new parameter
       `composeArgs []string`); insert after the
       `compose.CommandArgs[exec|run]` defaults and (for `run`) the
       `--no-deps --entrypoint ""` block, **before** the `--user` / `--workdir`
       / `-e` block; preserve order
-- [ ] update the inspect formatter (`internal/command/command_cmd.go`)
+- [x] update the inspect formatter (`internal/command/command_cmd.go`)
       and docs formatter (`internal/command/docs.go`) so non-empty
       `compose_args` is emitted as a list (mirror how `argv` / `env` are
       printed today)
-- [ ] write tests in `runner_service_test.go` for `service_exec` and
+- [x] write tests in `runner_service_test.go` for `service_exec` and
       `service_run` covering: empty `compose_args` is a no-op (current
       argv unchanged); literal args are inserted at the documented
       position relative to `--user`/`--workdir`/`-e`; templates are
@@ -250,9 +250,9 @@ Touches `devbox-cli/internal/commands/` and the inspect/docs formatters.
       to the existing tests; render error surfaces a wrapped error;
       validation rejects `compose_args` on `command`, `script`, and
       `workflow` types
-- [ ] add a YAML round-trip test in `types_test.go` for `compose_args`
-- [ ] run `cd devbox-cli && make test && make lint` — must be green
-- [ ] commit in `devbox-cli/`:
+- [x] add a YAML round-trip test in `types_test.go` for `compose_args`
+- [x] run `cd devbox-cli && make test && make lint` — must be green
+- [x] commit in `devbox-cli/`:
       `feat(commands): allow compose_args on service_exec/service_run`
 
 ### Task 3: Support `workdir` for type=script (host-side)
