@@ -24,8 +24,8 @@ Restore a database from a dump file
 |---|---|---|---|---|
 | `check_exists` | `bool` |  | false | Check if target database exists before restore |
 | `database` | `string` |  | from `db.database` | Source database (for backup reference, if needed) |
-| `dump_dir` | `string` |  | from `db.backup_dir` | Directory containing dump files |
-| `target_database` | `string` | yes |  | Target database to restore to |
+| `dump_dir` | `string` | yes | from `db.backup_dir` | Directory containing dump files |
+| `target_database` | `string` | yes | from `db.database` | Target database to restore to |
 
 ## Files
 

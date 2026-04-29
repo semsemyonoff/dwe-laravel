@@ -22,7 +22,7 @@ Create a database dump file
 |---|---|---|---|---|
 | `database` | `string` |  | from `db.database` | Database name to dump |
 | `dump_date` | `bool` |  | true | Include date suffix in filename |
-| `dump_dir` | `string` |  | from `db.backup_dir` | Directory to store the dump file |
+| `dump_dir` | `string` | yes | from `db.backup_dir` | Directory to store the dump file |
 
 ## Files
 
