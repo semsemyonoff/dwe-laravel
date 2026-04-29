@@ -202,10 +202,10 @@ CLAUDE.md describes a "four-way dispatch" for confirmation but the current code 
 - [x] `cd devbox-cli && make test && make lint` — must pass before next task
 
 ### Task 11: Build CLI + commit devbox-cli changes
-- [ ] `cd devbox-cli && make build` — produces `../bin/devbox`
-- [ ] regenerate command reference docs: `./bin/devbox docs generate` (run from pilot repo root)
-- [ ] inside `devbox-cli/`: stage and commit (`feat: add files: directive to commands; add --yes flag to commands run; add date/datetime/base/dir tpl funcs; add DEVBOX_BIN/DEVBOX_FILES_JSON script contract`)
-- [ ] commit message must mention: spec rationale (artefact lifecycle in YAML), backward compatibility, safe-cleanup semantics (existed_before), and tests added
+- [x] `cd devbox-cli && make build` — produces `../bin/devbox`
+- [x] regenerate command reference docs: `./bin/devbox docs generate` (run from pilot repo root)
+- [x] inside `devbox-cli/`: stage and commit (`feat: add files: directive to commands; add --yes flag to commands run; add date/datetime/base/dir tpl funcs; add DEVBOX_BIN/DEVBOX_FILES_JSON script contract`)
+- [x] commit message must mention: spec rationale (artefact lifecycle in YAML), backward compatibility, safe-cleanup semantics (existed_before), and tests added
 
 ### Task 12: Pilot — `dump-create` command and script
 - [ ] in `devbox/commands/db.yml`: add `dump-create` command (type=script) with `params` (`database` default_from `db.database`, `dump_dir` default_from `db.backup_dir`, `dump_date` bool default true), `env: { DB_NAME: "${param.database}", DB_USER: "${db.user}", DB_PASSWORD: "${db.password}" }` (mirrors the existing `db.create`/`db.drop` env contract — `mariadb-dump` needs auth), `files.dump` (write, templated path with `{{ if .Params.dump_date }}_{{ date }}{{ end }}`, mkdir true, overwrite true, on_error remove, env DUMP_FILE), `script.path: devbox/scripts/db/dump-create.sh`
