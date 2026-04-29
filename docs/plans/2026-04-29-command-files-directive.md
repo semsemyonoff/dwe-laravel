@@ -115,13 +115,13 @@ The first concrete consumers are two Laravel-pilot commands — `db.dump-create`
 - [x] `cd devbox-cli && make test && make lint` — must pass before next task
 
 ### Task 5: Implement `PrepareFileEffects` (post-confirm, mutating) + safe on_error cleanup (devbox-cli)
-- [ ] in `resolve_files.go`: add `PrepareFileEffects(ctx RunContext, paths map[string]tpl.ResolvedFile) (cleanups []func(), err error)`:
+- [x] in `resolve_files.go`: add `PrepareFileEffects(ctx RunContext, paths map[string]tpl.ResolvedFile) (cleanups []func(), err error)`:
     - for **write** entries with `mkdir: true`: `os.MkdirAll(filepath.Dir(path), 0o755)` (validation in Task 1 already rejects `mkdir` for read/read_write, so no branch is needed)
     - for write entries: stat the path; if exists and `overwrite: false` → return error before running runner; record `existedBefore: true|false`
     - for read_write entries: existence already required by ComputeFilePaths; record `existedBefore: true` always (used by the cleanup-suppression rule below)
     - cleanup callback for `on_error: remove` is registered **only when `existedBefore == false`** (file was created by this invocation) — this prevents wiping yesterday's dump when today's `dump-create` fails on an existing target; consequence: `read_write` never registers a cleanup (existedBefore is always true)
     - cleanup callback signature `func()` removes the file via `os.Remove`; errors logged to stderr only
-- [ ] in `internal/commands/runner.go`: rewire `RunCommand`:
+- [x] in `internal/commands/runner.go`: rewire `RunCommand`:
     1. **defensive init**: if `ctx.Render == nil`, allocate `ctx.Render = &tpl.RenderContext{}` (programmatic test callers today pass nil — this keeps them working before any `${...}` is rendered or `Files` is assigned). If `ctx.Render.Raw == nil` and `ctx.Config != nil`, set `ctx.Render.Raw = ctx.Config.Raw`. Initialize `ctx.Render.Params`/`ctx.Render.Context` to empty maps if nil. Document this as the canonical entry-point invariant
     2. `paths, err := ComputeFilePaths(ctx)` — non-mutating
     3. assign `ctx.Render.Files = paths` so confirmation_text + run/cwd/env templates can reference them
@@ -130,15 +130,15 @@ The first concrete consumers are two Laravel-pilot commands — `db.dump-create`
     6. dispatch via `NewRunner` + `Run`
     7. on runner error: invoke `cleanups` in LIFO order, then propagate
     8. on success: skip cleanups; emit success message
-- [ ] add a regression test in `runner_test.go` (or wherever `RunCommand` is unit-tested): pass `RunContext{Render: nil, Cmd: <minimal command without files>}` and assert no nil-pointer panic; behavior matches the `Render` set explicitly to a zero `RenderContext`
-- [ ] write tests in `resolve_files_test.go`:
+- [x] add a regression test in `runner_test.go` (or wherever `RunCommand` is unit-tested): pass `RunContext{Render: nil, Cmd: <minimal command without files>}` and assert no nil-pointer panic; behavior matches the `Render` set explicitly to a zero `RenderContext`
+- [x] write tests in `resolve_files_test.go`:
     - mkdir creates parent
     - overwrite=false + existing file → pre-run error (runner not invoked)
     - overwrite=true + existing file: runner runs, simulated failure → existing file is **preserved** (existedBefore=true)
     - overwrite=true + non-existing file: simulated failure → file is removed (existedBefore=false, on_error=remove)
     - on_error=keep + non-existing file + failure → file left in place
     - read_write + on_error=remove + failure → file preserved
-- [ ] `cd devbox-cli && make test && make lint` — must pass before next task
+- [x] `cd devbox-cli && make test && make lint` — must pass before next task
 
 ### Task 6: Inject file env vars + conflict guard (devbox-cli)
 
