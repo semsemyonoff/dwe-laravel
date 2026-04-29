@@ -8,11 +8,13 @@ set -euo pipefail
 
 # Optional: check if target database exists before dropping
 if [ "$CHECK_EXISTS" = "1" ]; then
-  # Capture db list separately so mariadb errors (auth failure, container down)
-  # are not silently treated as "database not found".
-  db_list=$("$DEVBOX_BIN" docker exec -T -e MYSQL_PWD="$DB_PASSWORD" db -- mariadb \
-    -u"$DB_USER" -Nse "SHOW DATABASES" 2>&1) || {
-    echo "Failed to query databases: $db_list"
+  # Capture db list (stdout only); stderr goes to a temp file so that mariadb
+  # warning/error lines cannot falsely match as a database name in the grep.
+  _stderr_file=$(mktemp)
+  trap 'rm -f "$_stderr_file"' EXIT
+  db_list=$("$DEVBOX_BIN" docker exec -T -e MYSQL_PWD db -- mariadb \
+    -u"$DB_USER" -Nse "SHOW DATABASES" 2>"$_stderr_file") || {
+    echo "Failed to query databases: $(cat "$_stderr_file")"
     exit 1
   }
   echo "$db_list" | grep -qxF "$TARGET_DB_NAME" || {
@@ -28,5 +30,5 @@ fi
 "$DEVBOX_BIN" commands run db.create --set database="$TARGET_DB_NAME" --yes
 
 # Restore from dump file
-gunzip -c "$DUMP_FILE" | "$DEVBOX_BIN" docker exec -T -e MYSQL_PWD="$DB_PASSWORD" db -- \
+gunzip -c "$DUMP_FILE" | "$DEVBOX_BIN" docker exec -T -e MYSQL_PWD db -- \
   mariadb -u"$DB_USER" -D "$TARGET_DB_NAME"
