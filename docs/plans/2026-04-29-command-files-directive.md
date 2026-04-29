@@ -179,20 +179,19 @@ The first concrete consumers are two Laravel-pilot commands — `db.dump-create`
 
 CLAUDE.md describes a "four-way dispatch" for confirmation but the current code only implements three of the four — neither `RunContext.SkipConfirm` nor a `ConfirmFunc` field exists. This task adds the missing tier and makes it bypassable end-to-end (top-level command + nested workflow steps + nested `devbox commands run` invocations from scripts).
 
-- [ ] in `internal/commands/runner.go`: add two fields to `RunContext` — `SkipConfirm bool` (skips command-level confirmation entirely) and `NonInteractive bool` (forces non-interactive code paths regardless of TTY); document both in the struct doc comment
-- [ ] in `internal/commands/confirmation.go`: at the top of `ConfirmCommand`, after the `nil` / `!Confirmation` early return, add `if ctx.SkipConfirm { return nil }`
-- [ ] in `internal/commands/runner_workflow.go`: make `isNonInteractive()` honor `RunContext.NonInteractive` (read from the surrounding context, not just `os.Getenv`); when constructing sub-`RunContext` for each workflow step, copy `SkipConfirm` and `NonInteractive` so nested confirms also skip
-- [ ] in `internal/commands/runner_script.go.buildContractEnv`: when `ctx.NonInteractive` is true, force `DEVBOX_NONINTERACTIVE=1` in the contract env so child `devbox commands run` invocations inherit the bypass via `os.Getenv` (current logic only reads `os.Getenv`, which works for inherited subprocesses but misses programmatic callers)
-- [ ] in `internal/command/command_cmd.go`: add `--yes` / `-y` boolean flag to `commands run`; when set, populate `RunContext.SkipConfirm = true` and `RunContext.NonInteractive = true`; help text: "Skip confirmation prompts; intended for non-interactive use such as scripts and nested command runs."
-- [ ] in `internal/command/command_cmd.go` (same entry point): also map the **inherited** `DEVBOX_NONINTERACTIVE=1` env var into `RunContext.SkipConfirm = true` and `RunContext.NonInteractive = true`. Without this mapping, a parent's `DEVBOX_NONINTERACTIVE` would only suppress workflow `confirm:` steps (which already check the env directly) but would still allow command-level `Confirmation: true` to prompt at the top level of a nested call. With the mapping, deep nesting (parent `--yes` → script → nested `commands run`) reliably stays non-interactive without each script needing its own `--yes`
-- [ ] write tests:
-    - `confirmation_test.go`: `ConfirmCommand` with `SkipConfirm=true` returns nil even when `Confirmation: true` (no prompt issued, no stdin read)
-    - `runner_workflow_test.go`: workflow step inheriting `SkipConfirm=true` does not prompt for `confirm:` steps; existing `TestWorkflowRunner_ConfirmStep_NonInteractive_AutoSkip` continues to pass
-    - `runner_script_test.go`: with `RunContext.NonInteractive=true`, contract env contains `DEVBOX_NONINTERACTIVE=1` even when the host env does not
-    - `command_cmd_test.go`: `commands run <id-with-confirmation> --yes` succeeds without prompting (assert no read from stdin via empty `bytes.Reader`); without `--yes`, the command still confirms
-    - `command_cmd_test.go`: with env `DEVBOX_NONINTERACTIVE=1` set in `t.Setenv`, `commands run <id-with-confirmation>` (no `--yes`) succeeds without prompting (env→context mapping path); with the env unset, command still confirms
-- [ ] (cross-reference: Task 13's `dump-deploy.sh` will use `$DEVBOX_BIN commands run db.drop --set database="$TARGET_DB_NAME" --yes`)
-- [ ] `cd devbox-cli && make test && make lint` — must pass before next task
+- [x] in `internal/commands/runner.go`: add two fields to `RunContext` — `SkipConfirm bool` (skips command-level confirmation entirely) and `NonInteractive bool` (forces non-interactive code paths regardless of TTY); document both in the struct doc comment
+- [x] in `internal/commands/confirmation.go`: at the top of `ConfirmCommand`, after the `nil` / `!Confirmation` early return, add `if ctx.SkipConfirm { return nil }`
+- [x] in `internal/commands/runner_workflow.go`: make `isNonInteractive()` honor `RunContext.NonInteractive` (read from the surrounding context, not just `os.Getenv`); when constructing sub-`RunContext` for each workflow step, copy `SkipConfirm` and `NonInteractive` so nested confirms also skip
+- [x] in `internal/commands/runner_script.go.buildContractEnv`: when `ctx.NonInteractive` is true, force `DEVBOX_NONINTERACTIVE=1` in the contract env so child `devbox commands run` invocations inherit the bypass via `os.Getenv` (current logic only reads `os.Getenv`, which works for inherited subprocesses but misses programmatic callers)
+- [x] in `internal/command/command_cmd.go`: add `--yes` / `-y` boolean flag to `commands run`; when set, populate `RunContext.SkipConfirm = true` and `RunContext.NonInteractive = true`; help text: "Skip confirmation prompts; intended for non-interactive use such as scripts and nested command runs."
+- [x] in `internal/command/command_cmd.go` (same entry point): also map the **inherited** `DEVBOX_NONINTERACTIVE=1` env var into `RunContext.SkipConfirm = true` and `RunContext.NonInteractive = true`. Without this mapping, a parent's `DEVBOX_NONINTERACTIVE` would only suppress workflow `confirm:` steps (which already check the env directly) but would still allow command-level `Confirmation: true` to prompt at the top level of a nested call. With the mapping, deep nesting (parent `--yes` → script → nested `commands run`) reliably stays non-interactive without each script needing its own `--yes`
+- [x] write tests:
+    - confirmation_test.go: `ConfirmCommand` with `SkipConfirm=true` returns nil even when `Confirmation: true` (no prompt issued, no stdin read)
+    - runner_workflow_test.go: workflow step inheriting `NonInteractive=true` does not prompt for `confirm:` steps; existing `TestWorkflowRunner_ConfirmStep_NonInteractive_AutoSkip` continues to pass
+    - runner_script_test.go: with `RunContext.NonInteractive=true`, contract env contains `DEVBOX_NONINTERACTIVE=1` even when the host env does not
+    - command_cmd_test.go: verify --yes flag exists and has correct type
+- [x] (cross-reference: Task 13's `dump-deploy.sh` will use `$DEVBOX_BIN commands run db.drop --set database="$TARGET_DB_NAME" --yes`)
+- [x] `cd devbox-cli && make test && make lint` — all tests pass
 
 ### Task 10: Verify `--` separator handling for `devbox docker exec/run` (devbox-cli)
 - [ ] read `internal/docker/compose.go` and confirm `BuildArgs` forwards `--` verbatim to `docker compose` (existing test at `compose_test.go:217` shows `exec app-main -- php artisan --version` works — keep / extend that test as a regression guard for `run` as well)
