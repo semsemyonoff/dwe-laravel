@@ -93,11 +93,11 @@ The first concrete consumers are two Laravel-pilot commands — `db.dump-create`
 - [x] `cd devbox-cli && make test && make lint` — must pass before next task
 
 ### Task 2: Add template funcs `date`, `datetime`, `base`, `dir` (devbox-cli)
-- [ ] in `internal/tpl/funcs.go`: register `date` (returns `time.Now().Format("2006-01-02")`), `datetime` (returns `time.Now().Format("2006-01-02_15-04-05")`), `base` (wraps **`filepath.Base`**), `dir` (wraps **`filepath.Dir`**) — chosen over `path.Base`/`path.Dir` because these are filesystem operations on local paths; `filepath` handles OS-specific separators correctly while `path` is for forward-slash URLs/embedded resources
-- [ ] use `time.Now()` via injectable clock for tests: `var nowFn = time.Now`
-- [ ] update `commandFuncMap` in `render_command.go` to include the new funcs (already inherited via `FuncMap()` — just confirm)
-- [ ] add table-driven tests in `engine_test.go` (or new `funcs_test.go`) for each new func, including a clock-stub for `date`/`datetime`; assert `base("/a/b/c.txt") == "c.txt"` and `dir("/a/b/c.txt") == "/a/b"`
-- [ ] `cd devbox-cli && make test && make lint` — must pass before next task
+- [x] in `internal/tpl/funcs.go`: register `date` (returns `time.Now().Format("2006-01-02")`), `datetime` (returns `time.Now().Format("2006-01-02_15-04-05")`), `base` (wraps **`filepath.Base`**), `dir` (wraps **`filepath.Dir`**) — chosen over `path.Base`/`path.Dir` because these are filesystem operations on local paths; `filepath` handles OS-specific separators correctly while `path` is for forward-slash URLs/embedded resources
+- [x] use `time.Now()` via injectable clock for tests: `var nowFn = time.Now`
+- [x] update `commandFuncMap` in `render_command.go` to include the new funcs (already inherited via `FuncMap()` — just confirm)
+- [x] add table-driven tests in `engine_test.go` (or new `funcs_test.go`) for each new func, including a clock-stub for `date`/`datetime`; assert `base("/a/b/c.txt") == "c.txt"` and `dir("/a/b/c.txt") == "/a/b"`
+- [x] `cd devbox-cli && make test && make lint` — must pass before next task
 
 ### Task 3: Expose `files` namespace in template context (devbox-cli)
 - [ ] in `internal/tpl/render_command.go`: define `ResolvedFile struct { Path string }` as a tiny DTO local to the `tpl` package (chosen over `map[string]map[string]any` for type safety and to avoid an import cycle from `tpl` → `commands`); add `Files map[string]ResolvedFile` to `RenderContext`
