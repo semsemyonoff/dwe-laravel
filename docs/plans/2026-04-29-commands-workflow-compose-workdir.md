@@ -326,30 +326,26 @@ so this is a clean break, not a deprecation.
 Touches the pilot repo only (single commit). All Go changes already shipped
 in Tasks 1–4.
 
-- [ ] rebuild `./bin/devbox` (`cd devbox-cli && make build`)
-- [ ] update `CLAUDE.md`: extend the Phase 4 / commands paragraphs to
+- [x] rebuild `./bin/devbox` (`cd devbox-cli && make build`)
+- [x] update `CLAUDE.md`: extend the Phase 4 / commands paragraphs to
       describe workflow `when` + `continue_on_error`, `compose_args` for
       service runners, and the unified `workdir` semantics (note: `cwd`
-      removed, `script.path` is always project-root-relative)
-- [ ] regenerate command reference: `./bin/devbox docs generate`
-- [ ] add at most one demo per feature in `devbox/commands/`. Each demo
-      is **opportunistic** — skip the bullet entirely if no command in
-      the current pilot repo benefits from the mechanism. Do not invent
-      a synthetic command just to exercise the feature; the unit tests
-      in Tasks 1–4 already cover correctness:
-      - workflow `when` / `continue_on_error` — extend an existing
-        workflow with one non-fatal step gated on a real predicate;
-        skip if no current workflow has a step that should be optional
-      - `compose_args` — apply to a `service_exec` or `service_run`
-        command where a non-default flag (e.g. `-T`, `--name`, `-d`,
-        `--rm`) is genuinely required; skip if no current service
-        command needs one
-      - `workdir` for host/script — add or convert a demo only if it
-        pulls its weight; skip otherwise
-- [ ] verify with `./bin/devbox commands list` and
-      `./bin/devbox commands inspect <id>` for each touched command
-- [ ] commit in pilot repo:
-      `feat: workflow conditions, compose_args, unified workdir`
+      removed, `script.path` is always project-root-relative). Also added
+      new "Commands System Features" subsection with detailed docs.
+- [x] regenerate command reference: `./bin/devbox docs generate`
+- [x] skip demos — analyzed all existing commands; none genuinely benefit
+      from the new mechanisms. Unit tests from Tasks 1–4 provide thorough
+      coverage:
+      - workflow `when` / `continue_on_error` — all steps in existing
+        workflows (db.start, services.main.bootstrap) are mandatory
+      - `compose_args` — no current service commands need non-default flags
+      - `workdir` for host/script — dump-create script doesn't require
+        workdir; script.path already project-root-relative
+- [x] verify with `./bin/devbox commands list` and
+      `./bin/devbox commands inspect <id>` — all commands display correctly;
+      bootstrap workflow, db.create, dump-create inspected successfully
+- [x] commit in pilot repo:
+      `feat: workflow conditions, compose_args, unified workdir` (commit 0f5de5d)
 
 ### Task 6: Verify acceptance criteria
 
