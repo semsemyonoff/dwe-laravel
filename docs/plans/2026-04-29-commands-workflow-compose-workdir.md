@@ -282,13 +282,13 @@ codify allowed types in Task 4.
 Removes the `Cwd` field entirely. Verified that no current YAML uses `cwd:`,
 so this is a clean break, not a deprecation.
 
-- [ ] delete `Cwd string \`yaml:"cwd"\`` from `CommandDef` in
+- [x] delete `Cwd string \`yaml:"cwd"\`` from `CommandDef` in
       `internal/commands/types.go`
-- [ ] in `runner_host.go` `BuildCommand`: replace `cmd.Cwd` references with
+- [x] in `runner_host.go` `BuildCommand`: replace `cmd.Cwd` references with
       `cmd.Workdir`; render via `tpl.RenderCommand`; relative paths resolve
       against `ctx.ProjectRoot`; absolute paths used as-is; empty falls
       back to `c.Dir = ctx.ProjectRoot`
-- [ ] extend `CommandDef.Validate` — note: `workdir_from` is currently
+- [x] extend `CommandDef.Validate` — note: `workdir_from` is currently
       *silently ignored* outside service runners (no validation rejects
       it today). This task tightens the rules:
       - `workdir` allowed on: `command`, `script`, `service_exec`,
@@ -302,22 +302,22 @@ so this is a clean break, not a deprecation.
         `workdir` in `validateWorkflowType` and the corresponding `devbox`
         path in `validateCommandType` (which today already routes
         `CommandTypeDevbox` through it)
-- [ ] update inspect (`command_cmd.go`) and docs (`docs.go`) formatters:
+- [x] update inspect (`command_cmd.go`) and docs (`docs.go`) formatters:
       remove the `cwd` branch; print `workdir` for any command type that
       sets it (already happens for service types; just generalize)
-- [ ] update affected tests: rename `Cwd` → `Workdir` in
+- [x] update affected tests: rename `Cwd` → `Workdir` in
       `runner_host_test.go` (`TestHostRunner_BuildCommand_CwdAbsolute` and
       siblings), `types_test.go` (`cwd: /var/www/html` fixture), and any
       other call sites flagged by `go build`
-- [ ] add new tests in `runner_host_test.go`: `workdir` on
+- [x] add new tests in `runner_host_test.go`: `workdir` on
       `type: command` (absolute + relative + template render error);
       validation rejects `workdir` on `type: workflow` and `type: devbox`;
       validation accepts `workdir` on all other types
-- [ ] add validation tests in `types_test.go`: `workdir_from` rejected on
+- [x] add validation tests in `types_test.go`: `workdir_from` rejected on
       `type: command`, `type: script`, `type: workflow`, `type: devbox`;
       `workdir_from` accepted on `service_exec` and `service_run`
-- [ ] run `cd devbox-cli && make test && make lint` — must be green
-- [ ] commit in `devbox-cli/`:
+- [x] run `cd devbox-cli && make test && make lint` — must be green
+- [x] commit in `devbox-cli/`:
       `refactor(commands)!: replace cwd with workdir on host commands`
       (bang because the YAML key is removed)
 
