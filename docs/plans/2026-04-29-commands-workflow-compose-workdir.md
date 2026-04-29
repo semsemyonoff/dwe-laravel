@@ -349,15 +349,19 @@ in Tasks 1–4.
 
 ### Task 6: Verify acceptance criteria
 
-- [ ] verify all three mechanisms from Overview are implemented with the
-      promised semantics
-- [ ] verify `cwd` is gone from the YAML schema and Go struct
-- [ ] verify `workdir_from` is **not** newly accepted on host/script
-- [ ] run full devbox-cli test suite (`make test`) and linter (`make lint`)
-- [ ] verify test coverage on touched files is ≥ existing baseline (no
-      regressions in coverage report)
-- [ ] confirm both repos have clean working trees before
-      announcing the plan complete
+- [x] verify all three mechanisms from Overview are implemented with the
+      promised semantics (when/continue_on_error on workflows, compose_args on
+      service runners, unified workdir on all executable types)
+- [x] verify `cwd` is gone from the YAML schema and Go struct (grep confirmed
+      no Cwd field remains in commands package)
+- [x] verify `workdir_from` is **not** newly accepted on host/script (test
+      coverage confirms rejection on command/script/workflow/devbox types)
+- [x] run full devbox-cli test suite (`make test`) and linter (`make lint`)
+      (all tests pass, 0 lint issues)
+- [x] verify test coverage on touched files is ≥ existing baseline (no
+      regressions in coverage report) (commands: 82.4%, tpl: 86.1%)
+- [x] confirm both repos have clean working trees before announcing the plan
+      complete (both pilot and devbox-cli repos clean)
 
 ## Technical Details
 
