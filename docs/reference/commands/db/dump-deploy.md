@@ -44,7 +44,7 @@ Restore a database from a dump file
 |---|---|
 | `CHECK_EXISTS` | `{{ if .Params.check_exists }}1{{ else }}0{{ end }}` |
 | `DB_NAME` | `${param.database}` |
-| `DB_PASSWORD` | `${db.password}` |
 | `DB_USER` | `${db.user}` |
+| `MYSQL_PWD` | `${db.password}` |
 | `TARGET_DB_NAME` | `${param.target_database}` |
 

@@ -37,6 +37,6 @@ Create a database dump file
 | Name | Value |
 |---|---|
 | `DB_NAME` | `${param.database}` |
-| `DB_PASSWORD` | `${db.password}` |
 | `DB_USER` | `${db.user}` |
+| `MYSQL_PWD` | `${db.password}` |
 
