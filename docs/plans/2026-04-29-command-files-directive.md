@@ -194,12 +194,12 @@ CLAUDE.md describes a "four-way dispatch" for confirmation but the current code 
 - [x] `cd devbox-cli && make test && make lint` — all tests pass
 
 ### Task 10: Verify `--` separator handling for `devbox docker exec/run` (devbox-cli)
-- [ ] read `internal/docker/compose.go` and confirm `BuildArgs` forwards `--` verbatim to `docker compose` (existing test at `compose_test.go:217` shows `exec app-main -- php artisan --version` works — keep / extend that test as a regression guard for `run` as well)
-- [ ] `internal/command/docker.go`: confirm the `exec` and `run` cobra commands forward args verbatim. Specifically: their cobra args policy must be `cobra.ArbitraryArgs` (or DisableFlagParsing for the user-supplied tail), and arguments after `--` must be carried through via `cmd.ArgsLenAtDash()` so `--` is forwarded into compose's argv, not consumed by cobra's parser
-- [ ] add **argv-construction unit tests** (no Docker, no subprocess) around the helpers that build the final argv for `docker exec` and `docker run` (e.g. `BuildArgs`, plus the cobra-command argv-assembly function — typically a `newDockerExecCmd`/`runDockerExec` style internal helper; if no such testable seam exists, extract one in this task). Assert: `exec <svc> -- mariadb -u user -- foo` produces argv where `--` appears between `<svc>` and `mariadb` and the user flags after `mariadb` are preserved
-- [ ] document the contract in a short comment above the `exec` and `run` cobra command definitions
-- [ ] live `docker compose` execution stays as **manual smoke** (Task 13's manual smoke step exercises the real path); CI must not depend on Docker being available for this verification
-- [ ] `cd devbox-cli && make test && make lint` — must pass before next task
+- [x] read `internal/docker/compose.go` and confirm `BuildArgs` forwards `--` verbatim to `docker compose` (existing test at `compose_test.go:217` shows `exec app-main -- php artisan --version` works — keep / extend that test as a regression guard for `run` as well)
+- [x] `internal/command/docker.go`: confirm the `exec` and `run` cobra commands forward args verbatim. Specifically: their cobra args policy must be `cobra.ArbitraryArgs` (or DisableFlagParsing for the user-supplied tail), and arguments after `--` must be carried through via `cmd.ArgsLenAtDash()` so `--` is forwarded into compose's argv, not consumed by cobra's parser
+- [x] add **argv-construction unit tests** (no Docker, no subprocess) around the helpers that build the final argv for `docker exec` and `docker run` (e.g. `BuildArgs`, plus the cobra-command argv-assembly function — typically a `newDockerExecCmd`/`runDockerExec` style internal helper; if no such testable seam exists, extract one in this task). Assert: `exec <svc> -- mariadb -u user -- foo` produces argv where `--` appears between `<svc>` and `mariadb` and the user flags after `mariadb` are preserved
+- [x] document the contract in a short comment above the `exec` and `run` cobra command definitions
+- [x] live `docker compose` execution stays as **manual smoke** (Task 13's manual smoke step exercises the real path); CI must not depend on Docker being available for this verification
+- [x] `cd devbox-cli && make test && make lint` — must pass before next task
 
 ### Task 11: Build CLI + commit devbox-cli changes
 - [ ] `cd devbox-cli && make build` — produces `../bin/devbox`
