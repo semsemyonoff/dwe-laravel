@@ -25,6 +25,7 @@ commands:
         type: string
         description: Database name to create
         required: true
+        pattern: ^[a-zA-Z0-9_][a-zA-Z0-9_-]*$
     env:
       MYSQL_PWD: "${db.password}"
     messages:
@@ -43,6 +44,7 @@ commands:
         type: string
         description: Database name to drop
         required: true
+        pattern: ^[a-zA-Z0-9_][a-zA-Z0-9_-]*$
     env:
       MYSQL_PWD: "${db.password}"
     messages:
@@ -78,6 +80,7 @@ commands:
         type: string
         description: Database name to dump
         default_from: db.database
+        pattern: ^[a-zA-Z0-9_][a-zA-Z0-9_-]*$
       dump_dir:
         type: string
         description: Directory to store the dump file
@@ -96,10 +99,10 @@ commands:
         path: "${param.dump_dir}/${param.database}{{ if .Params.dump_date }}_{{ date }}{{ end }}.sql.gz"
         mkdir: true
         overwrite: true
-        on_error: remove
         env: DUMP_FILE
     script:
       path: devbox/scripts/db/dump-create.sh
+      shell: bash
     messages:
       success: "Database dump created at ${files.dump.path}"
       error: "Failed to create database dump"
@@ -114,10 +117,12 @@ commands:
         type: string
         description: Source database (for backup reference, if needed)
         default_from: db.database
+        pattern: ^[a-zA-Z0-9_][a-zA-Z0-9_-]*$
       target_database:
         type: string
         description: Target database to restore to
         required: true
+        pattern: ^[a-zA-Z0-9_][a-zA-Z0-9_-]*$
       dump_dir:
         type: string
         description: Directory containing dump files
@@ -144,6 +149,7 @@ commands:
         env: DUMP_FILE
     script:
       path: devbox/scripts/db/dump-deploy.sh
+      shell: bash
     messages:
       success: "Database restored from ${files.dump.path}"
       error: "Failed to restore database"

@@ -8,7 +8,7 @@ set -euo pipefail
 # Write to a temp file and atomically rename on success so that an existing
 # dump at the same path is never truncated or corrupted if the dump fails.
 
-TMPFILE="${DUMP_FILE}.tmp"
+TMPFILE=$(mktemp "${DUMP_FILE}.XXXXXX")
 trap 'rm -f "$TMPFILE"' EXIT
 
 MYSQL_PWD="$DB_PASSWORD" "$DEVBOX_BIN" docker exec -T db -- mariadb-dump \

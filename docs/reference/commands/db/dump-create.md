@@ -12,7 +12,7 @@ Create a database dump file
 | **Success message** | Database dump created at ${files.dump.path} |
 | **Error message** | Failed to create database dump |
 
-**Shell:** `sh`
+**Shell:** `bash`
 
 **Script:** `devbox/scripts/db/dump-create.sh`
 
@@ -23,6 +23,14 @@ Create a database dump file
 | `database` | `string` |  | from `db.database` | Database name to dump |
 | `dump_date` | `bool` |  | true | Include date suffix in filename |
 | `dump_dir` | `string` |  | from `db.backup_dir` | Directory to store the dump file |
+
+## Files
+
+### `dump` (write)
+
+**Env:** `DUMP_FILE`
+
+**Path:** `${param.dump_dir}/${param.database}{{ if .Params.dump_date }}_{{ date }}{{ end }}.sql.gz`
 
 ## Environment Variables
 
