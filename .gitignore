@@ -1,12 +1,22 @@
+# Teporary (for pilot only)
 legacy/
 devbox-cli/
-devbox/local.yml
-devbox/docker.local.yml
 bin/
-/services/
-.env
 
+# Devbox
 logs/*
 backups/*
+services/*
+.env
+devbox/local.yml
+devbox/docker.local.yml
 
+# tools
 .ralphex/
+
+# IDE & OS
+.idea/
+.vscode/
+.zed/
+*~
+.DS_Store
