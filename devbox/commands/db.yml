@@ -85,6 +85,8 @@ commands:
         type: string
         description: Directory to store the dump file
         default_from: db.backup_dir
+        required: true
+        pattern: ^[^*?\[\]]+$
       dump_date:
         type: bool
         description: Include date suffix in filename
@@ -128,6 +130,8 @@ commands:
         type: string
         description: Directory containing dump files
         default_from: db.backup_dir
+        required: true
+        pattern: ^[^*?\[\]]+$
       check_exists:
         type: bool
         description: Check if target database exists before restore
