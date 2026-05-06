@@ -7,45 +7,62 @@ phases:
     description: Prepare service directories and clone repository
     steps:
       - name: create-dirs
-        builtin: service_dirs_ensure
+        type: builtin
+        cmd: service_dirs_ensure
         with:
           service: second
         description: Create service hub directories
       - name: git-clone
-        run: git clone ssh://git@git.horn:2222/semsemyonoff/laravel-test-service.git services/second/src
-        when: "dir-empty services/second/src"
+        type: shell
+        cmd: git clone ssh://git@git.horn:2222/semsemyonoff/laravel-test-service.git services/second/src
+        when:
+          type: builtin
+          cmd: "dir-empty services/second/src"
         description: Clone repository (skipped if already cloned)
       - name: copy-configs
-        builtin: service_configs_copy
+        type: builtin
+        cmd: service_configs_copy
         with:
           service: second
           mode: replace
         description: Copy template configs to service directory (files declared in services.second.configs)
-        check: "cmd: ./bin/devbox deploy config-check second"
+        check:
+          type: builtin
+          cmd: service_configs_check
+          with:
+            service: second
 
   - name: init
     description: Initialize application (database, dependencies, keys)
-    when: "dir-empty services/second/src/vendor"
+    when:
+      type: builtin
+      cmd: "dir-empty services/second/src/vendor"
     steps:
       - name: db-start
-        command: db.start
+        type: command
+        cmd: db.start
         description: Start database container and wait until healthy
       - name: db-create-second
-        command: services.second.db.create
+        type: command
+        cmd: services.second.db.create
         description: Create application database for second service
       - name: composer-install-second
-        command: services.second.composer-install
+        type: command
+        cmd: services.second.composer-install
         description: Install PHP dependencies
       - name: key-generate-second
-        command: services.second.key-generate
+        type: command
+        cmd: services.second.key-generate
         description: Generate Laravel application key
       - name: migrate-second
-        command: services.second.migrate
+        type: command
+        cmd: services.second.migrate
         description: Run database migrations
 
   - name: finalize
     description: Generate IDE configuration files
     steps:
       - name: render-ide
-        devbox: "render ide second"
+        type: devbox
+        cmd: "render ide second"
         description: Generate IDE configs for second service

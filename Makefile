@@ -1,6 +1,6 @@
 MAKEFLAGS += --no-print-directory
 
-DEVBOX_BIN := ./bin/devbox
+DEVBOX_BIN := devbox
 
 -include .env
 

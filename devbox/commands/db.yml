@@ -7,13 +7,13 @@ commands:
     type: devbox
     private: true
     description: Start the database container in the background
-    run: "docker up db"
+    cmd: "docker up db"
 
   wait:
     type: devbox
     private: true
     description: Wait for all containers to become healthy
-    run: "docker wait"
+    cmd: "docker wait"
 
   create:
     type: service_exec
@@ -31,7 +31,7 @@ commands:
     messages:
       success: "Database `${param.database}` is ready."
       error: "Failed to create database `${param.database}`."
-    run: "mariadb -u${db.user} -e 'CREATE DATABASE IF NOT EXISTS `${param.database}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'"
+    cmd: "mariadb -u${db.user} -e 'CREATE DATABASE IF NOT EXISTS `${param.database}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'"
   drop:
     type: service_exec
     description: Drop the database in the db container
@@ -50,7 +50,7 @@ commands:
     messages:
       success: "Database `${param.database}` was dropped if it existed."
       error: "Failed to drop database `${param.database}`."
-    run: "mariadb -u${db.user} -e 'DROP DATABASE IF EXISTS `${param.database}`;'"
+    cmd: "mariadb -u${db.user} -e 'DROP DATABASE IF EXISTS `${param.database}`;'"
   cli:
     type: service_exec
     description: Connect to the database in the db container
@@ -62,7 +62,7 @@ commands:
         description: Database name to connect
     env:
       MYSQL_PWD: "${db.password}"
-    run: "mariadb -u${db.user} {{with .Params.database}} -D{{.}}{{end}}"
+    cmd: "mariadb -u${db.user} {{with .Params.database}} -D{{.}}{{end}}"
 
   start:
     type: workflow

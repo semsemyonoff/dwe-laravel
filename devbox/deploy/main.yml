@@ -1,55 +1,70 @@
 # Deploy pipeline for service: main
 # Steps execute sequentially within each phase.
 #
-# Step types:
-#   run:     — shell command (executed directly)
-#   devbox:  — public devbox CLI command
-#   command: — devbox command ID dispatched via command runner
-#   builtin: — engine-internal action
+# Step types (set on `type:`, payload in `cmd:`):
+#   shell    — host shell command (sh -c)
+#   devbox   — devbox CLI subcommand
+#   command  — declarative command ID dispatched via command runner
+#   builtin  — engine-internal action
 
 phases:
   - name: setup
     description: Prepare service directories and install application
-    when: "dir-empty services/main/src"
+    when:
+      type: builtin
+      cmd: "dir-empty services/main/src"
     steps:
       - name: create-dirs
-        builtin: service_dirs_ensure
+        type: builtin
+        cmd: service_dirs_ensure
         with:
           service: main
         description: Create service hub directories
       - name: install
-        command: app.install
+        type: command
+        cmd: app.install
         description: Install Laravel project via installer container
       - name: copy-configs
-        builtin: service_configs_copy
+        type: builtin
+        cmd: service_configs_copy
         with:
           service: main
           mode: replace
-        description: Copy template configs to service directory (files declared in devbox.yml services.main.configs)
-        check: "cmd: ./bin/devbox deploy config-check main"
+        description: Copy template configs to service directory (files declared in services.main.configs)
+        check:
+          type: builtin
+          cmd: service_configs_check
+          with:
+            service: main
 
   - name: init
     description: Initialize application (database, dependencies, keys)
     steps:
       - name: db-start
-        command: db.start
+        type: command
+        cmd: db.start
         description: Start database container and wait until healthy
       - name: db-create
-        command: services.main.db.create
+        type: command
+        cmd: services.main.db.create
         description: Create application database
       - name: composer-install
-        command: services.main.composer-install
+        type: command
+        cmd: services.main.composer-install
         description: Install PHP dependencies
       - name: key-generate
-        command: services.main.key-generate
+        type: command
+        cmd: services.main.key-generate
         description: Generate Laravel application key
       - name: migrate
-        command: services.main.migrate
+        type: command
+        cmd: services.main.migrate
         description: Run database migrations
 
   - name: finalize
     description: Generate IDE configuration files
     steps:
       - name: render-ide
-        devbox: "render ide main"
+        type: devbox
+        cmd: "render ide main"
         description: Generate IDE configs for main service

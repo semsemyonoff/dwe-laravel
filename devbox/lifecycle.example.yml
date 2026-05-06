@@ -29,7 +29,8 @@ run:
       description: Before-run hooks (continue on failure)
       steps:
         - name: before-run
-          command: project.before-run
+          type: command
+          cmd: project.before-run
           continue_on_error: true
           description: Custom pre-start hook (optional command, skipped if not defined)
 
@@ -37,17 +38,20 @@ run:
       description: Start containers and wait for health
       steps:
         - name: up
-          devbox: "docker up"
+          type: devbox
+          cmd: "docker up"
           description: Start all containers
         - name: wait
-          devbox: "docker wait"
+          type: devbox
+          cmd: "docker wait"
           description: Wait for all containers to become healthy
 
     - name: post
       description: After-run hooks (continue on failure)
       steps:
         - name: after-run
-          command: project.after-run
+          type: command
+          cmd: project.after-run
           continue_on_error: true
           description: Custom post-start hook (optional command, skipped if not defined)
 
@@ -62,7 +66,8 @@ stop:
       description: Before-stop hooks (continue on failure)
       steps:
         - name: before-stop
-          command: project.before-stop
+          type: command
+          cmd: project.before-stop
           continue_on_error: true
           description: Custom pre-stop hook (optional command, skipped if not defined)
 
@@ -70,13 +75,15 @@ stop:
       description: Stop and remove containers
       steps:
         - name: down
-          devbox: "docker down"
+          type: devbox
+          cmd: "docker down"
           description: Stop all containers
 
     - name: post
       description: After-stop hooks (continue on failure)
       steps:
         - name: after-stop
-          command: project.after-stop
+          type: command
+          cmd: project.after-stop
           continue_on_error: true
           description: Custom post-stop hook (optional command, skipped if not defined)

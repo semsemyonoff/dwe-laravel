@@ -6,4 +6,4 @@ commands:
   install:
     type: devbox
     description: Install the Laravel application via installer container
-    run: "compose raw --bare -- --progress tty -f compose/installer.yml run --rm --quiet-pull -u ${host.uid}:${host.gid} app-install"
+    cmd: "compose raw --bare -- --progress tty -f compose/installer.yml run --rm --quiet-pull -u ${host.uid}:${host.gid} app-install"

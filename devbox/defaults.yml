@@ -2,8 +2,6 @@
 # Values here are merged on top of devbox.yml and may be overridden by devbox/local.yml.
 # This file IS tracked by git.
 
-schema_version: "1"
-
 tools:
   adminer:
     enabled: false
