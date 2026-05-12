@@ -18,17 +18,17 @@ Generated reference for the `devbox` command tree.
   - [devbox compose files](devbox_compose_files.md) — Print resolved compose file list (base + enabled overlays), one per line
   - [devbox compose raw](devbox_compose_raw.md) — Run docker compose directly with resolved file list and project name (escape hatch)
 - [devbox deploy](devbox_deploy.md) — Deploy pipeline commands
-  - [devbox deploy config](devbox_deploy_config.md) — Copy template configs to service directory
-  - [devbox deploy config-check](devbox_deploy_config-check.md) — Verify that all declared service configs exist in the service directory
   - [devbox deploy plan](devbox_deploy_plan.md) — Show resolved deploy plan
   - [devbox deploy run](devbox_deploy_run.md) — Execute the deploy plan
   - [devbox deploy step](devbox_deploy_step.md) — Run a single deploy step by <phase>/<step> address
 - [devbox docker](devbox_docker.md) — Docker Compose lifecycle commands
+  - [devbox docker build](devbox_docker_build.md) — Build compose service images
   - [devbox docker down](devbox_docker_down.md) — Stop and remove compose services
   - [devbox docker exec](devbox_docker_exec.md) — Execute a command in a running compose service
   - [devbox docker logs](devbox_docker_logs.md) — View compose service logs
   - [devbox docker project-name](devbox_docker_project-name.md) — Print the resolved compose project name
   - [devbox docker ps](devbox_docker_ps.md) — List compose containers
+  - [devbox docker pull](devbox_docker_pull.md) — Pull compose service images
   - [devbox docker restart](devbox_docker_restart.md) — Restart compose services
   - [devbox docker run](devbox_docker_run.md) — Run a one-off command in a compose service
   - [devbox docker stop](devbox_docker_stop.md) — Stop compose services
@@ -41,8 +41,9 @@ Generated reference for the `devbox` command tree.
 - [devbox logs](devbox_logs.md) — View compose service logs
 - [devbox ps](devbox_ps.md) — List compose containers
 - [devbox render](devbox_render.md) — Render derived artifacts from the merged devbox config
+  - [devbox render ai](devbox_render_ai.md) — Generate hub-level agents docs from template packs
   - [devbox render env](devbox_render_env.md) — Generate .env from exports.env spec (stdout or --output <file>)
-  - [devbox render ide](devbox_render_ide.md) — Generate IDE configs into service directories
+  - [devbox render ide](devbox_render_ide.md) — Generate IDE configs from template packs
 - [devbox reset](devbox_reset.md) — Reset pipeline commands
   - [devbox reset config](devbox_reset_config.md) — Reset config subcommands
     - [devbox reset config check](devbox_reset_config_check.md) — Validate the reset pipeline config (devbox/reset.yml)

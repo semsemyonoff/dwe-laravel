@@ -1,15 +1,16 @@
-## devbox docker project-name
+## devbox docker pull
 
-Print the resolved compose project name
+Pull compose service images
 
 ```
-devbox docker project-name [flags]
+devbox docker pull [services...] [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for project-name
+      --all    pull images from all configured overlays, not just enabled ones
+  -h, --help   help for pull
 ```
 
 ### Options inherited from parent commands

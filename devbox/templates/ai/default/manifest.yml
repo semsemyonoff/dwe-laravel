@@ -1,0 +1,7 @@
+render:
+  - from: AGENTS.md.tmpl
+    to: AGENTS.md
+
+symlinks:
+  - link: CLAUDE.md
+    to: AGENTS.md

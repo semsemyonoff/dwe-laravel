@@ -58,3 +58,15 @@ phases:
         type: command
         cmd: services.second.migrate
         description: Run database migrations
+
+  - name: finalize
+    description: Render hub-level IDE and AI-agent configs for this service
+    steps:
+      - name: render-ide
+        type: devbox
+        cmd: "render ide second"
+        description: Render IDE config (.devcontainer, .vscode) into the hub
+      - name: render-ai
+        type: devbox
+        cmd: "render ai second"
+        description: Render AGENTS.md + CLAUDE.md symlink into the hub

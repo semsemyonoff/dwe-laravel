@@ -1,15 +1,17 @@
-## devbox docker project-name
+## devbox docker build
 
-Print the resolved compose project name
+Build compose service images
 
 ```
-devbox docker project-name [flags]
+devbox docker build [services...] [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for project-name
+      --all     build images from all configured overlays, not just enabled ones
+      --force   rebuild without cache and re-pull base images (--no-cache --pull)
+  -h, --help    help for build
 ```
 
 ### Options inherited from parent commands
