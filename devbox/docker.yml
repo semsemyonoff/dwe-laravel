@@ -2,10 +2,9 @@
 # Loaded separately — not merged with the 3-layer devbox config.
 # Override locally via devbox/docker.local.yml (gitignored).
 
-project_name: "${project.prefix}-${project.name}"
+project_name: "${project.prefix}_${project.name}"
 
 args:
-  global: ["--ansi", "always", "--progress", "tty"]
   up: ["-d", "--remove-orphans"]
   logs: ["-f"]
   run: ["--rm"]

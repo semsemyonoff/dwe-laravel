@@ -23,7 +23,7 @@ services:
       args:
         APP_UID: "${UID:-1000}"
         APP_GID: "${GID:-1000}"
-    container_name: "${PROJECT_PREFIX:-devbox}-${PROJECT_NAME:-laravel}-app-second"
+    container_name: "${PROJECT_PREFIX:-devbox}_${PROJECT_NAME:-laravel}-app-second"
     hostname: second
     restart: unless-stopped
     working_dir: /workspace/src
@@ -39,6 +39,8 @@ services:
       - composer_cache:/home/www-data/.composer/cache
     environment:
       COMPOSER_CACHE_DIR: /home/www-data/.composer/cache
+      PHP_ENABLE_XDEBUG: "true"
+      PHP_IDE_CONFIG: "serverName=${APP_SECOND_HOST:-second.localhost}"
     env_file:
       - ./configs/env/default.env
     depends_on:

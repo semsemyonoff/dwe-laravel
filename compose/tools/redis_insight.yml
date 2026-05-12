@@ -13,7 +13,7 @@ services:
 
   redis-insight:
     image: "${IMAGE_REDISINSIGHT:-redis/redisinsight:latest}"
-    container_name: "${PROJECT_PREFIX:-devbox}-${PROJECT_NAME:-laravel}-redis-insight"
+    container_name: "${PROJECT_PREFIX:-devbox}_${PROJECT_NAME:-laravel}-redis-insight"
     restart: unless-stopped
     ports:
       - "${REDIS_INSIGHT_PORT:-5540}:5540"
@@ -24,7 +24,7 @@ services:
 
   redis-insight-setup:
     image: curlimages/curl:latest
-    container_name: "${PROJECT_PREFIX:-devbox}-${PROJECT_NAME:-laravel}-redis-insight-setup"
+    container_name: "${PROJECT_PREFIX:-devbox}_${PROJECT_NAME:-laravel}-redis-insight-setup"
     entrypoint: /bin/sh -c
     command:
       - |

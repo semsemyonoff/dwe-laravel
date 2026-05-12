@@ -12,8 +12,20 @@ if [ "$PHP_ENABLE_XDEBUG" = "true" ]; then
 fi
 
 echo "[$(date +'%Y-%m-%d %H:%M:%S')] Changing own and mod"
-find /home/www-data -path '*/.ssh*' -prune -o -print0 | xargs -0 -P 8 -n 100 sudo chown www-data:www-data
-find /home/www-data -path '*/.ssh*' -prune -o -print0 | xargs -0 -P 8 -n 100 sudo chmod g=u
+# Prune .ssh (read-only mount) and IDE-managed remote-server state — those
+# trees are owned and locked down by the IDE process (sockets, connection
+# tokens with mode 600, ephemeral files that race with the IDE) and chown/
+# chmod on them either fails with EINVAL/EPERM or is simply unnecessary.
+# `! -type s` is a safety net for any other sockets.
+home_prune=(
+    -path '*/.ssh*' -prune -o
+    -path '*/.cache/zed*' -prune -o
+    -path '*/.local/share/zed*' -prune -o
+    -path '*/.vscode-server*' -prune -o
+    -path '*/.cursor-server*' -prune -o
+)
+find /home/www-data "${home_prune[@]}" ! -type s -print0 | xargs -0 -r -P 8 -n 100 sudo chown www-data:www-data
+find /home/www-data "${home_prune[@]}" ! -type s -print0 | xargs -0 -r -P 8 -n 100 sudo chmod g=u
 if [ "$UPDATE_UID_GID" = "true" ]; then
     find /var/www/app -path '*/.git*' -prune -o -print0 | xargs -0 -P 8 -n 100 sudo chown www-data:www-data
     find /var/www/app -path '*/.git*' -prune -o -print0 | xargs -0 -P 8 -n 100 sudo chmod g=u

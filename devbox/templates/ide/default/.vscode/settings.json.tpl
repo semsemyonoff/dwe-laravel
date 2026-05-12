@@ -5,5 +5,5 @@
   "[php]": {
     "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
   },
-  "intelephense.environment.phpVersion": "8.3"
+  "intelephense.environment.phpVersion": "8.5"
 }

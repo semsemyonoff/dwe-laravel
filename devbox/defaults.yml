@@ -168,11 +168,3 @@ compose:
     adminer: compose/tools/adminer.yml
     redis_insight: compose/tools/redis_insight.yml
     mailpit: compose/tools/mailpit.yml
-
-ide:
-  vscode:
-    enabled: true
-  jetbrains:
-    enabled: false
-  devcontainer:
-    enabled: true

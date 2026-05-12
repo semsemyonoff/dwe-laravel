@@ -28,6 +28,14 @@ phases:
         cmd: "docker wait"
         description: Wait for all containers to become healthy
 
+  - name: finalize
+    description: Generate IDE configuration files for all enabled services
+    steps:
+      - name: render-ide
+        type: devbox
+        cmd: "render ide"
+        description: Render IDE configs
+
   - name: post-deploy
     description: Post-deploy summary (runs only if all prior phases succeeded)
     untracked: true

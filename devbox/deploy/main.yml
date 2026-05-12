@@ -60,11 +60,3 @@ phases:
         type: command
         cmd: services.main.migrate
         description: Run database migrations
-
-  - name: finalize
-    description: Generate IDE configuration files
-    steps:
-      - name: render-ide
-        type: devbox
-        cmd: "render ide main"
-        description: Generate IDE configs for main service

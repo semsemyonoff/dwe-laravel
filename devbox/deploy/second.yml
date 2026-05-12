@@ -58,11 +58,3 @@ phases:
         type: command
         cmd: services.second.migrate
         description: Run database migrations
-
-  - name: finalize
-    description: Generate IDE configuration files
-    steps:
-      - name: render-ide
-        type: devbox
-        cmd: "render ide second"
-        description: Generate IDE configs for second service

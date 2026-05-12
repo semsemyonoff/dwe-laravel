@@ -10,7 +10,7 @@ services:
 
   adminer:
     image: "${IMAGE_ADMINER:-adminer:latest}"
-    container_name: "${PROJECT_PREFIX:-devbox}-${PROJECT_NAME:-laravel}-adminer"
+    container_name: "${PROJECT_PREFIX:-devbox}_${PROJECT_NAME:-laravel}-adminer"
     hostname: adminer
     restart: unless-stopped
     ports:

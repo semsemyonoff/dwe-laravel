@@ -1,9 +1,14 @@
 {
-  "name": "{{ .Project.Name }}",
-  "dockerComposeFile": ["../../../compose.yaml"],
+  "name": "{{ .Project.Prefix }} {{ .Project.Name }} {{ .Service }}",
+  "dockerComposeFile": [
+    "../../../compose.yaml"{{ range .ServiceCfg.Compose }},
+    "../../../{{ . }}"{{ end }}
+  ],
   "service": "{{ .ServiceCfg.Container }}",
+  "runServices": ["{{ .ServiceCfg.Container }}"],
   "workspaceFolder": "{{ .ServiceCfg.DirInternal }}",
   "remoteUser": "www-data",
+  "updateRemoteUserUID": false,
   "customizations": {
     "vscode": {
       "extensions": [
@@ -15,7 +20,5 @@
         "php.validate.executablePath": "/usr/local/bin/php"
       }
     }
-  },
-  "forwardPorts": [{{ .Runtime.Ports.App }}],
-  "postCreateCommand": "composer install --no-interaction"
+  }
 }
