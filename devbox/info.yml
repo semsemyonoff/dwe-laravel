@@ -1,63 +1,68 @@
 sections:
   - id: devbox_info
     items:
-      - type: subheader
-        text: Devbox
-      - type: definition
-        name: Project
-        value: "{{ .Project.FullName }}"
-      - type: definition
-        name: State
-        value: "{{ .State }}"
-        when: "{{ .State }}"
+      - type: subgroup
+        title: Devbox
+        items:
+          - type: definition
+            name: Project
+            value: "{{ .Project.FullName }}"
+          - type: definition
+            name: State
+            value: "{{ .State }}"
+            when: "{{ .State }}"
 
   - id: urls
     title: URLs
     items:
-      - type: subheader
-        text: Main
-      - type: definition
-        name: URL
-        icon: "🔗"
-        value: "{{ appURL .Runtime.Hosts.Main .Runtime.Ports.App .Runtime.UseHTTPS }}"
-      - type: definition
-        name: SPX profiler
-        value: "{{ appURL .Runtime.Hosts.Main .Runtime.Ports.App .Runtime.UseHTTPS .Runtime.SPX.Path }}"
-        when: "{{ .Runtime.SPX.Path }}"
-      - type: subheader
-        text: Tools
-        when: "{{ .Tools.AnyEnabled }}"
-      - type: definition
-        name: "Adminer"
-        icon: "🛢"
-        value: '{{ appURL .Runtime.Hosts.Adminer .Runtime.Ports.App .Runtime.UseHTTPS }} | {{ appURL "" .Runtime.Ports.Adminer .Runtime.UseHTTPS }}'
-        when: "{{ .Tools.Adminer.Enabled }}"
-      - type: definition
-        name: "Redis Insight"
-        icon: "📕"
-        value: '{{ appURL .Runtime.Hosts.RedisInsight .Runtime.Ports.App .Runtime.UseHTTPS }} | {{ appURL "" .Runtime.Ports.RedisInsight .Runtime.UseHTTPS }}'
-        when: "{{ .Tools.RedisInsight.Enabled }}"
-      - type: definition
-        name: "Mailpit"
-        icon: "📨"
-        value: '{{ appURL .Runtime.Hosts.Mailpit .Runtime.Ports.App .Runtime.UseHTTPS }} | {{ appURL "" .Runtime.Ports.Mailpit .Runtime.UseHTTPS }}'
-        when: "{{ .Tools.Mailpit.Enabled }}"
+      - type: subgroup
+        title: Main
+        items:
+          - type: definition
+            name: URL
+            icon: "🔗"
+            value: "{{ appURL .Runtime.Hosts.Main .Runtime.Ports.App .Runtime.UseHTTPS }}"
+          - type: definition
+            name: SPX profiler
+            value: "{{ appURL .Runtime.Hosts.Main .Runtime.Ports.App .Runtime.UseHTTPS .Runtime.SPX.Path }}"
+            when: "{{ .Runtime.SPX.Path }}"
+      - type: subgroup
+        title: Tools
+        items:
+          - type: definition
+            name: "Adminer"
+            icon: "🛢"
+            value: '{{ appURL .Runtime.Hosts.Adminer .Runtime.Ports.App .Runtime.UseHTTPS }} | {{ appURL "" .Runtime.Ports.Adminer .Runtime.UseHTTPS }}'
+            when: "{{ .Tools.Adminer.Enabled }}"
+          - type: definition
+            name: "Redis Insight"
+            icon: "📕"
+            value: '{{ appURL .Runtime.Hosts.RedisInsight .Runtime.Ports.App .Runtime.UseHTTPS }} | {{ appURL "" .Runtime.Ports.RedisInsight .Runtime.UseHTTPS }}'
+            when: "{{ .Tools.RedisInsight.Enabled }}"
+          - type: definition
+            name: "Mailpit"
+            icon: "📨"
+            value: '{{ appURL .Runtime.Hosts.Mailpit .Runtime.Ports.App .Runtime.UseHTTPS }} | {{ appURL "" .Runtime.Ports.Mailpit .Runtime.UseHTTPS }}'
+            when: "{{ .Tools.Mailpit.Enabled }}"
 
   - id: hosts
     title: Hosts
+    hide_on_empty: true
     items:
       - type: warning
         text: "Please, make sure this is added to your /etc/hosts file:"
+        decorative: true
       - type: info
         text: "127.0.0.1\t{{ .Runtime.Hosts.Main }}"
+        when: '{{ not (hasSuffix ".localhost" .Runtime.Hosts.Main) }}'
       - type: info
         text: "127.0.0.1\t{{ .Runtime.Hosts.Adminer }}"
-        when: "{{ .Tools.Adminer.Enabled }}"
+        when: '{{ and .Tools.Adminer.Enabled (not (hasSuffix ".localhost" .Runtime.Hosts.Adminer)) }}'
       - type: info
         text: "127.0.0.1\t{{ .Runtime.Hosts.RedisInsight }}"
-        when: "{{ .Tools.RedisInsight.Enabled }}"
+        when: '{{ and .Tools.RedisInsight.Enabled (not (hasSuffix ".localhost" .Runtime.Hosts.RedisInsight)) }}'
       - type: info
         text: "127.0.0.1\t{{ .Runtime.Hosts.Mailpit }}"
-        when: "{{ .Tools.Mailpit.Enabled }}"
+        when: '{{ and .Tools.Mailpit.Enabled (not (hasSuffix ".localhost" .Runtime.Hosts.Mailpit)) }}'
 
 footer: true
