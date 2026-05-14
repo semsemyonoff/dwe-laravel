@@ -34,11 +34,11 @@ run:
           cmd: "docker up"
           description: Start all containers
         - name: wait
-          type: devbox
-          cmd: "docker wait"
+          type: builtin
+          cmd: docker_wait_healthy
           description: Wait for all containers to become healthy
 
-    # Uncomment to add a post-start hook (runs after docker wait):
+    # Uncomment to add a post-start hook (runs after wait):
     # - name: post
     #   steps:
     #     - name: after-run

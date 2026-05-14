@@ -5,10 +5,22 @@
 tools:
   adminer:
     enabled: false
+    container: adminer
+    host: adminer.localhost
+    port: 8080
+    compose: compose/tools/adminer.yml
   redis_insight:
     enabled: true
+    container: redis-insight
+    host: redis.localhost
+    port: 5540
+    compose: compose/tools/redis_insight.yml
   mailpit:
     enabled: true
+    container: mailpit
+    host: mail.localhost
+    port: 8025
+    compose: compose/tools/mailpit.yml
 
 # Optional service toggles. Service definitions live in devbox/services.yml.
 # Mandatory services (e.g. main) cannot be disabled and have no toggle here.
@@ -27,15 +39,9 @@ runtime:
     app: 80
     db: 13306
     redis: 6379
-    adminer: 8080
-    redis_insight: 5540
-    mailpit: 8025
   hosts:
     main: laravel.localhost
     second: second.localhost
-    adminer: adminer.localhost
-    redis_insight: redis.localhost
-    mailpit: mail.localhost
   spx:
     path: ""
 
@@ -75,30 +81,30 @@ exports:
       from: runtime.hosts.main
 
     - name: ADMINER_PORT
-      from: runtime.ports.adminer
+      from: tools.adminer.port
       format: int
       when: tools.adminer.enabled
 
     - name: ADMINER_HOST
-      from: runtime.hosts.adminer
+      from: tools.adminer.host
       when: tools.adminer.enabled
 
     - name: REDIS_INSIGHT_PORT
-      from: runtime.ports.redis_insight
+      from: tools.redis_insight.port
       format: int
       when: tools.redis_insight.enabled
 
     - name: REDIS_INSIGHT_HOST
-      from: runtime.hosts.redis_insight
+      from: tools.redis_insight.host
       when: tools.redis_insight.enabled
 
     - name: MAILPIT_PORT
-      from: runtime.ports.mailpit
+      from: tools.mailpit.port
       format: int
       when: tools.mailpit.enabled
 
     - name: MAILPIT_HOST
-      from: runtime.hosts.mailpit
+      from: tools.mailpit.host
       when: tools.mailpit.enabled
 
     - name: TOOL_ADMINER
@@ -164,7 +170,3 @@ db:
 
 compose:
   base: compose.yaml
-  overlays:
-    adminer: compose/tools/adminer.yml
-    redis_insight: compose/tools/redis_insight.yml
-    mailpit: compose/tools/mailpit.yml

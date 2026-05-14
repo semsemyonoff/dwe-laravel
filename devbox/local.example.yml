@@ -5,19 +5,20 @@
 # Active state name, empty = no state.
 # state: staging
 
-# Override tool visibility without changing project defaults.
+# Override tool visibility (and per-tool host/port) without changing project defaults.
 # tools:
 #   redis_insight:
 #     enabled: false
 #   adminer:
 #     enabled: true
+#   mailpit:
+#     port: 8026
 
-# Override runtime ports if the project defaults conflict with your local setup.
+# Override runtime ports/hosts (non-tool roles only — main, app, db, redis).
 # runtime:
 #   use_https: true
 #   ports:
 #     app: 8080
-#     mailpit: 8026
 
 # Enable debug service (Xdebug container, adds compose overlay automatically).
 # services:

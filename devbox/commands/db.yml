@@ -10,10 +10,27 @@ commands:
     cmd: "docker up db"
 
   wait:
-    type: devbox
+    type: shell
     private: true
-    description: Wait for all containers to become healthy
-    cmd: "docker wait"
+    description: Wait for the db container to become healthy
+    cmd: |
+      set -eu
+      cid=$(docker compose ps -q db)
+      if [ -z "$cid" ]; then
+        echo "db container is not running" >&2
+        exit 1
+      fi
+      for _ in $(seq 1 60); do
+        status=$(docker inspect -f '{{.State.Health.Status}}' "$cid" 2>/dev/null || echo "")
+        case "$status" in
+          healthy) exit 0 ;;
+          unhealthy) echo "db is unhealthy" >&2; exit 1 ;;
+          ""|none) exit 0 ;;
+        esac
+        sleep 2
+      done
+      echo "db did not become healthy in 120s" >&2
+      exit 1
 
   create:
     type: service_exec

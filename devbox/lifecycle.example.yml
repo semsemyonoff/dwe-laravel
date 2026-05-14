@@ -1,7 +1,7 @@
 # Example lifecycle.yml showing the full shape with all optional sections.
 # Copy relevant parts to devbox/lifecycle.yml and adjust for your project.
 #
-# devbox run   — update probe → pre hooks → docker up → docker wait → post hooks → info → message
+# devbox run   — update probe → pre hooks → docker up → wait healthy → post hooks → info → message
 # devbox stop  — pre hooks → docker down → post hooks → message
 # devbox restart — stop, then run --no-update
 #
@@ -42,8 +42,11 @@ run:
           cmd: "docker up"
           description: Start all containers
         - name: wait
-          type: devbox
-          cmd: "docker wait"
+          type: builtin
+          cmd: docker_wait_healthy
+          with:
+            timeout: 60s
+            interval: 2s
           description: Wait for all containers to become healthy
 
     - name: post

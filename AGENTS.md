@@ -37,7 +37,7 @@ The CLI's own reference docs live under `devbox-cli/docs/reference/` (config sch
 - All user-visible output goes through CLI macros: `$(call ok,...)`, `$(call err,...)`, `$(call warn,...)`, `$(call inf,...)`. Defined in `make/macros.mk`.
 - Public targets use `snake_case`. Internal targets use `private_*` prefix.
 - Use `@` to suppress command echo in recipes.
-- Makefile includes only `make/macros.mk`. `make stop` / `make restart` delegate to `devbox stop` / `devbox restart` (full lifecycle pipelines driven by `devbox/lifecycle.yml`). `make up` / `make down` / `make logs` are thin passthroughs to `devbox up` / `devbox down` / `devbox logs`. No compose flag assembly, no `docker compose` calls in Make.
+- Makefile includes only `make/macros.mk`. `make stop` / `make restart` delegate to `devbox stop` / `devbox restart` (full lifecycle pipelines driven by `devbox/lifecycle.yml`). `make up` / `make down` / `make logs` are thin passthroughs to `devbox docker up` / `devbox docker down` / `devbox docker logs`. No compose flag assembly, no `docker compose` calls in Make.
 - Cross-platform: must work on macOS and Linux (including WSL). Prefer portable shell constructs.
 
 ### General
@@ -49,12 +49,12 @@ The CLI's own reference docs live under `devbox-cli/docs/reference/` (config sch
 ## Architecture
 
 - **devbox-cli** (external repo, symlinked at `devbox-cli/`) — Go binary. The shared core: config loading, rendering, env generation, info display, topology, deploy planning, docker control plane. Built to `bin/devbox` via `cd devbox-cli && make build`.
-- **Docker** — `devbox docker` is the public lifecycle API (up/down/stop/restart/logs/ps/exec/run/wait); `devbox compose` is the low-level diagnostic layer (files/argv/raw).
-- **Make** (`Makefile` + `make/`) — thin facade that delegates lifecycle targets to `devbox run` / `devbox stop` / `devbox up` / `devbox down`.
+- **Docker** — `devbox docker` is the public lifecycle API (up/down/stop/restart/logs/ps/exec/run); `devbox compose` is the low-level diagnostic layer (files/argv/raw). Container health-wait is a pipeline builtin (`docker_wait_healthy`), not a CLI command.
+- **Make** (`Makefile` + `make/`) — thin facade that delegates lifecycle targets to `devbox run` / `devbox stop` / `devbox docker up` / `devbox docker down`.
 - **Config** — 3-layer YAML merge: `devbox.yml` → `devbox/defaults.yml` → `devbox/local.yml` (gitignored).
 - **Docker policy** — `devbox/docker.yml` + `devbox/docker.local.yml` (gitignored); loaded separately, controls compose execution (project name, args, `.env` triggers, topology, resources).
 - **Deploy** — `devbox/deploy.yml` (orchestrator) + `devbox/deploy/<service>.yml` (per-service); declares phases and steps. The orchestrator inlines per-service pipelines at `deploy_services: true` in `depends_on` order.
-- **Lifecycle** — `devbox/lifecycle.yml`; declares `run` and `stop` pipelines. `devbox run` = update probe → before-run hooks → docker up → docker wait → after-run hooks → info → message. `devbox stop` = before-stop hooks → docker down → after-stop hooks → message. `devbox restart` = stop + run --no-update. `devbox up` / `devbox down` remain thin Docker Compose passthroughs.
+- **Lifecycle** — `devbox/lifecycle.yml`; declares `run` and `stop` pipelines. `devbox run` = update probe → before-run hooks → docker up → wait healthy (`docker_wait_healthy` builtin) → after-run hooks → info → message. `devbox stop` = before-stop hooks → docker down → after-stop hooks → message. `devbox restart` = stop + run --no-update. Use `devbox docker up` / `devbox docker down` for raw Docker Compose passthroughs (the top-level `devbox up/down/logs/ps/wait` aliases were removed).
 - **Reset** — `devbox/reset.yml`; destructive cleanup pipeline (confirm → docker down → remove volumes → remove generated dirs).
 - `.env` is a **generated artifact** (`devbox render env -o .env`), never a source of truth.
 

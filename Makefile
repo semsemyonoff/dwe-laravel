@@ -23,10 +23,10 @@ run:
 
 # up/down are thin compose passthroughs (no hooks, no probe).
 up:
-	@$(DEVBOX_BIN) up
+	@$(DEVBOX_BIN) docker up
 
 down:
-	@$(DEVBOX_BIN) down
+	@$(DEVBOX_BIN) docker down
 
 # stop/restart delegate to lifecycle pipelines (devbox/lifecycle.yml: hooks + docker down/up + final message).
 # For the raw compose stop/restart use: devbox docker stop / devbox docker restart.
@@ -37,7 +37,7 @@ restart:
 	@$(DEVBOX_BIN) restart
 
 logs:
-	@$(DEVBOX_BIN) logs
+	@$(DEVBOX_BIN) docker logs
 
 cli:
 	@$(DEVBOX_BIN) shell main

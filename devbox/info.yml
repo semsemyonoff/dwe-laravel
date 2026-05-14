@@ -21,10 +21,10 @@ sections:
           - type: definition
             name: URL
             icon: "🔗"
-            value: "{{ appURL .Runtime.Hosts.Main .Runtime.Ports.App .Runtime.UseHTTPS }}"
+            value: "{{ appURL .Runtime.Hosts.main .Runtime.Ports.app .Runtime.UseHTTPS }}"
           - type: definition
             name: SPX profiler
-            value: "{{ appURL .Runtime.Hosts.Main .Runtime.Ports.App .Runtime.UseHTTPS .Runtime.SPX.Path }}"
+            value: "{{ appURL .Runtime.Hosts.main .Runtime.Ports.app .Runtime.UseHTTPS .Runtime.SPX.Path }}"
             when: "{{ .Runtime.SPX.Path }}"
       - type: subgroup
         title: Tools
@@ -32,18 +32,18 @@ sections:
           - type: definition
             name: "Adminer"
             icon: "🛢"
-            value: '{{ appURL .Runtime.Hosts.Adminer .Runtime.Ports.App .Runtime.UseHTTPS }} | {{ appURL "" .Runtime.Ports.Adminer .Runtime.UseHTTPS }}'
-            when: "{{ .Tools.Adminer.Enabled }}"
+            value: '{{ appURL .Tools.adminer.Host .Runtime.Ports.app .Runtime.UseHTTPS }} | {{ appURL "" .Tools.adminer.Port .Runtime.UseHTTPS }}'
+            when: "{{ .Tools.adminer.Enabled }}"
           - type: definition
             name: "Redis Insight"
             icon: "📕"
-            value: '{{ appURL .Runtime.Hosts.RedisInsight .Runtime.Ports.App .Runtime.UseHTTPS }} | {{ appURL "" .Runtime.Ports.RedisInsight .Runtime.UseHTTPS }}'
-            when: "{{ .Tools.RedisInsight.Enabled }}"
+            value: '{{ appURL .Tools.redis_insight.Host .Runtime.Ports.app .Runtime.UseHTTPS }} | {{ appURL "" .Tools.redis_insight.Port .Runtime.UseHTTPS }}'
+            when: "{{ .Tools.redis_insight.Enabled }}"
           - type: definition
             name: "Mailpit"
             icon: "📨"
-            value: '{{ appURL .Runtime.Hosts.Mailpit .Runtime.Ports.App .Runtime.UseHTTPS }} | {{ appURL "" .Runtime.Ports.Mailpit .Runtime.UseHTTPS }}'
-            when: "{{ .Tools.Mailpit.Enabled }}"
+            value: '{{ appURL .Tools.mailpit.Host .Runtime.Ports.app .Runtime.UseHTTPS }} | {{ appURL "" .Tools.mailpit.Port .Runtime.UseHTTPS }}'
+            when: "{{ .Tools.mailpit.Enabled }}"
 
   - id: hosts
     title: Hosts
@@ -53,16 +53,16 @@ sections:
         text: "Please, make sure this is added to your /etc/hosts file:"
         decorative: true
       - type: info
-        text: "127.0.0.1\t{{ .Runtime.Hosts.Main }}"
-        when: '{{ not (hasSuffix ".localhost" .Runtime.Hosts.Main) }}'
+        text: "127.0.0.1\t{{ .Runtime.Hosts.main }}"
+        when: '{{ not (hasSuffix ".localhost" .Runtime.Hosts.main) }}'
       - type: info
-        text: "127.0.0.1\t{{ .Runtime.Hosts.Adminer }}"
-        when: '{{ and .Tools.Adminer.Enabled (not (hasSuffix ".localhost" .Runtime.Hosts.Adminer)) }}'
+        text: "127.0.0.1\t{{ .Tools.adminer.Host }}"
+        when: '{{ and .Tools.adminer.Enabled (not (hasSuffix ".localhost" .Tools.adminer.Host)) }}'
       - type: info
-        text: "127.0.0.1\t{{ .Runtime.Hosts.RedisInsight }}"
-        when: '{{ and .Tools.RedisInsight.Enabled (not (hasSuffix ".localhost" .Runtime.Hosts.RedisInsight)) }}'
+        text: "127.0.0.1\t{{ .Tools.redis_insight.Host }}"
+        when: '{{ and .Tools.redis_insight.Enabled (not (hasSuffix ".localhost" .Tools.redis_insight.Host)) }}'
       - type: info
-        text: "127.0.0.1\t{{ .Runtime.Hosts.Mailpit }}"
-        when: '{{ and .Tools.Mailpit.Enabled (not (hasSuffix ".localhost" .Runtime.Hosts.Mailpit)) }}'
+        text: "127.0.0.1\t{{ .Tools.mailpit.Host }}"
+        when: '{{ and .Tools.mailpit.Enabled (not (hasSuffix ".localhost" .Tools.mailpit.Host)) }}'
 
 footer: true
