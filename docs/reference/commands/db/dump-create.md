@@ -30,7 +30,7 @@ Create a database dump file
 
 **Env:** `DUMP_FILE`
 
-**Path:** `${param.dump_dir}/${param.database}{{ if .Params.dump_date }}_{{ date }}{{ end }}.sql.gz`
+**Path:** `${param.dump_dir}/${param.database}{{ if .Params.dump_date }}_{{ now | date "2006-01-02" }}{{ end }}.sql.gz`
 
 ## Environment Variables
 

@@ -3,7 +3,7 @@ legacy/
 devbox-cli
 
 # Devbox
-logs/*
+.devbox/*
 backups/*
 services/*
 .env

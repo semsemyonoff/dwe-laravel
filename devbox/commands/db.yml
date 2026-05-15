@@ -10,27 +10,14 @@ commands:
     cmd: "docker up db"
 
   wait:
-    type: shell
+    type: builtin
     private: true
     description: Wait for the db container to become healthy
-    cmd: |
-      set -eu
-      cid=$(docker compose ps -q db)
-      if [ -z "$cid" ]; then
-        echo "db container is not running" >&2
-        exit 1
-      fi
-      for _ in $(seq 1 60); do
-        status=$(docker inspect -f '{{.State.Health.Status}}' "$cid" 2>/dev/null || echo "")
-        case "$status" in
-          healthy) exit 0 ;;
-          unhealthy) echo "db is unhealthy" >&2; exit 1 ;;
-          ""|none) exit 0 ;;
-        esac
-        sleep 2
-      done
-      echo "db did not become healthy in 120s" >&2
-      exit 1
+    cmd: docker_wait_healthy
+    with:
+      services: [db]
+      timeout: 120s
+      interval: 2s
 
   create:
     type: service_exec
@@ -115,7 +102,7 @@ commands:
     files:
       dump:
         access: write
-        path: "${param.dump_dir}/${param.database}{{ if .Params.dump_date }}_{{ now | date \"2006-01-02\" }}{{ end }}.sql.gz"
+        path: '${param.dump_dir}/${param.database}{{ if .Params.dump_date }}_{{ now | date "2006-01-02" }}{{ end }}.sql.gz'
         mkdir: true
         overwrite: true
         on_error: remove
