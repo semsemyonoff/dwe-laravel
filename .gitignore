@@ -1,6 +1,6 @@
 # Teporary (for pilot only)
 legacy/
-devbox-cli/
+devbox-cli
 
 # Devbox
 logs/*
