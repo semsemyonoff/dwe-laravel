@@ -1,0 +1,21 @@
+{
+  "php.validate.executablePath": "/usr/local/bin/php",
+  "php.suggest.basic": false,
+  "editor.formatOnSave": true,
+  "[php]": {
+    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+  },
+  "intelephense.environment.phpVersion": "8.5",
+
+  // Local additions for {{ .Service }} — edit freely; this file is not tracked.
+  "files.exclude": {
+    "**/.git": true,
+    "**/vendor": true,
+    "**/node_modules": true
+  },
+  "search.exclude": {
+    "**/vendor": true,
+    "**/node_modules": true,
+    "**/storage/logs": true
+  }
+}

@@ -9,6 +9,7 @@ services/*
 .env
 devbox/local.yml
 devbox/docker.local.yml
+devbox/templates/*/*.local/
 
 # tools
 .ralphex/
@@ -17,5 +18,8 @@ devbox/docker.local.yml
 .idea/
 .vscode/
 .zed/
+# …but template packs ship their own .vscode/ templates that must stay tracked.
+!devbox/templates/**/.vscode/
+!devbox/templates/**/.vscode/**
 *~
 .DS_Store

@@ -1,0 +1,7 @@
+render:
+  - from: .devcontainer/devcontainer.json.tmpl
+    to: .devcontainer/devcontainer.json
+  - from: .vscode/settings.json.tmpl
+    to: .vscode/settings.json
+  - from: .vscode/launch.json.tmpl
+    to: .vscode/launch.json

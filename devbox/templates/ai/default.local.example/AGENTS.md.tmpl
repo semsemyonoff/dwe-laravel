@@ -1,0 +1,19 @@
+# Service hub: {{ .Service }} (local override)
+
+This directory is a **devbox service workspace** for the `{{ .Service }}` service of project `{{ .Project.Name }}`. It is a generated hub — not the application repository itself.
+
+The application code lives in `src/`. If the project ships its own `AGENTS.md` or `CLAUDE.md` inside `src/`, treat that as authoritative for code-level conventions (framework, structure, tests, lint).
+
+## Personal notes
+
+Add per-developer guidance for AI agents working in this hub here — preferred
+tools, shortcuts, debugging workflows, anything that should not be committed
+to the shared `default/AGENTS.md.tmpl`.
+
+## Container
+
+- Container: `{{ .ServiceCfg.Container }}`
+- Work dir (inside container): `{{ .ServiceCfg.WorkDirInternal }}`
+{{- if .ServiceCfg.CLI.User }}
+- User (inside container): `{{ .ServiceCfg.CLI.User }}`
+{{- end }}

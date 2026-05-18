@@ -23,6 +23,8 @@ services:
       shell: bash
       user: www-data
       workdir: /workspace/src
+    git:
+      enabled: false
 
   main-debug:
     type: app

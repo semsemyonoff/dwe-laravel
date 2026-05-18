@@ -1,0 +1,3 @@
+render:
+  - { from: pre-commit.tmpl, to: pre-commit }
+  - { from: commit-msg.tmpl, to: commit-msg }
