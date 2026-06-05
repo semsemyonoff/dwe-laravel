@@ -1,0 +1,9 @@
+# DbGate — multi-database GUI (replacement for Adminer). Optional tool.
+type: tool
+container: dbgate
+compose:
+  - compose/tools/dbgate.yml
+ports:
+  http: 8080
+hosts:
+  web: dbgate.localhost

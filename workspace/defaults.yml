@@ -1,0 +1,120 @@
+# Versioned project defaults (layer 2 of the merged config).
+# Merged on top of workspace.yml and may be overridden by workspace/local.yml.
+# This file IS tracked by git.
+
+# Optional service toggles. Structural service definitions live in
+# workspace/services/<name>/service.yml. Required services (e.g. main) are
+# always enabled and have no toggle here.
+services:
+  main-debug:
+    enabled: false
+  dbgate:
+    enabled: false
+  mailpit:
+    enabled: true
+
+debug:
+  idekey: PHPSTORM
+
+runtime:
+  use_https: false
+  ports:
+    db: 13306
+  spx:
+    path: ""
+
+# Active state name, empty = no state.
+state: ""
+
+# Declarative export spec for the generated .env artifact.
+# dwe render env  →  reads exports.env and renders .env accordingly.
+#
+# Each rule:
+#   name     — env variable name
+#   from     — dot-path into the effective (merged) config
+#   default  — fallback when the path is absent
+#   required — error if path is absent and default is empty
+#   format   — string (default) | bool | int
+#   when     — dot-path; rule is skipped when the value at this path is falsy
+#   comment  — written as "# comment" above the variable in the generated file
+exports:
+  env:
+    - name: USE_HTTPS
+      from: runtime.use_https
+      format: bool
+
+    - name: APP_PORT
+      from: services.main.ports.http
+      format: int
+
+    - name: DB_PORT
+      from: runtime.ports.db
+      format: int
+
+    - name: APP_HOST
+      from: services.main.hosts.web
+
+    - name: DBGATE_PORT
+      from: services.dbgate.ports.http
+      format: int
+      when: services.dbgate.enabled
+
+    - name: DBGATE_HOST
+      from: services.dbgate.hosts.web
+      when: services.dbgate.enabled
+
+    - name: MAILPIT_PORT
+      from: services.mailpit.ports.http
+      format: int
+      when: services.mailpit.enabled
+
+    - name: MAILPIT_HOST
+      from: services.mailpit.hosts.web
+      when: services.mailpit.enabled
+
+    - name: TOOL_DBGATE
+      from: services.dbgate.enabled
+      format: bool
+
+    - name: TOOL_MAILPIT
+      from: services.mailpit.enabled
+      format: bool
+
+    - name: SPX_PATH
+      from: runtime.spx.path
+
+    - name: XDEBUG_IDEKEY
+      from: debug.idekey
+
+    - name: STATE
+      from: state
+
+    - name: PROJECT_PREFIX
+      from: project.prefix
+
+    - name: PROJECT_NAME
+      from: project.name
+
+    - name: APP_MAIN_CONTAINER
+      from: services.main.container
+
+    - name: APP_MAIN_DIR_INTERNAL
+      from: services.main.work_dir_internal
+
+    - name: DB_DATABASE
+      from: db.database
+
+    - name: DB_PASSWORD
+      from: db.password
+
+    - name: DB_USER
+      from: db.user
+
+db:
+  database: laravel
+  password: root
+  user: root
+  backup_dir: backups/db
+
+compose:
+  base: docker-compose.yml

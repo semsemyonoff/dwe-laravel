@@ -5,12 +5,12 @@
 #   docker compose -p <project> -f compose/installer.yml run --rm -u $(id -u):$(id -g) <service>
 #
 # NOTE: Paths are relative to this file's directory (compose/).
-# Image is hardcoded here (project-specific, not configurable via devbox config).
+# Image is hardcoded here (project-specific, not configurable via dwe config).
 
 volumes:
   composer_cache:
     external: true
-    name: devbox_composer_cache
+    name: dwe_composer_cache
 
 services:
   app-install:

@@ -1,0 +1,40 @@
+# Template for local overrides (layer 3 of the merged config).
+# Copy this file to local.yml and adjust as needed.
+# local.yml is NOT tracked by git.
+
+# Active state name, empty = no state.
+# state: staging
+
+# Toggle optional services (apps and tools) without changing project defaults.
+# services:
+#   dbgate:
+#     enabled: true
+#   main-debug:
+#     enabled: true     # Xdebug container — adds its compose overlay automatically
+
+# Override a service's port or host (deep-merged by entry name — only the listed
+# keys change). Useful when a port clashes with something on your host.
+# services:
+#   main:
+#     ports:
+#       http: 8080
+#     hosts:
+#       web: laravel.test
+#   mailpit:
+#     ports:
+#       http: 8026
+
+# Override runtime flags / infra ports (db).
+# runtime:
+#   use_https: true
+#   ports:
+#     db: 13307
+
+# Override database credentials if needed (default: root / root).
+# db:
+#   user: myuser
+#   password: mypassword
+
+# Xdebug IDE key for cookie-based debug routing (default: PHPSTORM).
+# debug:
+#   idekey: VSCODE

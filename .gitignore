@@ -1,15 +1,21 @@
-# Teporary (for pilot only)
+# Temporary (for pilot only)
 legacy/
-devbox-cli
 
-# Devbox
-.devbox/*
-backups/*
+# DWE
+.dwe/
+# DB dumps live in backups/db/ — keep the dir, ignore the dumps
+backups/db/*
+!backups/db/.gitkeep
 services/*
-.env
-devbox/local.yml
-devbox/docker.local.yml
-devbox/templates/*/*.local/
+volumes/
+snapshots/
+# Only the generated root .env is ignored — per-service templates in
+# configs/services/<svc>/.env ARE tracked (the deployed copy lands under
+# services/<svc>/configs/.env, already ignored via services/*).
+/.env
+workspace/local.yml
+workspace/docker.local.yml
+workspace/templates/*/*.local/
 
 # tools
 .ralphex/
@@ -19,7 +25,7 @@ devbox/templates/*/*.local/
 .vscode/
 .zed/
 # …but template packs ship their own .vscode/ templates that must stay tracked.
-!devbox/templates/**/.vscode/
-!devbox/templates/**/.vscode/**
+!workspace/templates/**/.vscode/
+!workspace/templates/**/.vscode/**
 *~
 .DS_Store

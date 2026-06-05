@@ -1,0 +1,6 @@
+# Project identity — the structural skeleton (layer 1 of the merged config).
+# Versioned defaults live in workspace/defaults.yml; per-developer overrides in
+# workspace/local.yml (gitignored).
+project:
+  name: laravel
+  prefix: dwe

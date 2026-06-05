@@ -1,0 +1,36 @@
+# Overlay: DbGate — multi-database GUI (replacement for Adminer).
+# Enabled when services.dbgate.enabled = true in dwe config.
+#
+# A single MariaDB-server connection is pre-seeded; DbGate browses every
+# database under it. User settings, saved queries, and tabs persist in the
+# `dbgate` named volume.
+
+volumes:
+  dbgate:
+
+services:
+  nginx:
+    volumes:
+      - ./configs/nginx/templates/tools/dbgate.conf.template:/etc/nginx/templates/dbgate.conf.template:ro
+    environment:
+      DBGATE_HOST: "${DBGATE_HOST:-dbgate.localhost}"
+
+  dbgate:
+    image: "${IMAGE_DBGATE:-dbgate/dbgate:latest}"
+    container_name: "${PROJECT_PREFIX:-dwe}_${PROJECT_NAME:-laravel}-dbgate"
+    hostname: dbgate
+    restart: unless-stopped
+    ports:
+      - "${DBGATE_PORT:-8080}:3000"
+    volumes:
+      - dbgate:/root/.dbgate
+    environment:
+      CONNECTIONS: "main"
+      LABEL_main: "Laravel (MariaDB)"
+      SERVER_main: "db"
+      PORT_main: "3306"
+      USER_main: "${DB_USER:-root}"
+      PASSWORD_main: "${DB_PASSWORD:-root}"
+      ENGINE_main: "mariadb@dbgate-plugin-mysql"
+    depends_on:
+      - db

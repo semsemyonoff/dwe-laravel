@@ -1,0 +1,78 @@
+# Deploy pipeline for service: main
+# Steps execute sequentially within each phase.
+#
+# Step types (set on `type:`, payload in `cmd:`):
+#   shell    — host shell command (sh -c)
+#   dwe      — dwe CLI subcommand
+#   command  — declarative command ID dispatched via command runner
+#   builtin  — engine-internal action
+
+phases:
+  - name: setup
+    description: Prepare service directories and install application
+    when:
+      type: builtin
+      cmd: "dir-empty services/main/src"
+    steps:
+      - name: create-dirs
+        type: builtin
+        cmd: service_dirs_ensure
+        with:
+          service: main
+        description: Create service hub directories
+      - name: install
+        type: command
+        cmd: app.install
+        description: Install Laravel project via installer container
+      - name: copy-configs
+        type: builtin
+        cmd: service_configs_copy
+        with:
+          service: main
+          mode: replace
+        description: Copy template configs to service directory (files declared in services.main.configs)
+        check:
+          type: builtin
+          cmd: service_configs_check
+          with:
+            service: main
+      - name: chown-src
+        type: command
+        cmd: services.main.chown-src
+        description: chown /workspace/src to www-data so artisan/composer can write (excludes .git*)
+
+  - name: init
+    description: Initialize application (database, dependencies, keys)
+    steps:
+      - name: db-start
+        type: command
+        cmd: db.start
+        description: Start database container and wait until healthy
+      - name: db-create
+        type: command
+        cmd: services.main.db.create
+        description: Create application database
+      - name: composer-install
+        type: command
+        cmd: services.main.composer-install
+        description: Install PHP dependencies
+      - name: key-generate
+        type: command
+        cmd: services.main.key-generate
+        description: Generate Laravel application key
+      - name: migrate
+        type: command
+        cmd: services.main.migrate
+        description: Run database migrations
+
+  - name: finalize
+    description: Render hub-level IDE and AI-agent configs for this service
+    steps:
+      - name: render-ide
+        type: dwe
+        cmd: "render ide main"
+        description: Render IDE config (.devcontainer, .vscode) into the hub
+      - name: render-ai
+        type: dwe
+        cmd: "render ai main"
+        description: Render AGENTS.md + CLAUDE.md symlink into the hub

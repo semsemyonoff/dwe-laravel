@@ -1,0 +1,48 @@
+group:
+  title: Main Logs
+  description: Inspect and manage log files inside the app-main container (/workspace/src/storage/logs)
+
+commands:
+  list:
+    type: service_exec
+    description: List log files inside /workspace/src/storage/logs
+    service: app-main
+    mode: exec-or-fail
+    argv: [ls, -lh, /workspace/src/storage/logs]
+
+  tail:
+    type: service_exec
+    description: Follow a log file with `tail -F` (Ctrl-C to stop). Defaults to laravel.log.
+    service: app-main
+    mode: exec-or-fail
+    params:
+      file:
+        type: string
+        description: Log filename inside /workspace/src/storage/logs
+        default: laravel.log
+        pattern: ^[A-Za-z0-9._-]+$
+    argv: [tail, -F, "/workspace/src/storage/logs/${param.file}"]
+
+  copy:
+    type: shell
+    description: Copy a log file from the container to services/main/logs/ on the host (creates the dir if missing)
+    params:
+      file:
+        type: string
+        description: Log filename inside /workspace/src/storage/logs
+        default: laravel.log
+        pattern: ^[A-Za-z0-9._-]+$
+    cmd: |
+      set -e
+      mkdir -p services/main/logs
+      docker compose cp "app-main:/workspace/src/storage/logs/${param.file}" "services/main/logs/${param.file}"
+
+  clean:
+    type: service_exec
+    description: Truncate every *.log file under /workspace/src/storage/logs (keeps file handles intact)
+    service: app-main
+    mode: exec-or-fail
+    argv:
+      - sh
+      - -c
+      - 'for f in /workspace/src/storage/logs/*.log; do [ -e "$f" ] && : > "$f"; done'

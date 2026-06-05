@@ -1,9 +1,0 @@
-commands:
-  create:
-    type: workflow
-    private: true
-    description: Create the second service database
-    steps:
-      - command: db.create
-        with:
-          database: "${db.second_database}"

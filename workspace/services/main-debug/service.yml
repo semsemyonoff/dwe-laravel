@@ -1,0 +1,9 @@
+# Xdebug variant of the main service. Optional — toggled via defaults.yml / local.yml.
+type: app
+container: app-main-debug
+extends: main
+compose:
+  - compose/services/main/debug.yml
+cli:
+  env:
+    - XDEBUG_CONFIG="cli_color=1"

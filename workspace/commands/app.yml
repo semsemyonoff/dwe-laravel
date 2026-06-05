@@ -1,0 +1,9 @@
+group:
+  title: App
+  description: Application-level commands
+
+commands:
+  install:
+    type: dwe
+    description: Install the Laravel application via installer container
+    cmd: "compose raw --bare -- --progress tty -f compose/installer.yml run --rm --quiet-pull -u ${host.uid}:${host.gid} app-install"

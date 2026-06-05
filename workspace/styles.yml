@@ -1,0 +1,21 @@
+# UI styles: ASCII header, semantic color palette, separator.
+# Laravel-inspired: coral-red brand accent for recognition.
+
+header:
+  lines:
+    - "Laravel"
+  font: slant
+
+# Seven semantic color tokens (raw hex). Empty/missing entries fall back to the
+# built-in light/dark default for that token.
+colors:
+  accent: "#FF2D20" # Laravel brand red — headers, table headers, focused borders
+  success: "#22C55E" # green — ok / running / enabled
+  warning: "#F59E0B" # amber — warnings / partial states
+  danger: "#EF4444" # red — errors / failures
+  muted: "#9AA3BB" # neutral gray — secondary text, separators, descriptions
+  border: "#334155" # unfocused panel and table borders
+  text: "" # empty — let the terminal pick the foreground color
+
+# Separator character between label and value in definition items.
+separator: "—"

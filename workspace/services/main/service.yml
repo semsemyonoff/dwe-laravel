@@ -1,0 +1,21 @@
+# Main Laravel application service (required — part of the base docker-compose.yml).
+type: app
+container: app-main
+required: true
+dir: ./services/main
+dir_internal: /workspace
+work_dir_internal: /workspace/src
+ports:
+  http: 80
+hosts:
+  web: laravel.localhost
+configs:
+  - .env
+dirs:
+  - home
+  - runtime
+cli:
+  mode: auto
+  shell: bash
+  user: www-data
+  workdir: /workspace/src

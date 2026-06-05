@@ -1,5 +1,5 @@
 ARG MAIN_IMAGE_TAG=8.5
-ARG BASE_IMAGE=semsemyonoff/devbox-laravel-php
+ARG BASE_IMAGE=ghcr.io/semsemyonoff/dwe-laravel-php
 FROM ${BASE_IMAGE}:${MAIN_IMAGE_TAG}
 
 COPY misc/xdebug.ini /usr/local/etc/php/conf.d/xdebug-custom.ini

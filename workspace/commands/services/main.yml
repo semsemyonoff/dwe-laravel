@@ -1,0 +1,79 @@
+group:
+  title: Main Service
+  description: Commands for the main Laravel application service
+
+commands:
+  chown-src:
+    type: service_run
+    private: true
+    description: |
+      chown /workspace/src to www-data so artisan / composer can write
+      (excludes `.git*`). Runs as root in a throwaway container, so it works
+      before the stack is brought up. Moved here from the container entrypoint.
+    service: app-main
+    user: root
+    workdir_from: services.main.work_dir_internal
+    # Prune every `.git` dir at any depth: git pack files (.git/objects/**) are
+    # owned by assorted uids/modes (often 0444) and chown on them fails on macOS
+    # Docker Desktop virtiofs even as root; nested .git dirs also land inside
+    # vendor/**/.git via composer. We don't need www-data ownership of .git
+    # anyway — git on the host uses the host UID. `find .` runs relative to the
+    # workdir resolved from workdir_from above.
+    argv:
+      - sh
+      - -c
+      - |
+        set -e
+        find . -name '.git' -prune -o -print0 \
+          | xargs -0 -r -P 8 -n 100 chown www-data:www-data
+        find . -name '.git' -prune -o -print0 \
+          | xargs -0 -r -P 8 -n 100 chmod g=u
+
+  composer-install:
+    type: service_exec
+    description: Install PHP dependencies via Composer
+    service: app-main
+    user: current
+    workdir_from: services.main.work_dir_internal
+    mode: exec-or-run
+    argv:
+      - composer
+      - install
+      - --ansi
+      - --prefer-dist
+      - --no-interaction
+      - --optimize-autoloader
+
+  key-generate:
+    type: service_exec
+    description: Generate the Laravel application key
+    service: app-main
+    user: current
+    workdir_from: services.main.work_dir_internal
+    mode: exec-or-run
+    argv:
+      - php
+      - artisan
+      - "key:generate"
+
+  migrate:
+    type: service_exec
+    description: Run Laravel database migrations
+    service: app-main
+    user: current
+    workdir_from: services.main.work_dir_internal
+    mode: exec-or-run
+    argv:
+      - php
+      - artisan
+      - migrate
+
+  bootstrap:
+    type: workflow
+    description: Full bootstrap — start db, create database, install deps, generate key, run migrations
+    steps:
+      - command: db.start
+      - command: services.main.db.create
+      - command: services.main.composer-install
+      - command: services.main.key-generate
+      - command: services.main.migrate

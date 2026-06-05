@@ -1,5 +1,5 @@
 # Overlay: Mailpit — SMTP capture for local email testing.
-# Enabled when tools.mailpit.enabled = true in devbox config.
+# Enabled when services.mailpit.enabled = true in dwe config.
 
 services:
   nginx:
@@ -10,7 +10,7 @@ services:
 
   mailpit:
     image: "${IMAGE_MAILPIT:-axllent/mailpit:latest}"
-    container_name: "${PROJECT_PREFIX:-devbox}_${PROJECT_NAME:-laravel}-mailpit"
+    container_name: "${PROJECT_PREFIX:-dwe}_${PROJECT_NAME:-laravel}-mailpit"
     restart: unless-stopped
     ports:
       - "${MAILPIT_PORT:-8025}:8025"
