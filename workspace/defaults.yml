@@ -11,7 +11,7 @@ services:
   dbgate:
     enabled: false
   mailpit:
-    enabled: true
+    enabled: false
 
 debug:
   idekey: PHPSTORM

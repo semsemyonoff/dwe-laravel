@@ -54,7 +54,7 @@ dwe reset run      # destructive cleanup (removes volumes & generated dirs)
 | 🐘 | `main` — Laravel app (nginx + PHP-FPM) | app | http://laravel.localhost | ✅ (required) |
 | 🐞 | `main-debug` — Xdebug-enabled variant of `main` | app | — | ❌ |
 | 💾 | `dbgate` — multi-database GUI | tool | http://dbgate.localhost | ❌ |
-| 📬 | `mailpit` — SMTP capture for local email testing | tool | http://mail.localhost | ✅ |
+| 📬 | `mailpit` — SMTP capture for local email testing | tool | http://mail.localhost | ❌ |
 
 Plus base infrastructure from `docker-compose.yml`: an **nginx** reverse proxy and a **MariaDB**
 database. Toggle optional services without touching defaults:
