@@ -1,0 +1,82 @@
+group:
+  title: Main Scaffolding
+  description: Generate Laravel classes with `php artisan make:*`
+
+commands:
+  model:
+    type: service_exec
+    description: Scaffold an Eloquent model, optionally with migration/factory/controller (`php artisan make:model`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    params:
+      name:
+        type: string
+        description: Model name in PascalCase (e.g. Order)
+        required: true
+        pattern: ^[A-Z][A-Za-z0-9]*$
+      migration:
+        type: bool
+        description: Also create a migration (-m)
+        default: false
+      factory:
+        type: bool
+        description: Also create a factory (-f)
+        default: false
+      controller:
+        type: bool
+        description: Also create a resource controller (-cr)
+        default: false
+    cmd: >-
+      php artisan make:model {{ .Params.name }}{{ if .Params.migration }} -m{{ end }}{{ if .Params.factory }} -f{{ end }}{{ if .Params.controller }} -cr{{ end }}
+
+  controller:
+    type: service_exec
+    description: Scaffold a controller, optionally resource/API (`php artisan make:controller`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    params:
+      name:
+        type: string
+        description: Controller name in PascalCase, with the Controller suffix (e.g. OrderController)
+        required: true
+        pattern: ^[A-Z][A-Za-z0-9]*$
+      resource:
+        type: bool
+        description: Generate the seven RESTful resource actions (--resource)
+        default: false
+      api:
+        type: bool
+        description: Exclude create/edit actions for an API controller (--api)
+        default: false
+    cmd: >-
+      php artisan make:controller {{ .Params.name }}{{ if .Params.resource }} --resource{{ end }}{{ if .Params.api }} --api{{ end }}
+
+  request:
+    type: service_exec
+    description: Scaffold a form request validation class (`php artisan make:request <Name>`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    params:
+      name:
+        type: string
+        description: Request name in PascalCase (e.g. StoreOrderRequest)
+        required: true
+        pattern: ^[A-Z][A-Za-z0-9]*$
+    argv: [php, artisan, "make:request", "${param.name}"]
+
+  resource:
+    type: service_exec
+    description: Scaffold an API resource transformer (`php artisan make:resource <Name>`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    params:
+      name:
+        type: string
+        description: Resource name in PascalCase (e.g. OrderResource)
+        required: true
+        pattern: ^[A-Z][A-Za-z0-9]*$
+    argv: [php, artisan, "make:resource", "${param.name}"]

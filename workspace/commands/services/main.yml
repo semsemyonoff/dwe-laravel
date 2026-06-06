@@ -2,6 +2,20 @@ group:
   title: Main Service
   description: Commands for the main Laravel application service
 
+# Sub-groups live in workspace/commands/services/main/ (IDs: services.main.<file>.<key>):
+#   db.yml       → services.main.db.*       (create [private])
+#   log.yml      → services.main.log.*      (list, tail, copy, clean)
+#   cache.yml    → services.main.cache.*    (clear, config-clear, route-clear, view-clear, clear-all, optimize)
+#   migrate.yml  → services.main.migrate.*  (run, status, rollback, fresh, make)
+#   schedule.yml → services.main.schedule.* (list, run)
+#   queue.yml    → services.main.queue.*    (failed, retry, failed-prune, clear)
+#   make.yml     → services.main.make.*     (model, controller, request, resource)
+#   artisan.yml  → services.main.artisan.*  (tinker, route-list, about, db-seed, storage-link)
+#
+# The queue *daemon* (services.main.queue.{start,logs,stop,restart}) is declared
+# below as key `queue` so its four virtual IDs land one level deep at
+# services.main.queue.*, alongside the failed-job helpers in queue.yml.
+
 commands:
   chown-src:
     type: service_run
@@ -56,18 +70,6 @@ commands:
       - artisan
       - "key:generate"
 
-  migrate:
-    type: service_exec
-    description: Run Laravel database migrations
-    service: app-main
-    user: current
-    workdir_from: services.main.work_dir_internal
-    mode: exec-or-run
-    argv:
-      - php
-      - artisan
-      - migrate
-
   bootstrap:
     type: workflow
     description: Full bootstrap — start db, create database, install deps, generate key, run migrations
@@ -76,4 +78,34 @@ commands:
       - command: services.main.db.create
       - command: services.main.composer-install
       - command: services.main.key-generate
-      - command: services.main.migrate
+      - command: services.main.migrate.run
+
+  # Long-running queue worker. Expands into four virtual commands:
+  #   services.main.queue.start | .logs | .stop | .restart
+  # Each runs a detached `app-main` container; `dwe stop` auto-reaps it.
+  # Multi-queue: `dwe cmd services.main.queue.start --set name=emails`.
+  queue:
+    type: daemon
+    description: Laravel queue worker (`php artisan queue:listen`) — detached, auto-reaped on `dwe stop`
+    service: app-main
+    user: www-data
+    workdir_from: services.main.work_dir_internal
+    params:
+      name:
+        type: string
+        description: Queue name to listen on
+        default: "default"
+        pattern: ^[a-zA-Z0-9_-]+$
+    argv:
+      - php
+      - artisan
+      - "queue:listen"
+      - --timeout=0
+      - -v
+      - "--queue=${param.name}"
+    daemon:
+      container_template: "queue_${param.name}"
+      on_already_running: error
+      auto_remove: true
+      # Give the worker time to finish the current job before SIGKILL.
+      stop_timeout: 60s

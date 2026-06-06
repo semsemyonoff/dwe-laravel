@@ -1,0 +1,64 @@
+group:
+  title: Main Queue
+  description: Failed-job management for the main service queue
+
+# The queue worker daemon (services.main.queue.{start,logs,stop,restart}) is
+# declared in workspace/commands/services/main.yml as key `queue`, so its virtual
+# command IDs stay one level deep at services.main.queue.* alongside these helpers.
+
+commands:
+  failed:
+    type: service_exec
+    description: List failed jobs (`php artisan queue:failed`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    argv:
+      - php
+      - artisan
+      - "queue:failed"
+
+  retry:
+    type: service_exec
+    description: Retry failed jobs — all by default, or a specific job ID (`php artisan queue:retry [id|all]`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    params:
+      id:
+        type: string
+        description: Failed job ID to retry, or "all" to retry every failed job
+        default: "all"
+        pattern: ^[a-zA-Z0-9_-]+$
+    argv:
+      - php
+      - artisan
+      - "queue:retry"
+      - "${param.id}"
+
+  failed-prune:
+    type: service_exec
+    description: Prune failed jobs; optionally limit to jobs older than N hours (`php artisan queue:prune-failed [--hours=N]`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    params:
+      hours:
+        type: int
+        description: Prune jobs older than this many hours (omit to prune all failed jobs)
+    cmd: "php artisan queue:prune-failed{{ if .Params.hours }} --hours={{ .Params.hours }}{{ end }}"
+
+  clear:
+    type: service_exec
+    description: Clear pending jobs from a queue; omit `queue` to clear the default queue (`php artisan queue:clear [--queue=name]`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    confirmation: true
+    confirmation_text: "This deletes all pending jobs{{ with .Params.queue }} on queue '{{ . }}'{{ end }}. Continue?"
+    params:
+      queue:
+        type: string
+        description: Queue name to clear (omit to clear the default queue)
+        pattern: ^[a-zA-Z0-9_-]+$
+    cmd: "php artisan queue:clear{{ with .Params.queue }} --queue={{ . }}{{ end }}"

@@ -1,6 +1,7 @@
 # Main Laravel application service (required — part of the base docker-compose.yml).
 type: app
 container: app-main
+icon: "🐘"
 required: true
 dir: ./services/main
 dir_internal: /workspace

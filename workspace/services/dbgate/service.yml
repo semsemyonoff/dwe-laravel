@@ -1,6 +1,7 @@
 # DbGate — multi-database GUI (replacement for Adminer). Optional tool.
 type: tool
 container: dbgate
+icon: "💾"
 compose:
   - compose/tools/dbgate.yml
 ports:

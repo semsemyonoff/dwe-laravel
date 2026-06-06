@@ -1,171 +1,115 @@
 # DWE — Laravel
 
-Containerized local dev environment driven by **DWE** (Dev Workspace Engine): a Go CLI core + a Docker Compose runtime.
+A **demonstration project** for [DWE](#dwe-is-an-external-tool) (Dev Workspace Engine): a containerized local dev environment for a Laravel app, driven entirely by declarative YAML. `README.md` is the human-facing overview; this file is the working guide for agents editing the repo.
 
-DWE augments the project's Docker Compose setup with configuration layering, lifecycle management, validation, and tooling — it does not replace compose. Edit `docker-compose.yml` freely; DWE runs on top of it. All lifecycle operations go through `dwe` directly (no Make facade).
-
-## Goals
-
-The project keeps orchestration, rendering, topology resolution, state management, and config declarative. Concerns are separated cleanly:
-
-1. **Single source of truth in YAML** — `workspace.yml` + layered config files define the entire project declaratively.
-2. **CLI as shared core** — All logic that computes, validates, inspects, renders, or generates belongs in the `dwe` binary: config merge, topology resolution, .env generation, info/help display, deploy plan generation, editor/devcontainer config.
-3. **Generated .env as transport only** — `.env` is never edited manually, never a source of truth. It is rendered from the export spec by `dwe render env`.
-4. **Explicit over magic** — No magic env variable name mapping. All exports are declared explicitly in `exports.env` rules with `name`, `from` (dot-path), `format`, `when`.
-5. **Service as hub** — Each application service directory follows the hub model: `src/`, `configs/`, `home/`, `runtime/`, `.devcontainer/`.
-6. **Editor-agnostic** — Must support JetBrains, VS Code, and Zed equally via generated configurations.
-7. **AI-friendly structure** — Predictable directory layout, declarative entities, safe extensibility. An agent or human should be able to understand the project state by reading config files.
+DWE augments the project's Docker Compose setup with configuration layering, lifecycle management, validation, and declarative tooling — it does **not** replace compose. Edit `docker-compose.yml` freely; DWE runs on top of it.
 
 ## DWE is an external tool
 
-`dwe` is installed on the host (e.g. via Homebrew at `/opt/homebrew/bin/dwe`); this repo contains only the project configuration it consumes. **Do not modify CLI behavior from this repo** — only the YAML configs, compose files, and templates here.
+`dwe` is installed on the host (e.g. Homebrew at `/opt/homebrew/bin/dwe`). This repo contains only the project configuration it consumes — **do not** try to modify CLI behavior from here; only edit the YAML configs, compose files, and templates.
 
-The CLI ships its own authoritative reference docs, accessed through the binary (always pass `--lang en`):
+### Using the CLI
 
-- `dwe docs llms-txt --lang en` — project-aware overview / index (start here)
-- `dwe docs list --lang en` — list all topics
-- `dwe docs search <term> --lang en` — search docs
-- `dwe docs show <topic> --lang en` — read a topic (e.g. `reference/config/services/fields`)
+The CLI ships its own authoritative, versioned docs. Read them through the binary, always with `--lang en`:
 
-Read commands (`dwe status`, `dwe validate`, `dwe logs`, `dwe docs show/search/list/llms-txt`) are safe to run. Mutating commands (`dwe deploy run`, `dwe run`/`stop`/`restart`, `dwe reset run`, `dwe services enable|disable`, `dwe docs generate`) change state — prepare the edit, then run them deliberately. Never call `docker compose` directly; DWE tracks state and holds locks.
+```bash
+dwe docs llms-txt --lang en             # project-aware overview / index — start here
+dwe docs list --lang en                 # list every topic
+dwe docs search <term> --lang en        # search docs
+dwe docs show <topic> --lang en         # read one topic, e.g. reference/config/services/fields
+```
 
-## Design principles
+**Rule — agents read status/data output as JSON.** When running `dwe validate`, `dwe status`, `dwe services`, or any other data-emitting status command, always pass `--output json` (alias `-o json`): the JSON is stable and parseable, while the default table output is formatted for humans and noisy to scan programmatically. **Exception — documentation:** the `dwe docs` commands (`show` / `list` / `search` / `llms-txt`) are not status commands — read them in their default form and never pass `-o json`. `docs show` / `docs llms-txt` emit markdown and treat `--output` as a *file path*, so `-o json` would write a file literally named `json` instead of changing the format.
 
-### Config (this repo)
-- Three layers merged in strict order: `workspace.yml` (structure) → `workspace/defaults.yml` (versioned defaults) → `workspace/local.yml` (gitignored user overrides). Later wins, maps merge recursively.
-- `workspace.yml` is lean — only project identity (`project.name`, `project.prefix`). Runtime details (ports, hosts, exports, state, db) live in `defaults.yml`.
-- Export rules are declarative and live in `defaults.yml` under `exports.env`. Each rule maps a dot-path in the merged config to an env variable name.
-- `workspace/local.yml` is always gitignored. `workspace/local.example.yml` is the tracked template showing available overrides.
-- Service definitions live one-per-folder in `workspace/services/<name>/service.yml` (loaded separately, not part of the 3-layer merge). A `type:` discriminator (`app` / `tool` / `infra`) selects the allowed fields. `required: true` services are always enabled; optional services are toggled via `services.<name>.enabled` in `defaults.yml` / `local.yml`. Per-service `ports:` / `hosts:` are deep-merged by entry name.
-- Tools (dbgate, mailpit) are `type: tool` services; their compose overlay is activated automatically when the service is enabled.
-- Docker/Compose execution policy lives in `workspace/docker.yml` (tracked) + `workspace/docker.local.yml` (gitignored). Loaded separately. Controls project name, per-command compose args, `.env` auto-generation triggers, topology hidden services, and shared Docker volumes.
-- Pipelines (`workspace/deploy.yml`, `workspace/reset.yml`, `workspace/lifecycle.yml`) and per-service deploy files (`workspace/services/<name>/deploy.yml`) are loaded standalone and resolve `${...}` template expressions against the merged config.
-- Declarative commands live in `workspace/commands/` (one file per group; subdirectories nest groups). Command IDs are derived from path + filename + key.
+**Read commands are safe to run:** `dwe status`, `dwe validate`, `dwe logs`, `dwe docs show/search/list/llms-txt`.
 
-### General
-- Lifecycle is driven through `dwe` directly: `dwe run` / `dwe stop` / `dwe restart` (full pipelines) and `dwe docker up` / `dwe docker down` / `dwe docker logs` (raw passthroughs). There is no Makefile.
-- Never call `docker compose` directly — DWE tracks state and holds locks.
-- Cross-platform: must work on macOS and Linux (including WSL).
-- Do not commit secrets to `.env` or config files.
-- `legacy/` directory is gitignored and contains old repos for reference only. Do not modify legacy code.
-- DWE runtime artifacts live under `.dwe/` (gitignored): logs, deploy state, snapshot pointers, locks.
+**Mutating commands change state — prepare the edit, then run deliberately (or ask the user):** `dwe deploy run`, `dwe run` / `stop` / `restart`, `dwe reset run`, `dwe services enable|disable`, `dwe docs generate`. **Never** call `docker compose` directly — DWE tracks state and holds locks.
 
-## Architecture
+After editing a `service.yml`, configs, or a service `deploy.yml` → `dwe deploy run`. After editing `docker-compose.yml` → `dwe run`. After toggling a service → `dwe services enable|disable <name> --apply`. After changing a `service.yml` icon/host → `dwe validate` to confirm.
 
-- **dwe** (external binary) — the shared core: config loading, rendering, env generation, info display, topology, deploy planning, docker control plane.
-- **Docker** — `dwe docker` is the public lifecycle API (up/down/stop/restart/logs/ps/exec/run); `dwe compose` is the low-level diagnostic layer (files/argv/raw). Container health-wait is a pipeline builtin (`docker_wait_healthy`), not a CLI command.
-- **Config** — 3-layer YAML merge: `workspace.yml` → `workspace/defaults.yml` → `workspace/local.yml` (gitignored). Per-service `workspace/services/<name>/service.yml` files are injected into the merged raw map.
-- **Docker policy** — `workspace/docker.yml` + `workspace/docker.local.yml` (gitignored); loaded separately, controls compose execution (project name, args, `.env` triggers, topology, resources).
-- **Deploy** — `workspace/deploy.yml` (orchestrator) + `workspace/services/<name>/deploy.yml` (per-service); declares phases and steps. The orchestrator inlines per-service pipelines at `deploy_services: true` in `depends_on` order.
-- **Lifecycle** — `workspace/lifecycle.yml`; declares `run` and `stop` pipelines. `dwe run` = update probe → before-run hooks → docker up → wait healthy (`docker_wait_healthy` builtin) → after-run hooks → info → message. `dwe stop` = before-stop hooks → docker down → after-stop hooks → message. `dwe restart` = stop + run --no-update. Use `dwe docker up` / `dwe docker down` for raw Docker Compose passthroughs.
-- **Reset** — `workspace/reset.yml`; destructive cleanup pipeline (confirm → docker down → remove volumes → remove generated dirs).
-- `.env` is a **generated artifact** (`dwe render env -o .env`), never a source of truth.
+## How this repo is configured
+
+- **3-layer config merge**, strict order, later wins, maps merge recursively:
+  `workspace.yml` (project identity only — `project.name`, `project.prefix`) → `workspace/defaults.yml` (versioned defaults: service toggles, runtime, exports, db) → `workspace/local.yml` (gitignored per-developer overrides; `local.example.yml` is the tracked template).
+- **Services** are declared one-per-folder in `workspace/services/<name>/service.yml`, loaded separately and injected into the merged map. A `type:` discriminator (`app` / `tool` / `infra`) selects allowed fields. `required: true` services are always on (`main`); optional ones toggle via `services.<name>.enabled`. Per-service `ports:` / `hosts:` deep-merge by entry name. Each service can carry an `icon:` shown in `dwe info`.
+- **`.env` is a generated artifact** (`dwe render env -o .env`), never edited by hand, never a source of truth. Every variable is declared explicitly in `defaults.yml` under `exports.env` (`name` + `from` dot-path + optional `format` / `when` / `default`). No magic name mapping.
+- **Docker/Compose policy** lives in `workspace/docker.yml` (loaded separately, not part of the 3-layer merge). This project keeps it minimal — only the shared `composer_cache` volume; everything else uses DWE defaults (project name `dwe-laravel`, etc.).
+- **Declarative commands** live in `workspace/commands/` — one file per group, subdirectories nest groups. Command IDs derive from path + filename + key (`workspace/commands/services/main/cache.yml` → `services.main.cache.*`).
+- **Service hub model:** on deploy, each service gets a hub under `services/<name>/` (gitignored): `src/` (the app code), `configs/`, `home/`, `runtime/`, plus generated `.devcontainer/` / `.vscode/` / `AGENTS.md`.
+
+### Pipeline files — what exists here
+
+DWE's deploy / lifecycle / reset / info dashboards are all optional standalone files. **This project only defines `workspace/services/main/deploy.yml`** (the per-service deploy pipeline). It has no orchestrator `deploy.yml`, no `lifecycle.yml`, no `reset.yml`, no `info.yml` — so `dwe deploy run`, `dwe run`/`stop`/`restart`, `dwe reset run`, and `dwe info` all use DWE's built-in defaults. (`dwe validate` reports these as informational ⓘ, not errors.) Add a file from the `dwe docs` reference only when you need to customize that pipeline.
+
+## Lifecycle
+
+- `dwe deploy run` — full deploy: ensure hub dirs, install Laravel via the installer container, copy configs, start db, create database, composer install, key:generate, migrate, render IDE/AI configs. Run on first setup or after changing a service's config/deploy.
+- `dwe run` / `dwe stop` / `dwe restart` — bring the stack up / down / cycle it.
+- `dwe docker up|down|logs|exec|ps` — raw Docker Compose passthroughs (state-tracked).
+- `dwe reset run` — destructive cleanup.
+
+There is **no Make facade for lifecycle.** The `Makefile` exists for one thing only — building/pushing the multi-arch base PHP image (`make build-php-base-image`); day-to-day work goes through `dwe`.
 
 ## Project layout
 
 ```
-workspace.yml                            # project identity (project name/prefix)
-workspace/defaults.yml                   # versioned defaults: service toggles, runtime, exports, db, compose
+workspace.yml                            # project identity (name/prefix)
+workspace/defaults.yml                   # versioned defaults: service toggles, runtime, exports, db
 workspace/local.yml                      # local overrides (gitignored)
 workspace/local.example.yml              # tracked template for local overrides
-workspace/services/<name>/service.yml    # per-service declaration (type, container, ports, hosts, dirs, cli, configs)
-workspace/services/main/deploy.yml       # per-service deploy pipeline (main)
-workspace/deploy.yml                     # orchestrator deploy pipeline
-workspace/reset.yml                      # reset pipeline
-workspace/lifecycle.yml                  # run + stop pipelines
-workspace/lifecycle.example.yml          # tracked template showing full lifecycle shape with hook phases
-workspace/docker.yml                     # docker/compose execution policy
-workspace/docker.local.yml               # docker policy local overrides (gitignored)
-workspace/docker.local.example.yml       # tracked template for docker policy overrides
-workspace/info.yml                       # declarative info dashboard
-workspace/styles.yml                     # UI styles: ASCII header, color palette, separator
-workspace/commands/                      # declarative command definitions (per-group YAML)
-workspace/commands/db.yml                # db group: up, wait, create, drop, cli, start, dump-create, dump-deploy
-workspace/commands/app.yml               # app group: install (installer container)
-workspace/commands/services/main.yml     # services.main: composer-install, key-generate, migrate, bootstrap
-workspace/commands/services/main/db.yml  # services.main.db: create (private workflow)
-workspace/scripts/                       # script files referenced by type:script commands (db/dump-create.sh, etc.)
-workspace/templates/                     # render packs (ai/, git/, ide/) consumed by dwe render
+workspace/docker.yml                     # docker/compose execution policy (shared composer_cache volume)
+workspace/styles.yml                     # UI: ASCII header, color palette, separator
+workspace/services/<name>/service.yml    # per-service declaration (type, container, icon, ports, hosts, dirs, cli, configs)
+workspace/services/main/deploy.yml       # per-service deploy pipeline (the only pipeline file in this repo)
+workspace/commands/                      # declarative commands (see "Commands" below)
+workspace/scripts/db/*.sh                # scripts referenced by type:script commands (dump-create, dump-deploy)
+workspace/templates/{ai,git,ide}/        # render packs consumed by `dwe render`
 docker-compose.yml                       # base compose: nginx, db, app-main (mandatory infrastructure)
-compose/tools/dbgate.yml                 # DbGate DB tool overlay
-compose/tools/mailpit.yml                # Mailpit email testing overlay
-compose/services/main/debug.yml          # app-main-debug container (Xdebug enabled)
+compose/tools/{dbgate,mailpit}.yml       # optional tool overlays
+compose/services/main/debug.yml          # app-main-debug container (Xdebug)
 compose/installer.yml                    # installer container (deploy only)
-configs/services/main/.env               # Laravel .env template (copied to services/main/configs/ on deploy)
-services/                                # service hubs (gitignored, created by deploy)
-backups/                                 # local DB dumps etc. (gitignored)
-.dwe/                                    # DWE runtime artifacts (gitignored): logs, deploy state, snapshots, locks
-legacy/                                  # old repos (gitignored, reference only)
+configs/services/main/.env               # Laravel .env template (copied into the hub on deploy)
+services/                                 # service hubs (gitignored, created by deploy)
+backups/                                  # local DB dumps (gitignored except .gitkeep)
+.dwe/                                     # DWE runtime artifacts (gitignored): logs, state, snapshots, locks
+legacy/                                   # old repos (gitignored, reference only — do not modify)
 ```
 
 ### Compose naming convention
 
-- `docker-compose.yml` at root — mandatory infrastructure (nginx, db, app-main), always started (declared as `compose.base`)
-- `compose/tools/<name>.yml` — optional tool services (dbgate, mailpit)
-- `compose/services/<service>/<name>.yml` — optional service variants (e.g. the debug container)
-- `compose/installer.yml` — standalone installer (deploy only, not in regular compose files list)
-- No `docker-compose.` prefix in overlay filenames
+- `docker-compose.yml` at root — mandatory infrastructure (nginx, db, app-main), always started (`compose.base`).
+- `compose/tools/<name>.yml` — optional tool services (dbgate, mailpit).
+- `compose/services/<service>/<name>.yml` — optional service variants (e.g. the debug container).
+- `compose/installer.yml` — standalone installer (deploy only, not in the regular file list).
+- No `docker-compose.` prefix on overlay filenames.
 
-DWE assembles the compose `-f` file list deterministically: base file first, then enabled **tool** → **infra** → **app** overlays (alphabetical by service key within each group).
+DWE assembles the `-f` list deterministically: base first, then enabled **tool** → **infra** → **app** overlays (alphabetical within each group).
 
-## CLI reference
+## Commands
 
-DWE docs are versioned with the binary. Read them through the CLI (always `--lang en`):
+| ID group | File | Commands |
+|----------|------|----------|
+| `app.*` | `commands/app.yml` | `install` (installer container) |
+| `db.*` | `commands/db.yml` | `create`, `drop`, `cli`, `dump-create`, `dump-deploy` (+ private `up`/`wait`/`start`) |
+| `services.main` | `commands/services/main.yml` | `composer-install`, `key-generate`, `bootstrap` (+ private `chown-src`); the `queue` **daemon** |
+| `services.main.db.*` | `.../main/db.yml` | `create` (private) |
+| `services.main.log.*` | `.../main/log.yml` | `list`, `tail`, `copy`, `clean` |
+| `services.main.cache.*` | `.../main/cache.yml` | `clear`, `config-clear`, `route-clear`, `view-clear`, `clear-all`, `optimize` |
+| `services.main.migrate.*` | `.../main/migrate.yml` | `run`, `status`, `rollback`, `fresh`, `make` |
+| `services.main.schedule.*` | `.../main/schedule.yml` | `list`, `run` |
+| `services.main.queue.*` | `.../main/queue.yml` + daemon | `start`/`logs`/`stop`/`restart` (daemon), `failed`, `retry`, `failed-prune`, `clear` |
+| `services.main.make.*` | `.../main/make.yml` | `model`, `controller`, `request`, `resource` |
+| `services.main.artisan.*` | `.../main/artisan.yml` | `tinker`, `route-list`, `about`, `db-seed`, `storage-link` |
 
-```bash
-dwe docs llms-txt --lang en              # project overview / index (start here)
-dwe docs show reference/config/index --lang en
-dwe docs show reference/config/workspace --lang en          # workspace.yml / defaults.yml / local.yml (3-layer merge)
-dwe docs show reference/config/services/index --lang en     # per-service service.yml
-dwe docs show reference/config/deploy/index --lang en       # deploy.yml / reset.yml (typed steps, builtins)
-dwe docs show reference/config/lifecycle --lang en          # lifecycle.yml (run/stop, update probe, hooks)
-dwe docs show reference/config/conditions --lang en         # typed when: / check: conditions
-dwe docs show reference/config/docker --lang en             # docker.yml (compose policy, project name, topology)
-dwe docs show reference/config/commands/index --lang en     # declarative commands
-dwe docs show reference/config/info --lang en               # info dashboard
-dwe docs show reference/config/styles --lang en             # ASCII header and color palette
-```
+Run a command with `dwe cmd <id>`; pass params with `--set key=value` (e.g. `dwe cmd services.main.queue.start --set name=emails`). Each command declares a `type:` (`shell` / `dwe` / `script` / `service_exec` / `service_run` / `workflow` / `builtin` / `daemon`) — see `dwe docs show reference/config/commands/types --lang en`.
 
-## Pipeline step model (typed)
+### The `main` deploy pipeline (`workspace/services/main/deploy.yml`)
 
-Pipeline steps in `deploy.yml`, `services/<name>/deploy.yml`, `reset.yml`, and `lifecycle.yml` use the **typed action model**. Each step has a `type:` and a `cmd:` plus optional `with:`:
+Typed steps: each has a `type:` (`shell` / `dwe` / `command` / `builtin`) and `cmd:`, plus optional `when:` / `check:` / `continue_on_error`. `.env` generation is implicitly inserted before phase 1. Full schema: `dwe docs show reference/config/deploy/index --lang en`.
 
-| `type:` | `cmd:` payload | Notes |
-|---------|----------------|-------|
-| `shell` | `sh -c <command>` | Full shell semantics |
-| `dwe` | dwe subcommand string (e.g. `"docker up"`) | Binary path resolved automatically |
-| `command` | declarative command ID (e.g. `services.main.migrate`) | Dispatched via command registry; supports `with:` overrides |
-| `builtin` | builtin name | In-process Go action; parameters via `with:` |
+## Conventions
 
-Optional per-step fields:
-
-- `when:` — pre-condition (typed: `{type: builtin|shell|template, cmd|expr: ...}`). Step skipped when falsy. Available builtin predicates: `dir-exists`, `dir-missing`, `dir-empty`, `dir-not-empty`, `file-exists`, `file-missing`.
-- `check:` — post-action (same typed shape as steps). Pipeline aborts when the action fails (skipped when `continue_on_error: true` and step body failed).
-- `continue_on_error: true` — failed step reported as ✗ but pipeline continues. Useful on hook phases.
-
-Phases also accept `when:` (typed condition) and `untracked: true` (suppress step output for the phase). The `deploy_services: true` marker phase is valid only in `deploy.yml`.
-
-Available builtins: `confirm`, `message`, `service_dirs_ensure`, `service_configs_copy`, `service_configs_check`, `docker_remove_project_volumes`, `remove_paths`, `docker_wait_healthy`.
-
-`.env` generation is the implicit first step inserted by the CLI before phase 1.
-
-Workflow steps inside `type: workflow` commands are an exception to the typed model — they keep the older `command:` / `confirm:` / `with:` / `when:` (string) shape.
-
-## Variable flow
-
-```
-workspace.yml + defaults.yml + local.yml
-  → dwe render env -o .env        (CLI generates)
-  → .env loaded by Docker Compose (env_file)
-  → containers and declarative command env vars use the exported variables
-```
-
-## Pipeline file logging
-
-Every pipeline command (`deploy`, `reset`, `run`, `stop`) supports a top-level `log:` field that toggles file logging at `.dwe/logs/<pipeline>.log`. When enabled, dwe status messages and child-process stdout/stderr are teed to the log file (with ANSI codes stripped). Defaults differ by pipeline:
-
-- `workspace/deploy.yml` — `log:` defaults to `true` (deploy keeps a record by default).
-- `workspace/reset.yml` — `log:` defaults to `false`.
-- `workspace/lifecycle.yml` `run:` / `stop:` — `log:` defaults to `false`.
-
-Override per pipeline with an explicit `log: true` or `log: false`.
+- Cross-platform: must work on macOS and Linux (including WSL).
+- Don't commit secrets to `.env` or config files. `.env` is generated and gitignored.
+- `legacy/` is gitignored, reference-only — do not modify it.
+- Before editing any YAML under `workspace/`, confirm the schema with `dwe docs show reference/config/<area> --lang en` rather than guessing field shapes.

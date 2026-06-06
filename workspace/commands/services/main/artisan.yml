@@ -1,0 +1,49 @@
+group:
+  title: Main Artisan
+  description: Everyday `php artisan` utilities for the main service
+
+commands:
+  tinker:
+    type: service_exec
+    description: Open an interactive Tinker REPL inside the app container (`php artisan tinker`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    argv: [php, artisan, tinker]
+
+  route-list:
+    type: service_exec
+    description: List all registered routes (`php artisan route:list`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    argv: [php, artisan, "route:list"]
+
+  about:
+    type: service_exec
+    description: Show the application environment overview (`php artisan about`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    argv: [php, artisan, about]
+
+  db-seed:
+    type: service_exec
+    description: Run database seeders, all or a single class (`php artisan db:seed [--class=<Seeder>]`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    params:
+      class:
+        type: string
+        description: Seeder class to run (omit to run DatabaseSeeder)
+        pattern: ^[A-Za-z][A-Za-z0-9_]*$
+    cmd: "php artisan db:seed{{ with .Params.class }} --class={{ . }}{{ end }}"
+
+  storage-link:
+    type: service_exec
+    description: Symlink public/storage to storage/app/public (`php artisan storage:link`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    argv: [php, artisan, "storage:link"]

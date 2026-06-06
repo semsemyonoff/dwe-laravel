@@ -1,5 +1,11 @@
 # Deploy pipeline for service: main
-# Steps execute sequentially within each phase.
+#
+# Every step is independently idempotent and gated by filesystem truth, so
+# `dwe deploy run` is safe to re-run: if a step fails mid-pipeline (e.g. composer
+# hits a network blip), fix the cause and re-run — only the unfinished steps
+# execute. There is intentionally NO phase-level `when:` — a coarse phase guard
+# (e.g. "skip the whole setup phase when src is non-empty") strands a partial
+# install and forces a destructive `dwe reset run` to recover. Gate on the step.
 #
 # Step types (set on `type:`, payload in `cmd:`):
 #   shell    — host shell command (sh -c)
@@ -9,61 +15,90 @@
 
 phases:
   - name: setup
-    description: Prepare service directories and install application
-    when:
-      type: builtin
-      cmd: "dir-empty services/main/src"
+    description: Prepare service directories and install the application
     steps:
       - name: create-dirs
         type: builtin
         cmd: service_dirs_ensure
         with:
           service: main
-        description: Create service hub directories
+        description: Create service hub directories (idempotent)
+
       - name: install
         type: command
         cmd: app.install
-        description: Install Laravel project via installer container
+        description: Install Laravel via the installer container (composer create-project)
+        # create-project requires an EMPTY target. Only run on a fresh checkout;
+        # a partially-installed src is completed by `composer-install` below
+        # (vendor backfill), never re-installed over.
+        when:
+          type: builtin
+          cmd: "dir-empty services/main/src"
+
       - name: copy-configs
         type: builtin
         cmd: service_configs_copy
         with:
           service: main
-          mode: replace
-        description: Copy template configs to service directory (files declared in services.main.configs)
+          # `default` = copy only when the destination is missing; never clobber
+          # an existing .env (it holds the generated APP_KEY). Switch to `update`
+          # if you also want new template keys synced while preserving values.
+          mode: default
+        description: Copy template configs into the hub (files declared in services.main.configs)
         check:
           type: builtin
           cmd: service_configs_check
           with:
             service: main
+
       - name: chown-src
         type: command
         cmd: services.main.chown-src
         description: chown /workspace/src to www-data so artisan/composer can write (excludes .git*)
+        # Nothing to chown on an empty src; once installed it always has content.
+        when:
+          type: builtin
+          cmd: "dir-not-empty services/main/src"
 
   - name: init
-    description: Initialize application (database, dependencies, keys)
+    description: Initialize the application (database, dependencies, key, migrations)
     steps:
       - name: db-start
         type: command
         cmd: db.start
-        description: Start database container and wait until healthy
+        description: Start the database container and wait until healthy
+
       - name: db-create
         type: command
         cmd: services.main.db.create
-        description: Create application database
+        description: Create the application database (CREATE DATABASE IF NOT EXISTS)
+
       - name: composer-install
         type: command
         cmd: services.main.composer-install
         description: Install PHP dependencies
+        # Re-runs until vendor/ is complete, then skips. This is what lets a
+        # network-interrupted install be resumed by re-running `dwe deploy run`
+        # instead of resetting the whole service.
+        when:
+          type: builtin
+          cmd: "file-missing services/main/src/vendor/autoload.php"
+
       - name: key-generate
         type: command
         cmd: services.main.key-generate
-        description: Generate Laravel application key
+        description: Generate the Laravel application key
+        # Only when APP_KEY has no value — re-running would rotate the key and
+        # invalidate existing encrypted data / sessions. (.env is bind-mounted
+        # from services/main/configs/.env, so we check it on the host.)
+        when:
+          type: shell
+          cmd: "! grep -qE '^APP_KEY=.+' services/main/configs/.env"
+
       - name: migrate
         type: command
-        cmd: services.main.migrate
-        description: Run database migrations
+        cmd: services.main.migrate.run
+        description: Run database migrations (pending only; safe to re-run)
 
   - name: finalize
     description: Render hub-level IDE and AI-agent configs for this service

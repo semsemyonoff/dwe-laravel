@@ -1,0 +1,52 @@
+group:
+  title: Main Cache
+  description: Clear and warm the Laravel caches (application, config, routes, views)
+
+commands:
+  clear:
+    type: service_exec
+    description: Clear the application cache (`php artisan cache:clear`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    argv: [php, artisan, "cache:clear"]
+
+  config-clear:
+    type: service_exec
+    description: Remove the cached config file (`php artisan config:clear`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    argv: [php, artisan, "config:clear"]
+
+  route-clear:
+    type: service_exec
+    description: Remove the cached route file (`php artisan route:clear`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    argv: [php, artisan, "route:clear"]
+
+  view-clear:
+    type: service_exec
+    description: Clear compiled Blade views (`php artisan view:clear`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    argv: [php, artisan, "view:clear"]
+
+  clear-all:
+    type: service_exec
+    description: Clear every framework cache — config, routes, views, events, compiled (`php artisan optimize:clear`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    argv: [php, artisan, "optimize:clear"]
+
+  optimize:
+    type: service_exec
+    description: Cache config, routes, events and views for faster boot (`php artisan optimize`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    argv: [php, artisan, optimize]

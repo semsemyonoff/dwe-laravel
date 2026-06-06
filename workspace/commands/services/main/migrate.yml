@@ -1,0 +1,61 @@
+group:
+  title: Main Migrations
+  description: Migration helpers for the main service — run, status, rollback, fresh, scaffold
+
+commands:
+  run:
+    type: service_exec
+    description: Run pending Laravel database migrations (`php artisan migrate`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    argv: [php, artisan, migrate]
+
+  status:
+    type: service_exec
+    description: Show pending/applied migration status (`php artisan migrate:status`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    argv: [php, artisan, "migrate:status"]
+
+  rollback:
+    type: service_exec
+    description: Roll back the last batch, or N batches with `--set step=N` (`php artisan migrate:rollback`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    params:
+      step:
+        type: int
+        description: Number of batches to roll back (omit to roll back the last batch only)
+    cmd: "php artisan migrate:rollback{{ if .Params.step }} --step={{ .Params.step }}{{ end }}"
+
+  fresh:
+    type: service_exec
+    description: Drop all tables and re-run every migration (`php artisan migrate:fresh [--seed]`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    confirmation: true
+    confirmation_text: "This DROPS ALL TABLES and re-runs every migration. Continue?"
+    params:
+      seed:
+        type: bool
+        description: Run seeders after migrating
+        default: false
+    cmd: "php artisan migrate:fresh{{ if .Params.seed }} --seed{{ end }}"
+
+  make:
+    type: service_exec
+    description: Scaffold a new migration file (`php artisan make:migration <name>`)
+    service: app-main
+    mode: exec-or-run
+    workdir_from: services.main.work_dir_internal
+    params:
+      name:
+        type: string
+        description: Migration name in snake_case (e.g. add_status_to_orders)
+        required: true
+        pattern: ^[A-Za-z][A-Za-z0-9_]*$
+    argv: [php, artisan, "make:migration", "${param.name}"]

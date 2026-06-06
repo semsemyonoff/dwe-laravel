@@ -1,6 +1,7 @@
 # Mailpit — SMTP capture for local email testing. Optional tool.
 type: tool
 container: mailpit
+icon: "📬"
 compose:
   - compose/tools/mailpit.yml
 ports:

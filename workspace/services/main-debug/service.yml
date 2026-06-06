@@ -1,6 +1,7 @@
 # Xdebug variant of the main service. Optional — toggled via defaults.yml / local.yml.
 type: app
 container: app-main-debug
+icon: "🐞"
 extends: main
 compose:
   - compose/services/main/debug.yml
