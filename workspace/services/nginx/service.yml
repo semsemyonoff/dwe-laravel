@@ -1,0 +1,10 @@
+# Front proxy (required — part of the base docker-compose.yml).
+# Owns the public HTTP port; routes hostnames to backends, so it is the
+# port_via candidate that lets dwe info render service hosts (e.g.
+# http://laravel.localhost) instead of bare http://localhost:80.
+type: infra
+container: nginx
+icon: "🌐"
+required: true
+ports:
+  http: 80

@@ -44,7 +44,7 @@ exports:
       format: bool
 
     - name: APP_PORT
-      from: services.main.ports.http
+      from: services.nginx.ports.http
       format: int
 
     - name: DB_PORT
