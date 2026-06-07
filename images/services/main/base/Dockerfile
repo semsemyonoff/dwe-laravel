@@ -29,8 +29,6 @@ RUN apt-get update \
     vim \
     jq \
     procps \
-    locales \
-    && sed -i 's/# *\(ru_RU.UTF-8\)/\1/' /etc/locale.gen && locale-gen \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # PHP extensions (configure gd with freetype + jpeg before building).
