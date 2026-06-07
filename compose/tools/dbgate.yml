@@ -17,7 +17,7 @@ services:
 
   dbgate:
     image: "${IMAGE_DBGATE:-dbgate/dbgate:latest}"
-    container_name: "${PROJECT_PREFIX:-dwe}_${PROJECT_NAME:-laravel}-dbgate"
+    container_name: "${PROJECT_PREFIX:-dwe}-${PROJECT_NAME:-laravel}-dbgate"
     hostname: dbgate
     restart: unless-stopped
     ports:

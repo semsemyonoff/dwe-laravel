@@ -10,7 +10,7 @@ services:
 
   mailpit:
     image: "${IMAGE_MAILPIT:-axllent/mailpit:latest}"
-    container_name: "${PROJECT_PREFIX:-dwe}_${PROJECT_NAME:-laravel}-mailpit"
+    container_name: "${PROJECT_PREFIX:-dwe}-${PROJECT_NAME:-laravel}-mailpit"
     restart: unless-stopped
     ports:
       - "${MAILPIT_PORT:-8025}:8025"

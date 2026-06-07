@@ -1,7 +1,7 @@
 # Base compose: mandatory infrastructure (nginx, db, app-main).
 # Always started. Overlays in compose/ add optional services.
 
-name: "${PROJECT_PREFIX:-dwe}_${PROJECT_NAME:-laravel}"
+name: "${PROJECT_PREFIX:-dwe}-${PROJECT_NAME:-laravel}"
 
 volumes:
   db:
@@ -17,12 +17,12 @@ volumes:
 
 networks:
   default:
-    name: ${PROJECT_PREFIX:-dwe}_${PROJECT_NAME:-laravel}
+    name: ${PROJECT_PREFIX:-dwe}-${PROJECT_NAME:-laravel}
 
 services:
   nginx:
     image: "${IMAGE_NGINX:-nginx:latest}"
-    container_name: "${PROJECT_PREFIX:-dwe}_${PROJECT_NAME:-laravel}-nginx"
+    container_name: "${PROJECT_PREFIX:-dwe}-${PROJECT_NAME:-laravel}-nginx"
     restart: unless-stopped
     extra_hosts:
       - host.docker.internal:host-gateway
@@ -42,7 +42,7 @@ services:
 
   db:
     image: "${IMAGE_DB:-mariadb:lts}"
-    container_name: "${PROJECT_PREFIX:-dwe}_${PROJECT_NAME:-laravel}-db"
+    container_name: "${PROJECT_PREFIX:-dwe}-${PROJECT_NAME:-laravel}-db"
     hostname: db
     restart: unless-stopped
     healthcheck:
@@ -64,7 +64,7 @@ services:
       args:
         APP_UID: "${UID:-1000}"
         APP_GID: "${GID:-1000}"
-    container_name: "${PROJECT_PREFIX:-dwe}_${PROJECT_NAME:-laravel}-app-main"
+    container_name: "${PROJECT_PREFIX:-dwe}-${PROJECT_NAME:-laravel}-app-main"
     hostname: main
     restart: unless-stopped
     working_dir: /workspace/src
