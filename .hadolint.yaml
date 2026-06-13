@@ -1,0 +1,9 @@
+# hadolint configuration — picked up automatically by `dwe validate linters`
+# (DWE runs hadolint from the project root, where this file lives).
+#
+# DL3008 — "Pin versions in apt-get install" — is ignored on purpose: pinning
+# every Debian package version in a dev base image is unmaintainable and breaks
+# the build on each php:8.5-fpm / Debian point-release bump. All other rules
+# stay active.
+ignored:
+  - DL3008

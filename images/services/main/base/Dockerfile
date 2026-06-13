@@ -1,13 +1,13 @@
-FROM alpine AS unpack
+FROM alpine:3.21 AS unpack
 WORKDIR /unpack
 ARG COMPOSER_VER=2.10.1
-RUN wget https://getcomposer.org/download/${COMPOSER_VER}/composer.phar -O composer
+RUN wget -q https://getcomposer.org/download/${COMPOSER_VER}/composer.phar -O composer
 
 FROM php:8.5-fpm
 
 # System dependencies (libraries needed by the PHP extensions below + dev tools)
 RUN apt-get update \
-  && apt-get install -y \
+  && apt-get install -y --no-install-recommends \
     libzip-dev \
     libpng-dev \
     libjpeg-dev \
@@ -69,5 +69,7 @@ ENV PHP_ENABLE_XDEBUG=false
 
 # PHP SPX profiler (built from source, web UI exposed via SPX_KEY)
 ARG SPX_VER=0.4.22
-RUN cd /usr/lib && git clone --depth 1 --branch v${SPX_VER} https://github.com/NoiseByNorthwest/php-spx.git
-RUN cd /usr/lib/php-spx && phpize && ./configure && make && make install
+WORKDIR /usr/lib/php-spx
+RUN git clone --depth 1 --branch v${SPX_VER} https://github.com/NoiseByNorthwest/php-spx.git . \
+  && phpize && ./configure && make && make install
+WORKDIR /var/www/html
