@@ -1,6 +1,10 @@
 group:
   title: Main Scaffolding
   description: Generate Laravel classes with `php artisan make:*`
+  # Reachable from inside the app-main dev container via the host bridge.
+  bridge:
+    enabled: true
+    services: [main]
 
 commands:
   model:

@@ -1,6 +1,13 @@
 group:
   title: Main Queue
   description: Failed-job management for the main service queue
+  # Reachable from inside the app-main dev container via the host bridge. Only the
+  # failed-job helpers below are bridged; the queue *daemon* (start/logs/stop/
+  # restart, declared in services/main.yml) stays host-only — managing a detached
+  # worker container belongs on the host.
+  bridge:
+    enabled: true
+    services: [main]
 
 # The queue worker daemon (services.main.queue.{start,logs,stop,restart}) is
 # declared in workspace/commands/services/main.yml as key `queue`, so its virtual

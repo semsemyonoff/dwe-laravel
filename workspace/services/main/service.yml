@@ -8,11 +8,28 @@ dir_internal: /workspace
 work_dir_internal: /workspace/src
 hosts:
   web: laravel.localhost
-configs:
-  - .env
+# .env is render-based (workspace/templates/config/main/): the deploy pipeline
+# runs service_configs_render to write src/.env directly from vars.db.* and
+# ${generated.app_key} — no configs bind-mount, no copy step.
+render:
+  config:
+    template: main
+# APP_KEY is minted once by `php artisan key:generate` (gated by the
+# `generated-missing` predicate in deploy.yml) and harvested into the durable
+# generated-value store (.dwe/generated.yml). Every subsequent config render
+# replays it via ${generated.app_key} in env.tmpl, so the key survives
+# run/redeploy while staying out of git.
+generated:
+  app_key:
+    file: src/.env
+    pattern: "^APP_KEY=(.*)$"
 dirs:
   - home
   - runtime
+# Opt this container into the host bridge so `dwe cmd services.main.*`,
+# read-only diagnostics, and `dwe vars` work from inside the dev container.
+bridge:
+  enabled: true
 cli:
   mode: auto
   shell: bash

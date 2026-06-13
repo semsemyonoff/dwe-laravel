@@ -1,6 +1,10 @@
 group:
   title: Main Cache
   description: Clear and warm the Laravel caches (application, config, routes, views)
+  # Reachable from inside the app-main dev container via the host bridge.
+  bridge:
+    enabled: true
+    services: [main]
 
 commands:
   clear:

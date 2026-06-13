@@ -6,4 +6,4 @@ commands:
     steps:
       - command: db.create
         with:
-          database: "${db.database}"
+          database: "${vars.db.database}"

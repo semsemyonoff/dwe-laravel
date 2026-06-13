@@ -35,19 +35,19 @@ phases:
           type: builtin
           cmd: "dir-empty services/main/src"
 
-      - name: copy-configs
+      - name: render-configs
         type: builtin
-        cmd: service_configs_copy
+        cmd: service_configs_render
         with:
           service: main
-          # `default` = copy only when the destination is missing; never clobber
-          # an existing .env (it holds the generated APP_KEY). Switch to `update`
-          # if you also want new template keys synced while preserving values.
-          mode: default
-        description: Copy template configs into the hub (files declared in services.main.configs)
+        description: Render services/main/src/.env from the config template pack (replays the stored APP_KEY)
+        # Runs AFTER install so it overwrites the .env that create-project lays
+        # down with our template (APP_KEY=${generated.app_key}). The paired
+        # render-check forces a re-render every deploy, so template / vars edits
+        # and a cleared store always take effect.
         check:
           type: builtin
-          cmd: service_configs_check
+          cmd: service_configs_render_check
           with:
             service: main
 
@@ -87,13 +87,21 @@ phases:
       - name: key-generate
         type: command
         cmd: services.main.key-generate
-        description: Generate the Laravel application key
-        # Only when APP_KEY has no value — re-running would rotate the key and
-        # invalidate existing encrypted data / sessions. (.env is bind-mounted
-        # from services/main/configs/.env, so we check it on the host.)
+        description: Mint the Laravel APP_KEY into src/.env (first deploy only — gated on an empty store)
+        # First deploy only: the store has no app_key yet, so the gate opens and
+        # `php artisan key:generate` writes APP_KEY into src/.env. On every later
+        # deploy the store holds the key (replayed by render-configs above), the
+        # gate closes, and this step is skipped — so the key is never rotated.
         when:
-          type: shell
-          cmd: "! grep -qE '^APP_KEY=.+' services/main/configs/.env"
+          type: builtin
+          cmd: "generated-missing main app_key"
+
+      - name: harvest-app-key
+        type: builtin
+        cmd: service_generated_harvest
+        with:
+          service: main
+        description: Harvest APP_KEY from src/.env into the generated-value store (.dwe/generated.yml; write-if-absent)
 
       - name: migrate
         type: command

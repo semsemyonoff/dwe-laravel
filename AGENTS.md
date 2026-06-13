@@ -30,9 +30,12 @@ After editing a `service.yml`, configs, or a service `deploy.yml` → `dwe deplo
 ## How this repo is configured
 
 - **3-layer config merge**, strict order, later wins, maps merge recursively:
-  `workspace.yml` (project identity only — `project.name`, `project.prefix`) → `workspace/defaults.yml` (versioned defaults: service toggles, runtime, exports, db) → `workspace/local.yml` (gitignored per-developer overrides; `local.example.yml` is the tracked template).
+  `workspace.yml` (project identity + lifecycle policy — `project`, `update`, `compose`) → `workspace/defaults.yml` (versioned defaults: service toggles, runtime, the `vars:` sandbox, exports, `bridge`) → `workspace/local.yml` (gitignored per-developer overrides; `local.example.yml` is the tracked template).
+- **Strict root + `vars:` sandbox.** The merged config root is strict — only `project · runtime · state · exports · compose · ui · docs · services · vars · update · bridge` are allowed top-level keys; anything else is a load error. Free-form, project-specific values (db credentials, the Xdebug idekey) live under the single `vars:` block in `defaults.yml` and are referenced by dot-path with the `vars.` prefix (`${vars.db.user}` in commands/templates, `from: vars.db.database` in exports). Inspect with `dwe vars list` / `dwe vars get <path>`.
 - **Services** are declared one-per-folder in `workspace/services/<name>/service.yml`, loaded separately and injected into the merged map. A `type:` discriminator (`app` / `tool` / `infra`) selects allowed fields. `required: true` services are always on (`main`); optional ones toggle via `services.<name>.enabled`. Per-service `ports:` / `hosts:` deep-merge by entry name. Each service can carry an `icon:` shown in `dwe info`.
-- **`.env` is a generated artifact** (`dwe render env -o .env`), never edited by hand, never a source of truth. Every variable is declared explicitly in `defaults.yml` under `exports.env` (`name` + `from` dot-path + optional `format` / `when` / `default`). No magic name mapping.
+- **`.env` is a generated artifact** (`dwe render env --out .env`), never edited by hand, never a source of truth. Every variable is declared explicitly in `defaults.yml` under `exports.env` (`name` + `from` dot-path + optional `format` / `when` / `default`). No magic name mapping.
+- **Service configs are render-based** (`dwe render config`, the 0.2.0 successor to the copy mechanism). The `main` service's Laravel `.env` is rendered from `workspace/templates/config/main/env.tmpl` straight into `services/main/src/.env` — there is **no** static `.env` template and no `.env` bind-mount. Templates use the `${...}` shorthand (`${vars.db.user}`); a literal `${APP_NAME}` that Laravel itself must expand is escaped as `{{ "$" }}{APP_NAME}`. The `APP_KEY` secret is minted once by `php artisan key:generate`, harvested into `.dwe/generated.yml`, and replayed on every render via `${generated.app_key}` (declared as `generated:` in `service.yml`).
+- **Host bridge.** `services.main.bridge.enabled` opts the `app-main` container into the bridge, so `dwe cmd services.main.*`, read-only diagnostics, and `dwe vars` work from inside the dev container. `bridge.vars_writable` in `defaults.yml` is the deny-by-default allowlist of `vars.*` paths a containerized `dwe vars set` may write back to the host `local.yml`.
 - **Docker/Compose policy** lives in `workspace/docker.yml` (loaded separately, not part of the 3-layer merge). This project keeps it minimal — only the shared `composer_cache` volume; everything else uses DWE defaults (project name `dwe-laravel`, etc.).
 - **Declarative commands** live in `workspace/commands/` — one file per group, subdirectories nest groups. Command IDs derive from path + filename + key (`workspace/commands/services/main/cache.yml` → `services.main.cache.*`).
 - **Service hub model:** on deploy, each service gets a hub under `services/<name>/` (gitignored): `src/` (the app code), `configs/`, `home/`, `runtime/`, plus generated `.devcontainer/` / `.vscode/` / `AGENTS.md`.
@@ -43,7 +46,7 @@ DWE's deploy / lifecycle / reset / info dashboards are all optional standalone f
 
 ## Lifecycle
 
-- `dwe deploy run` — full deploy: ensure hub dirs, install Laravel via the installer container, copy configs, start db, create database, composer install, key:generate, migrate, render IDE/AI configs. Run on first setup or after changing a service's config/deploy.
+- `dwe deploy run` — full deploy: ensure hub dirs, install Laravel via the installer container, render `src/.env` from the config pack, start db, create database, composer install, key:generate (+ harvest APP_KEY), migrate, render IDE/AI configs. Run on first setup or after changing a service's config/deploy.
 - `dwe run` / `dwe stop` / `dwe restart` — bring the stack up / down / cycle it.
 - `dwe docker up|down|logs|exec|ps` — raw Docker Compose passthroughs (state-tracked).
 - `dwe reset run` — destructive cleanup.
@@ -53,23 +56,23 @@ There is **no Make facade for lifecycle.** The `Makefile` exists for one thing o
 ## Project layout
 
 ```
-workspace.yml                            # project identity (name/prefix)
-workspace/defaults.yml                   # versioned defaults: service toggles, runtime, exports, db
+workspace.yml                            # project identity + lifecycle policy (project/update/compose)
+workspace/defaults.yml                   # versioned defaults: service toggles, runtime, vars sandbox, exports, bridge
 workspace/local.yml                      # local overrides (gitignored)
 workspace/local.example.yml              # tracked template for local overrides
 workspace/docker.yml                     # docker/compose execution policy (shared composer_cache volume)
 workspace/styles.yml                     # UI: ASCII header, color palette, separator
-workspace/services/<name>/service.yml    # per-service declaration (type, container, icon, ports, hosts, dirs, cli, configs)
+workspace/services/<name>/service.yml    # per-service declaration (type, container, icon, ports, hosts, dirs, cli, render, generated, bridge)
 workspace/services/main/deploy.yml       # per-service deploy pipeline (the only pipeline file in this repo)
 workspace/commands/                      # declarative commands (see "Commands" below)
 workspace/scripts/db/*.sh                # scripts referenced by type:script commands (dump-create, dump-deploy)
-workspace/templates/{ai,git,ide}/        # render packs consumed by `dwe render`
+workspace/templates/ai,git,ide/          # render packs consumed by `dwe render ai|git|ide`
+workspace/templates/config/main/         # config render pack: env.tmpl → services/main/src/.env (dwe render config)
 docker-compose.yml                       # base compose: nginx, db, app-main (mandatory infrastructure)
 compose/tools/{dbgate,mailpit}.yml       # optional tool overlays
 compose/services/main/debug.yml          # app-main-debug container (Xdebug)
 compose/installer.yml                    # installer container (deploy only)
-configs/services/main/.env               # Laravel .env template (copied into the hub on deploy)
-services/                                 # service hubs (gitignored, created by deploy)
+services/                                 # service hubs (gitignored, created by deploy; src/.env rendered here)
 backups/                                  # local DB dumps (gitignored except .gitkeep)
 .dwe/                                     # DWE runtime artifacts (gitignored): logs, state, snapshots, locks
 legacy/                                   # old repos (gitignored, reference only — do not modify)

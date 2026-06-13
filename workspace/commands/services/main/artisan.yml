@@ -1,6 +1,10 @@
 group:
   title: Main Artisan
   description: Everyday `php artisan` utilities for the main service
+  # Reachable from inside the app-main dev container via the host bridge.
+  bridge:
+    enabled: true
+    services: [main]
 
 commands:
   tinker:
@@ -10,6 +14,10 @@ commands:
     mode: exec-or-run
     workdir_from: services.main.work_dir_internal
     argv: [php, artisan, tinker]
+    # Host-only: the bridge runs non-interactively and never allocates a PTY, so
+    # an interactive REPL is useless over it. Run it from a container shell directly.
+    bridge:
+      enabled: false
 
   route-list:
     type: service_exec

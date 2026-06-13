@@ -76,7 +76,6 @@ services:
       - ./services/main/home:/home/www-data
       - vscode_server_main:/home/www-data/.vscode-server
       - ~/.ssh:/home/www-data/.ssh:ro
-      - ./services/main/configs/.env:/workspace/src/.env
       - composer_cache:/home/www-data/.composer/cache
     environment:
       COMPOSER_CACHE_DIR: /home/www-data/.composer/cache

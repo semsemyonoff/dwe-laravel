@@ -30,11 +30,15 @@
 #   ports:
 #     db: 13307
 
-# Override database credentials if needed (default: root / root).
-# db:
-#   user: myuser
-#   password: mypassword
-
-# Xdebug IDE key for cookie-based debug routing (default: PHPSTORM).
-# debug:
-#   idekey: VSCODE
+# Free-form, project-specific values live under the strict-root `vars:` sandbox
+# (the merged config root only allows project/runtime/state/exports/compose/
+# ui/docs/services/vars/update/bridge). Database credentials and the Xdebug IDE
+# key nest under `vars:`.
+# vars:
+#   # Override database credentials if needed (default: root / root).
+#   db:
+#     user: myuser
+#     password: mypassword
+#   # Xdebug IDE key for cookie-based debug routing (default: PHPSTORM).
+#   debug:
+#     idekey: VSCODE

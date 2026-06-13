@@ -1,10 +1,15 @@
 # Versioned project defaults (layer 2 of the merged config).
 # Merged on top of workspace.yml and may be overridden by workspace/local.yml.
 # This file IS tracked by git.
+#
+# workspace.yml (layer 1) carries only project identity + the `update:`/`compose`
+# policy. This layer holds the bulky configuration: the `services` overlay,
+# `runtime`, the `vars:` sandbox, `exports:` (.env render spec) and `bridge:`
+# (host-bridge container-write policy).
 
 # Optional service toggles. Structural service definitions live in
-# workspace/services/<name>/service.yml. Required services (e.g. main) are
-# always enabled and have no toggle here.
+# workspace/services/<name>/service.yml. Required services (e.g. main, and the
+# base infra: nginx/db in docker-compose.yml) are always on — no toggle here.
 services:
   main-debug:
     enabled: false
@@ -13,9 +18,6 @@ services:
   mailpit:
     enabled: false
 
-debug:
-  idekey: PHPSTORM
-
 runtime:
   use_https: false
   ports:
@@ -23,8 +25,36 @@ runtime:
   spx:
     path: ""
 
+# Free-form, project-specific values. The merged config root is strict (only
+# project/runtime/state/exports/compose/ui/docs/services/vars/update/bridge are
+# allowed top-level keys), so every custom value lives under this single
+# sandbox. Reference these by dot-path with the `vars.` prefix: `${vars.db.user}`
+# in commands and config templates, `from: vars.db.database` in exports.
+vars:
+  debug:
+    idekey: PHPSTORM
+
+  # Database connection. database/user/password back the rendered Laravel .env
+  # (workspace/templates/config/main/env.tmpl) and the db.* commands; they are
+  # container-writable via bridge.vars_writable. backup_dir is the host dir the
+  # dump-create / dump-deploy commands read & write.
+  db:
+    database: laravel
+    user: root
+    password: root
+    backup_dir: backups/db
+
 # Active state name, empty = no state.
 state: ""
+
+# Host-bridge container-write policy. `services.main.bridge.enabled` (in
+# service.yml) opts the app-main container into the bridge; this top-level block
+# is the project-wide allowlist of vars a containerized `dwe vars set` may write
+# back to the host local.yml. The .env-backing db params are writable so a
+# developer can retune them from inside the dev container (apply with a redeploy).
+bridge:
+  vars_writable:
+    - vars.db.*
 
 # Declarative export spec for the generated .env artifact.
 # dwe render env  →  reads exports.env and renders .env accordingly.
@@ -84,7 +114,7 @@ exports:
       from: runtime.spx.path
 
     - name: XDEBUG_IDEKEY
-      from: debug.idekey
+      from: vars.debug.idekey
 
     - name: STATE
       from: state
@@ -102,19 +132,10 @@ exports:
       from: services.main.work_dir_internal
 
     - name: DB_DATABASE
-      from: db.database
+      from: vars.db.database
 
     - name: DB_PASSWORD
-      from: db.password
+      from: vars.db.password
 
     - name: DB_USER
-      from: db.user
-
-db:
-  database: laravel
-  password: root
-  user: root
-  backup_dir: backups/db
-
-compose:
-  base: docker-compose.yml
+      from: vars.db.user

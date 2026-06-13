@@ -1,0 +1,8 @@
+# Config template pack for the main (Laravel) service — rendered into the
+# service hub by `service_configs_render` (deploy) / `dwe render config` (run +
+# CLI). `to:` is relative to the service hub dir; `src/` is the dir-mounted app
+# tree (./services/main → /workspace), so `src/.env` lands at the in-container
+# /workspace/src/.env. No configs bind-mount, no entrypoint copy.
+render:
+  - from: env.tmpl
+    to: src/.env

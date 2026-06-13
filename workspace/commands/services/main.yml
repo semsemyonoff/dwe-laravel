@@ -57,6 +57,13 @@ commands:
       - --prefer-dist
       - --no-interaction
       - --optimize-autoloader
+    # Reachable from inside the app-main dev container via the host bridge. The
+    # other commands in this file stay host-only: chown-src (private), key-generate
+    # (deploy-time secret mint, harvested host-side), bootstrap (deploy workflow),
+    # and the queue daemon (detached worker, host-managed).
+    bridge:
+      enabled: true
+      services: [main]
 
   key-generate:
     type: service_exec

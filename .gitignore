@@ -9,9 +9,9 @@ backups/db/*
 services/*
 volumes/
 snapshots/
-# Only the generated root .env is ignored — per-service templates in
-# configs/services/<svc>/.env ARE tracked (the deployed copy lands under
-# services/<svc>/configs/.env, already ignored via services/*).
+# Only the generated root .env is ignored. Per-service .env files are render
+# outputs (workspace/templates/config/<svc>/) written into services/<svc>/src/.env
+# at deploy/run time — already ignored via services/*.
 /.env
 workspace/local.yml
 workspace/docker.local.yml

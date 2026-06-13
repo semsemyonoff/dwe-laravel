@@ -1,6 +1,15 @@
-# Project identity — the structural skeleton (layer 1 of the merged config).
-# Versioned defaults live in workspace/defaults.yml; per-developer overrides in
-# workspace/local.yml (gitignored).
+# Project identity + lifecycle policy (layer 1 of the merged config).
+# The bulky configuration blocks — service toggles, runtime, the vars sandbox,
+# export rules and bridge policy — live in workspace/defaults.yml (layer 2);
+# per-developer overrides in workspace/local.yml (layer 3).
 project:
   name: laravel
   prefix: dwe
+
+# Self-update probe for `dwe run`. off = never fetch/pull (a developer may flip
+# it on in workspace/local.yml).
+update:
+  mode: off
+
+compose:
+  base: docker-compose.yml
