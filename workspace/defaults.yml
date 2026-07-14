@@ -20,8 +20,6 @@ services:
 
 runtime:
   use_https: false
-  ports:
-    db: 13306
   spx:
     path: ""
 
@@ -78,7 +76,7 @@ exports:
       format: int
 
     - name: DB_PORT
-      from: runtime.ports.db
+      from: services.db.ports.mysql
       format: int
 
     - name: APP_HOST

@@ -1,0 +1,11 @@
+# Database (required — part of the base docker-compose.yml).
+# Modeling the host port here (rather than the old free-form runtime.ports.db)
+# puts it under dwe's automatic host-port isolation: `dwe test` auto-remaps
+# any services.<name>.ports entry to a free port per disposable run, which a
+# bare compose-level port never gets.
+type: infra
+container: db
+icon: "🐬"
+required: true
+ports:
+  mysql: 13306

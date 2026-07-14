@@ -23,12 +23,13 @@
 #   mailpit:
 #     ports:
 #       http: 8026
+#   db:
+#     ports:
+#       mysql: 13307
 
-# Override runtime flags / infra ports (db).
+# Override runtime flags.
 # runtime:
 #   use_https: true
-#   ports:
-#     db: 13307
 
 # Free-form, project-specific values live under the strict-root `vars:` sandbox
 # (the merged config root only allows project/runtime/state/exports/compose/
