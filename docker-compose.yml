@@ -15,10 +15,6 @@ volumes:
   # app-main from VS Code on Docker Desktop fails with `echo: I/O error`.
   vscode_server_main:
 
-networks:
-  default:
-    name: ${PROJECT_PREFIX:-dwe}-${PROJECT_NAME:-laravel}
-
 services:
   nginx:
     image: "${IMAGE_NGINX:-nginx:latest}"
