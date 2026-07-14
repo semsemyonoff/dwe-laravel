@@ -1,0 +1,47 @@
+# Variant: optional tool overlays (dbgate, mailpit) enabled together —
+# verifies both compose overlays layer onto the base stack without breaking
+# the core deploy or colliding with it.
+description: "Deploy with dbgate + mailpit tool overlays enabled"
+
+timeout: 15m
+
+env:
+  services:
+    enable: [dbgate, mailpit]
+
+steps:
+  - name: "core + tool containers running"
+    type: builtin
+    cmd: containers_running
+    with:
+      services: [nginx, app-main, db, dbgate, mailpit]
+
+  - name: "app still answers on /up"
+    type: builtin
+    cmd: http_check
+    with:
+      url: "http://${services.main.hosts.web}:${services.nginx.ports.http}/up"
+      status: 200
+      retries: 10
+      interval: 2s
+      timeout: 5s
+
+  - name: "dbgate UI answers"
+    type: builtin
+    cmd: http_check
+    with:
+      url: "http://localhost:${services.dbgate.ports.http}/"
+      status: 200
+      retries: 10
+      interval: 2s
+      timeout: 5s
+
+  - name: "mailpit UI answers"
+    type: builtin
+    cmd: http_check
+    with:
+      url: "http://localhost:${services.mailpit.ports.http}/"
+      status: 200
+      retries: 10
+      interval: 2s
+      timeout: 5s

@@ -1,0 +1,21 @@
+# Baseline scenario: default toggles (no optional services), clean deploy.
+description: "Clean deploy comes up healthy — nginx/app-main/db, Laravel /up responds"
+
+timeout: 15m
+
+steps:
+  - name: "core containers running"
+    type: builtin
+    cmd: containers_running
+    with:
+      services: [nginx, app-main, db]
+
+  - name: "app answers on /up"
+    type: builtin
+    cmd: http_check
+    with:
+      url: "http://${services.main.hosts.web}:${services.nginx.ports.http}/up"
+      status: 200
+      retries: 10
+      interval: 2s
+      timeout: 5s

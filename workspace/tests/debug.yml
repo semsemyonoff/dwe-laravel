@@ -1,0 +1,41 @@
+# Variant: the Xdebug (main-debug) service variant enabled — verifies the
+# extra container deploys and nginx's $backend map (see
+# configs/nginx/templates/common/backend.conf.template) doesn't break routing
+# for either plain or Xdebug-tagged requests. Note: both requests hit the same
+# Laravel /up route and both return 200 regardless of which backend served
+# them, so this proves "routing doesn't 502/504 either way", not which
+# container actually answered.
+description: "Deploy with the main-debug (Xdebug) variant enabled — backend map still routes cleanly"
+
+timeout: 15m
+
+env:
+  services:
+    enable: [main-debug]
+
+steps:
+  - name: "core + debug containers running"
+    type: builtin
+    cmd: containers_running
+    with:
+      services: [nginx, app-main, app-main-debug, db]
+
+  - name: "plain request still answers"
+    type: builtin
+    cmd: http_check
+    with:
+      url: "http://${services.main.hosts.web}:${services.nginx.ports.http}/up"
+      status: 200
+      retries: 10
+      interval: 2s
+      timeout: 5s
+
+  - name: "xdebug-tagged request still answers"
+    type: builtin
+    cmd: http_check
+    with:
+      url: "http://${services.main.hosts.web}:${services.nginx.ports.http}/up?XDEBUG_SESSION_START=${vars.debug.idekey}"
+      status: 200
+      retries: 5
+      interval: 2s
+      timeout: 5s
