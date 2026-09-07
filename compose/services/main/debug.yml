@@ -12,7 +12,6 @@ services:
     extends:
       file: docker-compose.yml
       service: app-main
-    container_name: "${PROJECT_PREFIX:-dwe}-${PROJECT_NAME:-laravel}-app-main-debug"
     hostname: main-debug
     volumes:
       - ./services/main/runtime:/tmp

@@ -3,6 +3,34 @@
 
 name: "${PROJECT_PREFIX:-dwe}-${PROJECT_NAME:-laravel}"
 
+# No per-service `container_name:` here or in the overlays under compose/, and
+# that is deliberate. The pins used to spell out `dwe-laravel-<svc>` to avoid
+# compose's `-1` suffix, but dwe's per-service commands (`logs`, `shell`,
+# `stop`, `restart`) resolve a container through the compose project+service
+# LABELS and never guess that name — so the pins bought nothing dwe needed,
+# while the `dwe test` isolation scanner blocks on them precisely because a
+# fixed name does not move with the disposable copy's own compose project.
+# Containers are `<project>-<service>-1`, e.g. `dwe-laravel-app-main-1`.
+#
+# A raw `docker compose` run from this directory does not invent a second stack
+# either: since dwe 0.6.0 the generated `.env` carries the reserved
+# `COMPOSE_PROJECT_NAME=dwe-laravel`, and `.env` sits beside this file in the
+# compose project directory, so compose reads it and lands in the same project
+# the `name:` above declares.
+#
+# The generated services/main/.devcontainer/devcontainer.json points here too, and
+# it always attaches by compose SERVICE name, never by container name — so it is
+# unaffected either way. Which service depends on the toggles: with the defaults it
+# lists this file alone and attaches to `app-main`; enable `main-debug` and
+# `dwe render ide main` re-renders that same hub file for the debug variant
+# (`service: app-main-debug`, plus `compose/services/main/debug.yml`), because the
+# template ranges over the service's own `compose:` list. Note also that a client
+# passing its own `--project-name` outranks both `.env` and the `name:` above, so
+# do not read the paragraph above as an explanation of what VS Code does.
+#
+# A bare `docker compose` here does see only this file and not the enabled
+# overlays, so `dwe` remains the way to drive the whole stack.
+
 volumes:
   db:
   composer_cache:
@@ -18,7 +46,6 @@ volumes:
 services:
   nginx:
     image: "${IMAGE_NGINX:-nginx:latest}"
-    container_name: "${PROJECT_PREFIX:-dwe}-${PROJECT_NAME:-laravel}-nginx"
     restart: unless-stopped
     extra_hosts:
       - host.docker.internal:host-gateway
@@ -38,7 +65,6 @@ services:
 
   db:
     image: "${IMAGE_DB:-mariadb:lts}"
-    container_name: "${PROJECT_PREFIX:-dwe}-${PROJECT_NAME:-laravel}-db"
     hostname: db
     restart: unless-stopped
     healthcheck:
@@ -60,7 +86,6 @@ services:
       args:
         APP_UID: "${UID:-1000}"
         APP_GID: "${GID:-1000}"
-    container_name: "${PROJECT_PREFIX:-dwe}-${PROJECT_NAME:-laravel}-app-main"
     hostname: main
     restart: unless-stopped
     working_dir: /workspace/src
