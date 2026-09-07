@@ -24,10 +24,11 @@ runtime:
     path: ""
 
 # Free-form, project-specific values. The merged config root is strict (only
-# project/runtime/state/exports/compose/ui/docs/services/vars/update/bridge are
-# allowed top-level keys), so every custom value lives under this single
-# sandbox. Reference these by dot-path with the `vars.` prefix: `${vars.db.user}`
-# in commands and config templates, `from: vars.db.database` in exports.
+# schema_version/project/runtime/exports/compose/docs/services/vars/update/
+# bridge/stop/secrets are allowed top-level keys), so every custom value lives
+# under this single sandbox. Reference these by dot-path with the `vars.` prefix:
+# `${vars.db.user}` in commands and config templates, `from: vars.db.database`
+# in exports.
 vars:
   debug:
     idekey: PHPSTORM
@@ -41,9 +42,6 @@ vars:
     user: root
     password: root
     backup_dir: backups/db
-
-# Active state name, empty = no state.
-state: ""
 
 # Host-bridge container-write policy. `services.main.bridge.enabled` (in
 # service.yml) opts the app-main container into the bridge; this top-level block
@@ -113,9 +111,6 @@ exports:
 
     - name: XDEBUG_IDEKEY
       from: vars.debug.idekey
-
-    - name: STATE
-      from: state
 
     - name: PROJECT_PREFIX
       from: project.prefix

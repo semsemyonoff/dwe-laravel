@@ -2,9 +2,6 @@
 # Copy this file to local.yml and adjust as needed.
 # local.yml is NOT tracked by git.
 
-# Active state name, empty = no state.
-# state: staging
-
 # Toggle optional services (apps and tools) without changing project defaults.
 # services:
 #   dbgate:
@@ -32,9 +29,9 @@
 #   use_https: true
 
 # Free-form, project-specific values live under the strict-root `vars:` sandbox
-# (the merged config root only allows project/runtime/state/exports/compose/
-# ui/docs/services/vars/update/bridge). Database credentials and the Xdebug IDE
-# key nest under `vars:`.
+# (the merged config root only allows schema_version/project/runtime/exports/
+# compose/docs/services/vars/update/bridge/stop/secrets). Database credentials
+# and the Xdebug IDE key nest under `vars:`.
 # vars:
 #   # Override database credentials if needed (default: root / root).
 #   db:
