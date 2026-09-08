@@ -48,8 +48,6 @@ commands:
     description: Install PHP dependencies via Composer
     service: app-main
     user: current
-    workdir_from: services.main.work_dir_internal
-    mode: exec-or-run
     argv:
       - composer
       - install
@@ -70,8 +68,6 @@ commands:
     description: Generate the Laravel application key
     service: app-main
     user: current
-    workdir_from: services.main.work_dir_internal
-    mode: exec-or-run
     argv:
       - php
       - artisan
@@ -96,7 +92,6 @@ commands:
     description: Laravel queue worker (`php artisan queue:listen`) — detached, auto-reaped on `dwe stop`
     service: app-main
     user: www-data
-    workdir_from: services.main.work_dir_internal
     params:
       name:
         type: string

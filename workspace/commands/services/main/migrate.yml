@@ -11,24 +11,18 @@ commands:
     type: service_exec
     description: Run pending Laravel database migrations (`php artisan migrate`)
     service: app-main
-    mode: exec-or-run
-    workdir_from: services.main.work_dir_internal
     argv: [php, artisan, migrate]
 
   status:
     type: service_exec
     description: Show pending/applied migration status (`php artisan migrate:status`)
     service: app-main
-    mode: exec-or-run
-    workdir_from: services.main.work_dir_internal
     argv: [php, artisan, "migrate:status"]
 
   rollback:
     type: service_exec
     description: Roll back the last batch, or N batches with `--set step=N` (`php artisan migrate:rollback`)
     service: app-main
-    mode: exec-or-run
-    workdir_from: services.main.work_dir_internal
     params:
       step:
         type: int
@@ -39,8 +33,6 @@ commands:
     type: service_exec
     description: Drop all tables and re-run every migration (`php artisan migrate:fresh [--seed]`)
     service: app-main
-    mode: exec-or-run
-    workdir_from: services.main.work_dir_internal
     confirmation: true
     confirmation_text: "This DROPS ALL TABLES and re-runs every migration. Continue?"
     params:
@@ -54,8 +46,6 @@ commands:
     type: service_exec
     description: Scaffold a new migration file (`php artisan make:migration <name>`)
     service: app-main
-    mode: exec-or-run
-    workdir_from: services.main.work_dir_internal
     params:
       name:
         type: string

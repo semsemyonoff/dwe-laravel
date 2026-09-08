@@ -11,14 +11,10 @@ commands:
     type: service_exec
     description: List all scheduled tasks and their next run time (`php artisan schedule:list`)
     service: app-main
-    mode: exec-or-run
-    workdir_from: services.main.work_dir_internal
     argv: [php, artisan, "schedule:list"]
 
   run:
     type: service_exec
     description: Run all tasks that are due right now (`php artisan schedule:run`)
     service: app-main
-    mode: exec-or-run
-    workdir_from: services.main.work_dir_internal
     argv: [php, artisan, "schedule:run"]

@@ -11,8 +11,6 @@ commands:
     type: service_exec
     description: Open an interactive Tinker REPL inside the app container (`php artisan tinker`)
     service: app-main
-    mode: exec-or-run
-    workdir_from: services.main.work_dir_internal
     argv: [php, artisan, tinker]
     # Host-only: the bridge runs non-interactively and never allocates a PTY, so
     # an interactive REPL is useless over it. Run it from a container shell directly.
@@ -23,24 +21,18 @@ commands:
     type: service_exec
     description: List all registered routes (`php artisan route:list`)
     service: app-main
-    mode: exec-or-run
-    workdir_from: services.main.work_dir_internal
     argv: [php, artisan, "route:list"]
 
   about:
     type: service_exec
     description: Show the application environment overview (`php artisan about`)
     service: app-main
-    mode: exec-or-run
-    workdir_from: services.main.work_dir_internal
     argv: [php, artisan, about]
 
   db-seed:
     type: service_exec
     description: Run database seeders, all or a single class (`php artisan db:seed [--class=<Seeder>]`)
     service: app-main
-    mode: exec-or-run
-    workdir_from: services.main.work_dir_internal
     params:
       class:
         type: string
@@ -52,6 +44,4 @@ commands:
     type: service_exec
     description: Symlink public/storage to storage/app/public (`php artisan storage:link`)
     service: app-main
-    mode: exec-or-run
-    workdir_from: services.main.work_dir_internal
     argv: [php, artisan, "storage:link"]

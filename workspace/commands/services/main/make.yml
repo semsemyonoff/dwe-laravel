@@ -11,8 +11,6 @@ commands:
     type: service_exec
     description: Scaffold an Eloquent model, optionally with migration/factory/controller (`php artisan make:model`)
     service: app-main
-    mode: exec-or-run
-    workdir_from: services.main.work_dir_internal
     params:
       name:
         type: string
@@ -38,8 +36,6 @@ commands:
     type: service_exec
     description: Scaffold a controller, optionally resource/API (`php artisan make:controller`)
     service: app-main
-    mode: exec-or-run
-    workdir_from: services.main.work_dir_internal
     params:
       name:
         type: string
@@ -61,8 +57,6 @@ commands:
     type: service_exec
     description: Scaffold a form request validation class (`php artisan make:request <Name>`)
     service: app-main
-    mode: exec-or-run
-    workdir_from: services.main.work_dir_internal
     params:
       name:
         type: string
@@ -75,8 +69,6 @@ commands:
     type: service_exec
     description: Scaffold an API resource transformer (`php artisan make:resource <Name>`)
     service: app-main
-    mode: exec-or-run
-    workdir_from: services.main.work_dir_internal
     params:
       name:
         type: string
