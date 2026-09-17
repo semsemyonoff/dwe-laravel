@@ -116,3 +116,13 @@ Typed steps: each has a `type:` (`shell` / `dwe` / `command` / `builtin`) and `c
 - Don't commit secrets to `.env` or config files. `.env` is generated and gitignored.
 - `legacy/` is gitignored, reference-only — do not modify it.
 - Before editing any YAML under `workspace/`, confirm the schema with `dwe docs show reference/config/<area> --lang en` rather than guessing field shapes.
+- `dwe commands list --output json` — before any task a declared command may
+  cover (tests, linters, formatters, builds, codegen, migrations, seeds, cache or
+  token management, package-manager scripts), make this call once per session and
+  again after `workspace/commands/` changes. A declared command that matches the
+  intent outranks the direct invocation: run it with `dwe cmd <id>`, inspect an
+  unfamiliar one with `dwe cmd -i <id> --output json`. Hand the exact call to the
+  user instead when it changes project or data state (migrations, seeds,
+  installs) or its inspect output shows `confirmation: true`. Do not invoke the
+  underlying npm/composer/make/docker command directly until that check has been
+  made
