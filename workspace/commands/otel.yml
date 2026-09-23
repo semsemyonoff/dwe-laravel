@@ -18,4 +18,4 @@ commands:
     # on otel-lookup would be ignored.
     argv: [python3, /opt/otel/traces.py, "${args}"]
     messages:
-      error: "otel.traces failed — is otel enabled and running? (dwe services enable otel --apply)"
+      error: "otel.traces failed — see the message above (exit 2: backend unreachable, is otel enabled? dwe services enable otel --apply; exit 3: Tempo rejected the query)"
