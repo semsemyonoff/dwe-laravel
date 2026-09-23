@@ -6,6 +6,13 @@ COPY misc/xdebug.ini /usr/local/etc/php/conf.d/xdebug-custom.ini
 
 COPY misc/spx.ini /usr/local/etc/php/conf.d/zz-spx.ini
 
+# OpenTelemetry auto-instrumentation hooks (ext-opentelemetry). Built but NOT
+# enabled — same pattern as xdebug: no conf.d ini here, so PHP never loads the
+# .so. The otel tool's compose_after: overlay (compose/tools/otel-apps.yml)
+# mounts the ini that loads it, together with the SDK prepend.
+ARG OTEL_EXT_VER=1.4.2
+RUN pecl install -o -f opentelemetry-${OTEL_EXT_VER} && rm -rf /tmp/pear
+
 ENV PHP_MEMORY_LIMIT=4G
 ENV DEBUG=false
 
