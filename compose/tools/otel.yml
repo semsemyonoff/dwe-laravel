@@ -1,0 +1,50 @@
+# Overlay: otel — grafana/otel-lgtm backend (Collector + Tempo + Loki +
+# Prometheus + Grafana). Enabled when services.otel.enabled = true.
+# The app-side half (OTEL_* env + PHP SDK for app-main) is compose/tools/otel-apps.yml,
+# emitted via compose_after: so it wins over every other overlay.
+#
+# Relative paths resolve against the directory of the first -f file
+# (docker-compose.yml at the project root), not compose/tools/.
+
+volumes:
+  # The image declares no VOLUME; every stateful path lives under /data.
+  otel_data:
+
+services:
+  nginx:
+    volumes:
+      - ./configs/nginx/templates/tools/otel.conf.template:/etc/nginx/templates/otel.conf.template:ro
+    environment:
+      OTEL_HOST: "${OTEL_HOST:-otel.laravel.localhost}"
+
+  otel:
+    # Pinned: a cached :latest is sticky. 0.33.1 is multi-arch.
+    image: "${IMAGE_OTEL:-grafana/otel-lgtm:0.33.1}"
+    restart: unless-stopped
+    volumes:
+      - otel_data:/data
+      - ./configs/otel/provisioning/dashboards.yaml:/otel-lgtm/grafana/conf/provisioning/dashboards/grafana-dashboards.yaml:ro
+      - ./configs/otel/dashboards:/otel-lgtm/grafana-dashboards-laravel:ro
+    # The image healthcheck has no start_period; six processes cold-booting take
+    # longer than 3 x 30 s and `dwe run` (compose up --wait) would fail.
+    healthcheck:
+      test: ["CMD", "/otel-lgtm/docker/healthcheck.sh"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 120s
+      start_interval: 5s
+
+  # Trace lookup runner for `dwe cmd otel.traces` (workspace/otel/traces.py).
+  # The PHP image (php:8.5-fpm, Debian) carries no python3, so the stdlib-only
+  # script runs in a throwaway python container instead. The `tools` profile
+  # keeps it out of `compose up`: it exists only as a `compose run --rm` target
+  # (service_run in workspace/commands/otel.yml).
+  otel-lookup:
+    image: "${IMAGE_OTEL_LOOKUP:-python:3.13-alpine}"
+    profiles: ["tools"]
+    working_dir: /opt/otel
+    volumes:
+      - ./workspace/otel:/opt/otel:ro
+    # No entrypoint: here — dwe's service_run always passes `--entrypoint ""`,
+    # so the command's argv must name the interpreter itself.

@@ -1,0 +1,45 @@
+# Overlay: the app-side half of the otel tool — listed in the otel service's
+# compose_after:, so it is emitted after every service group and wins every
+# whole-value merge (command:, env keys) over earlier overlays.
+#
+# Patches ONLY app-main (base docker-compose.yml, always present). NOT
+# app-main-debug: it lives in its own optional overlay, so a patch block here
+# would leave compose a service with no image/build whenever main-debug is off;
+# and its `extends: docker-compose.yml` reads the base file, not this patch.
+#
+# PHP needs three things, none of them in the app repo:
+#   1. ext-opentelemetry — built into the image but not enabled (Dockerfile);
+#      the ini below loads it and sets auto_prepend_file.
+#   2. The SDK + instrumentation packages — a separate vendor dir under
+#      workspace/otel/php/build/, installed by ensure.sh at container start.
+#   3. OTEL_* env below. php-fpm must keep the env (clear_env = no, set in
+#      images/services/main/misc/php-fpm.conf and by the official image).
+# No depends_on: spans emitted before the collector answers are dropped.
+
+services:
+  app-main:
+    command: ["/opt/otel-php/ensure.sh", "php-fpm", "-F"]
+    volumes:
+      # rw: ensure.sh writes build/ (gitignored). The trace-lookup script is NOT
+      # run here — the PHP image has no python3 (see otel-lookup in otel.yml).
+      - ./workspace/otel/php:/opt/otel-php
+      - ./workspace/otel/php/otel.ini:/usr/local/etc/php/conf.d/zz-otel.ini:ro
+    environment:
+      OTEL_PHP_AUTOLOAD_ENABLED: "true"
+      OTEL_SERVICE_NAME: "main"
+      OTEL_RESOURCE_ATTRIBUTES: "service.namespace=${COMPOSE_PROJECT_NAME:-dwe-laravel},deployment.environment.name=dev"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel:4318"
+      OTEL_EXPORTER_OTLP_PROTOCOL: "http/protobuf"
+      OTEL_TRACES_EXPORTER: "otlp"
+      # Under php-fpm every request is a fresh SDK: a periodic metric reader
+      # never ticks, so there is nothing useful to export. RED panels come from
+      # Tempo's span metrics.
+      OTEL_METRICS_EXPORTER: "none"
+      OTEL_LOGS_EXPORTER: "none"
+      OTEL_PROPAGATORS: "tracecontext,baggage"
+      # One DB layer only: opentelemetry-auto-laravel already emits a
+      # `sql SELECT` span per query (statement + timing). auto-pdo on top adds
+      # PDO::prepare / PDOStatement::execute / fetchAll siblings for the same
+      # query (4-5 spans per statement). Remove "pdo" here to also see
+      # PDO::connect and raw PDO calls outside Eloquent/Query Builder.
+      OTEL_PHP_DISABLED_INSTRUMENTATIONS: "pdo"
