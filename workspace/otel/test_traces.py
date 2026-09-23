@@ -5,6 +5,8 @@ Run with:
 """
 
 import base64
+import contextlib
+import io
 import json
 import os
 import re
@@ -803,6 +805,65 @@ class TraceparentTests(unittest.TestCase):
         self.assertRegex(header, r"^00-[0-9a-f]{32}-[0-9a-f]{16}-01$")
         self.assertIn(trace_id, header)
         self.assertEqual(len(trace_id), 32)
+
+
+class TagValuesTests(unittest.TestCase):
+    """`services` must ask for a time range: without start/end Tempo answers
+    from its live store only, so a service whose spans were already flushed
+    to blocks vanished from the list while a fresh selftest trace showed up."""
+
+    def setUp(self):
+        self.calls = []
+        self._orig = traces._http_get
+
+    def tearDown(self):
+        traces._http_get = self._orig
+
+    def _stub(self, status, payload):
+        def fake(url, params=None, timeout=8.0):
+            self.calls.append((url, params))
+            return status, json.dumps(payload).encode("utf-8")
+
+        traces._http_get = fake
+
+    def test_uses_scoped_v2_endpoint_with_time_range(self):
+        self._stub(200, {"tagValues": []})
+        traces.tempo_tag_values("http://tempo:3200", "resource.service.name", 100, 200)
+        url, params = self.calls[0]
+        self.assertEqual(url, "http://tempo:3200/api/v2/search/tag/resource.service.name/values")
+        self.assertEqual(params, {"start": 100, "end": 200})
+
+    def test_parses_v2_typed_values_and_dedupes(self):
+        self._stub(
+            200,
+            {
+                "tagValues": [
+                    {"type": "string", "value": "traces-selftest"},
+                    {"type": "string", "value": "main"},
+                    {"type": "string", "value": "main"},
+                    {"type": "string", "value": ""},
+                ]
+            },
+        )
+        got = traces.tempo_tag_values("http://tempo:3200", "resource.service.name", 0, 1)
+        self.assertEqual(got, ["traces-selftest", "main"])
+
+    def test_accepts_v1_plain_string_values(self):
+        self._stub(200, {"tagValues": ["main"]})
+        self.assertEqual(traces.tempo_tag_values("http://t", "resource.service.name", 0, 1), ["main"])
+
+    def test_non_200_is_backend_unreachable(self):
+        self._stub(500, {})
+        with self.assertRaises(traces.BackendUnreachable):
+            traces.tempo_tag_values("http://t", "resource.service.name", 0, 1)
+
+    def test_services_subcommand_passes_last_window(self):
+        self._stub(200, {"tagValues": [{"type": "string", "value": "main"}]})
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(traces.main(["services", "--last", "2h"]), 0)
+        self.assertEqual(out.getvalue(), "main\n")
+        _, params = self.calls[0]
+        self.assertEqual(params["end"] - params["start"], 7200)
 
 
 class SelftestFixtureTests(unittest.TestCase):

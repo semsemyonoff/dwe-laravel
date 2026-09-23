@@ -282,12 +282,26 @@ def tempo_get_trace(base_url: str, trace_id: str) -> Dict[str, Any]:
     return trace
 
 
-def tempo_tag_values(base_url: str, tag: str) -> List[str]:
-    status, body = _http_get(f"{base_url}/api/search/tag/{tag}/values")
+def tempo_tag_values(base_url: str, tag: str, start_s: int, end_s: int) -> List[str]:
+    """Distinct values of a SCOPED tag (e.g. `resource.service.name`) over a
+    time window, via the v2 endpoint.
+
+    start/end are mandatory on purpose: without them Tempo answers from its
+    live store only (recent, not-yet-flushed data), so a service whose spans
+    all sit in completed blocks — e.g. after the otel container restarted —
+    silently drops out while a freshly posted selftest trace shows up. v2
+    returns `[{"type": ..., "value": ...}]`; plain strings are accepted too."""
+    params = {"start": int(start_s), "end": int(end_s)}
+    status, body = _http_get(f"{base_url}/api/v2/search/tag/{tag}/values", params)
     if status != 200:
         raise BackendUnreachable(base_url)
     data = json.loads(body)
-    return data.get("tagValues", []) or []
+    values: List[str] = []
+    for v in data.get("tagValues", []) or []:
+        value = v.get("value") if isinstance(v, dict) else v
+        if isinstance(value, str) and value and value not in values:
+            values.append(value)
+    return values
 
 
 # --------------------------------------------------------------------------
@@ -1153,11 +1167,14 @@ def cmd_traceparent(_args: argparse.Namespace) -> int:
     return 0
 
 
-def cmd_services(_args: argparse.Namespace) -> int:
+def cmd_services(args: argparse.Namespace) -> int:
     base = tempo_url()
-    values = tempo_tag_values(base, "service.name")
+    last_ns = parse_duration_ns(args.last)
+    end_s = int(time.time())
+    start_s = end_s - int(round(last_ns / 1e9))
+    values = tempo_tag_values(base, "resource.service.name", start_s, end_s)
     if not values:
-        print("no services known to Tempo yet")
+        print(f"no services seen by Tempo in the last {args.last}")
         return 0
     for v in sorted(values):
         print(v)
@@ -1436,7 +1453,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_tp = sub.add_parser("traceparent", help="Print a fresh W3C traceparent header + trace id")
     p_tp.set_defaults(func=cmd_traceparent)
 
-    p_svc = sub.add_parser("services", help="List service names Tempo knows")
+    p_svc = sub.add_parser("services", help="List service names Tempo has spans for")
+    p_svc.add_argument("--last", default="24h", help="time window, e.g. 1h, 168h (default 24h)")
     p_svc.set_defaults(func=cmd_services)
 
     p_self = sub.add_parser("selftest", help="Round-trip a synthetic trace through OTLP ingest + Tempo + rendering")
