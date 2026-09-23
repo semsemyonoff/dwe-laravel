@@ -1,0 +1,21 @@
+# Trace lookup against the otel tool service (Tempo), for an agent or a human.
+#
+# The PHP image carries no python3, so the stdlib-only workspace/otel/traces.py
+# runs in a throwaway python container: the `otel-lookup` compose service that
+# exists only in compose/tools/otel.yml (profile `tools`, never started by
+# `compose up`). Hidden while the tool is off — the service does not exist then.
+group:
+  title: Otel
+  description: "Trace lookup against the otel tool service (Tempo), for triage without opening Grafana"
+  hide: '{{ not .Raw.services.otel.enabled }}'
+
+commands:
+  traces:
+    type: service_run
+    description: "Traces as text (SQL, slow spans, N+1, exceptions): -- summary | list | show <id> | traceparent | -h"
+    service: otel-lookup
+    # Full argv: service_run passes `--entrypoint ""`, so a compose entrypoint:
+    # on otel-lookup would be ignored.
+    argv: [python3, /opt/otel/traces.py, "${args}"]
+    messages:
+      error: "otel.traces failed — is otel enabled and running? (dwe services enable otel --apply)"
