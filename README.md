@@ -20,7 +20,7 @@ project's `docker-compose.yml` rather than replacing it. On top of plain Compose
 - **Validation** — `dwe validate` checks config, templates, commands, and the environment.
 - **Declarative commands** — project-specific tasks (artisan, queue, migrations, db dumps…)
   defined in YAML and runnable via `dwe cmd`.
-- **Editor & agent config generation** — `.devcontainer`, `.vscode`, and `AGENTS.md`/`CLAUDE.md`
+- **Editor & agent config generation** — `.devcontainer`, `.vscode`, and `AGENTS.md`
   rendered into each service hub.
 
 ## Requirements
@@ -104,7 +104,7 @@ Browse the full catalogue with `dwe cmd` (interactive) or `dwe cmd list`.
 
 ## Layout & docs
 
-- **`AGENTS.md`** (and the `CLAUDE.md` symlink) — the working guide for this repo's structure.
+- **`AGENTS.md`** — the working guide for this repo's structure.
 - **`workspace/`** — all DWE configuration: `defaults.yml`, `services/<name>/service.yml`,
   `commands/`, `templates/`.
 - **`dwe docs`** — the authoritative, versioned reference:

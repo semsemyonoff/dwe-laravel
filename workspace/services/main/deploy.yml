@@ -118,4 +118,4 @@ phases:
       - name: render-ai
         type: dwe
         cmd: "render ai main"
-        description: Render AGENTS.md + CLAUDE.md symlink into the hub
+        description: Render AGENTS.md into the hub
