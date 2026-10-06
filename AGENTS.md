@@ -70,6 +70,8 @@ workspace/templates/ai,git,ide/          # render packs consumed by `dwe render 
 workspace/templates/config/main/         # config render pack: env.tmpl → services/main/src/.env (dwe render config)
 docker-compose.yml                       # base compose: nginx, db, app-main (mandatory infrastructure)
 compose/tools/{dbgate,mailpit}.yml       # optional tool overlays
+compose/tools/otel.yml, otel-apps.yml    # optional OpenTelemetry backend + app-main patch (compose_after)
+workspace/otel/                          # traces.py (trace lookup) + php/ (PHP SDK sidecar vendor, prepend)
 compose/services/main/debug.yml          # app-main-debug container (Xdebug)
 compose/installer.yml                    # installer container (deploy only)
 services/                                 # service hubs (gitignored, created by deploy; src/.env rendered here)
@@ -103,12 +105,17 @@ DWE assembles the `-f` list deterministically: base first, then enabled **tool**
 | `services.main.queue.*` | `.../main/queue.yml` + daemon | `start`/`logs`/`stop`/`restart` (daemon), `failed`, `retry`, `failed-prune`, `clear` |
 | `services.main.make.*` | `.../main/make.yml` | `model`, `controller`, `request`, `resource` |
 | `services.main.artisan.*` | `.../main/artisan.yml` | `tinker`, `route-list`, `about`, `db-seed`, `storage-link` |
+| `otel.*` | `commands/otel.yml` | `traces` (hidden while the `otel` tool is off) |
 
 Run a command with `dwe cmd <id>`; pass params with `--set key=value` (e.g. `dwe cmd services.main.queue.start --set name=emails`). Each command declares a `type:` (`shell` / `dwe` / `script` / `service_exec` / `service_run` / `workflow` / `builtin` / `daemon`) — see `dwe docs show reference/config/commands/types --lang en`.
 
 ### The `main` deploy pipeline (`workspace/services/main/deploy.yml`)
 
 Typed steps: each has a `type:` (`shell` / `dwe` / `command` / `builtin`) and `cmd:`, plus optional `when:` / `check:` / `continue_on_error`. `.env` generation is implicitly inserted before phase 1. Full schema: `dwe docs show reference/config/deploy/index --lang en`.
+
+## Traces (optional `otel` tool)
+
+Only while the optional `otel` tool is enabled (`dwe services list`). When the question is "what did this request actually do" — too many queries, a slow endpoint, a 500, a failing job — look at the trace BEFORE reading code: `dwe cmd otel.traces -- summary --last 15m` when you do not know where yet; when you do, `dwe cmd otel.traces -- traceparent`, then `curl -H 'traceparent: <value>' http://laravel.localhost/...`, then `dwe cmd otel.traces -- show <trace_id>`. Queued jobs appear inside the trace of whatever dispatched them. The Tempo search index lags 10–15 s; `show <id>` does not. Grafana: `http://otel.laravel.localhost`.
 
 ## Conventions
 

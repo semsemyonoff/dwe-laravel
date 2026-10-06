@@ -17,6 +17,10 @@ services:
     enabled: false
   mailpit:
     enabled: false
+  # OpenTelemetry backend + app-main instrumentation (one toggle for both).
+  # Heavy image, six processes: opt in with `dwe services enable otel --apply`.
+  otel:
+    enabled: false
 
 runtime:
   use_https: false
@@ -97,6 +101,10 @@ exports:
     - name: MAILPIT_HOST
       from: services.mailpit.hosts.web
       when: services.mailpit.enabled
+
+    - name: OTEL_HOST
+      from: services.otel.hosts.web
+      when: services.otel.enabled
 
     - name: TOOL_DBGATE
       from: services.dbgate.enabled

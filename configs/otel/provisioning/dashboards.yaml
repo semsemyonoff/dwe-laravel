@@ -1,0 +1,20 @@
+# Replaces the image's dashboard-provider file (mounted by compose/tools/otel.yml).
+# Keeps the classic-histogram RED dashboard, drops the native-histogram and JVM
+# ones, and adds a provider for this repo's configs/otel/dashboards/.
+apiVersion: 1
+
+providers:
+  - name: "RED Metrics (classic histogram)"
+    type: file
+    options:
+      path: /otel-lgtm/grafana-dashboard-red-metrics-classic.json
+      foldersFromFilesStructure: false
+
+  - name: "laravel"
+    type: file
+    folder: "laravel"
+    allowUiUpdates: true
+    disableDeletion: false
+    options:
+      path: /otel-lgtm/grafana-dashboards-laravel
+      foldersFromFilesStructure: false

@@ -1,0 +1,21 @@
+{
+  "name": "local/otel-php-sidecar",
+  "description": "OpenTelemetry SDK + auto-instrumentation for app-main, loaded via auto_prepend_file. NOT the app's dependencies: ensure.sh copies this file to build/composer.json and adds a replace/provide block generated from the app's composer.lock, so every package the app already ships is taken from the app's vendor (exact version) and only OTel-only packages land in build/vendor.",
+  "type": "project",
+  "require": {
+    "open-telemetry/sdk": "^1.15",
+    "open-telemetry/exporter-otlp": "^1.4",
+    "open-telemetry/opentelemetry-auto-laravel": "^1.9",
+    "open-telemetry/opentelemetry-auto-pdo": "^0.5"
+  },
+  "config": {
+    "sort-packages": true,
+    "optimize-autoloader": true,
+    "allow-plugins": {
+      "php-http/discovery": false,
+      "tbachert/spi": true
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}

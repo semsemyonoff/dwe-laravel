@@ -1,0 +1,24 @@
+# tool: OpenTelemetry backend (grafana/otel-lgtm — Collector + Tempo + Loki +
+# Prometheus + Grafana in one container). Optional, OFF by default (defaults.yml).
+#
+# One toggle switches the whole feature: the backend lives in compose:, the
+# patch that makes app-main export to it (OTEL_* env, the PHP SDK mount, the
+# php.ini that loads the extension) lives in compose_after:, so it lands after
+# every other overlay and wins every whole-value merge.
+#
+# No ports: — Grafana is reached through the nginx vhost
+# (configs/nginx/templates/tools/otel.conf.template); OTLP ingest (otel:4318)
+# and Tempo's API (otel:3200) stay inside the compose network.
+type: tool
+container: otel
+icon: "📊"
+compose:
+  - compose/tools/otel.yml
+compose_after:
+  - compose/tools/otel-apps.yml
+hosts:
+  web: otel.laravel.localhost
+info:
+  title: "Grafana · traces (OpenTelemetry)"
+notes:
+  disable: "Optional dev tool; the stack runs without it."
